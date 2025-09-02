@@ -1,0 +1,23 @@
+Let $X:[0,T]\to\mathbb{R}^d$ be a c\`adl\`ag path and define the 
+time-augmented path $\tilde X_t=(t,X_t)$. Its (Chen) signature up to time $t$ is
+$$
+S(\tilde X)_{0,t}
+\;=\;
+1+\sum_{k=1}^{\infty}\int_{0<u_1<\cdots<u_k<t}
+d\tilde X_{u_1}\otimes\cdots\otimes d\tilde X_{u_k}
+\;\in T((\mathbb{R}^{d+1})).
+$$
+For any compact $K\subset D([0,T];\mathbb{R}^d)$ 
+(with Skorokhod $J_1$ topology and bounded $p$-variation),
+any non-anticipative continuous functional $F$ on paths,
+and any $\varepsilon>0$, there exist an integer $m$
+and coefficients $\{w_J\}_{|J|\le m}$ such that 
+uniformly for $X\in K$ and $t\in[0,T]$,
+$$
+\Big|F\!\big(X_{[0,t]}\big)\;-\;
+\sum_{|J|\le m} w_J\,\big\langle e_J,\;S(\tilde X)_{0,t}\big\rangle
+\Big| < \varepsilon .
+$$
+In words: continuous path-functionals can be approximated arbitrarily well 
+by linear functionals of a truncated time-augmented signature, 
+uniformly in time --- even when the path has jumps.

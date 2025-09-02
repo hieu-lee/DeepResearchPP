@@ -1,0 +1,205 @@
+[
+  "Let $T$ be the random first-error step in a dispreferred sample and let $G_t\in L^2$ denote the Step-DPO gradient contribution at a fixed step $t$. Then the law of total variance holds: $$ \mathrm{Var}[G_t]=\mathbb E\big[\mathrm{Var}(G_t\mid T)\big]+\mathrm{Var}\big(\mathbb E[G_t\mid T]\big). $$ Moreover, when negatives are drawn conditioned on $T=t$ (as in step-controlled DPO, SCDPO), the between-$T$ variability term $\mathrm{Var}(\mathbb E[G_t\mid T])$ is removed. Consequently $$ \mathrm{Var}_{\mathrm{SCDPO}}[G_t]\le\mathrm{Var}_{\mathrm{uncond}}[G_t], $$ with strict inequality whenever $\mathbb E[G_t\mid T]$ depends nontrivially on $T$ (i.e., $\mathrm{Var}(\mathbb E[G_t\mid T])>0$).",
+  "Fix $\beta>0$ and $\alpha\in[0,1]$. Consider the convex mixture $$ \mathcal L_{\mathrm{mix}}(\theta)=\alpha\,\mathcal L_{\mathrm{DPO}}(\theta)+(1-\alpha)\,\mathbb E\sum_t r_t\,\ell_{\log}(\Delta_t(\theta;u_t)), $$ where $\ell_{\log}$ is the logistic surrogate with derivative $\ell'_{\log}(z)=-\beta\,\sigma(-\beta z)$ and $u_t=(x,s_{<t})$. Under standard occupancy and integrability hypotheses (stated below), in a neighborhood of the reference parameter $\theta_{\mathrm{ref}}$ the first-order optimality condition produces a token-level policy update of TDPO form: $$ \pi_{\theta}^{\mathrm{new}}(a\mid u)\propto\pi_{\mathrm{ref}}(a\mid u)\exp\!\left(\tfrac{1}{\beta}A_{\mathrm{mix}}(u,a)\right), $$ with the mixed advantage $$ A_{\mathrm{mix}}(u,a)=\alpha\,A_{\mathrm{seq}}(u,a)+(1-\alpha)\,\widetilde A_{\mathrm{step}}(u,a), $$ where $A_{\mathrm{seq}}$ aggregates sequence-level advantages to tokens via credit assignment and $\widetilde A_{\mathrm{step}}$ encodes step rewards $r_t$. Hypotheses (standard, brief): - (A0) Occupancy domination: there exists $\kappa<\infty$ bounding the expected step occupancy relative to a reference occupancy measure. - (A1) Square-integrability of step reward kernels at $\theta_{\mathrm{ref}}$ so that the G\^ateaux derivative is well defined and bounded.",
+  "
+  Let small per-step forward-KL budgets $\{\varepsilon_t\}_{t\ge1}$ satisfy $\sum_t\varepsilon_t\le\varepsilon$. Linearizing the expected increase of $\mathbb E[T]=\sum_{k\ge1}S_\theta(k)$ at $\theta_{\mathrm{ref}}$ along natural-gradient updates yields a separable concave objective of the form
+  $$
+  \sum_t w_t\sqrt{\frac{\varepsilon_t}{c_t}},
+  $$
+  with weights
+  $$
+  w_t:=S_{\theta_{\mathrm{ref}}}(t)\,\sqrt{\mathcal I_t},\qquad \mathcal I_t:=\mathbb E\big[\mathrm{Var}_{a\sim\pi_{\mathrm{ref}}(\cdot\mid u_t)}\{\widetilde A_{\mathrm{step}}(u_t,a)\}\big].
+  $$
+  If $c_t>0$ and $S:=\sum_{t\ge1}\frac{w_t^2}{c_t}$ then:
+
+  - If $S<\infty$ and some $w_t>0$, the unique maximizer of
+    $$\max_{\{\varepsilon_t\ge0\}}\;\sum_{t\ge1} w_t\,\sqrt{\frac{\varepsilon_t}{c_t}}\quad\text{s.t.}\quad\sum_{t\ge1}\varepsilon_t\le\varepsilon$$
+    is the Neyman-type allocation
+    $$
+    \varepsilon_t^{\star}=\varepsilon\,\frac{\dfrac{w_t^2}{c_t}}{\sum_{s\ge1}\dfrac{w_s^2}{c_s}}=\varepsilon\,\frac{\dfrac{S_{\theta_{\mathrm{ref}}}(t)^2\,\mathcal I_t}{c_t}}{\sum_{s\ge1}\dfrac{S_{\theta_{\mathrm{ref}}}(s)^2\,\mathcal I_s}{c_s}}.
+    $$
+
+  - If $S=\infty$ and at least one $w_t>0$, the supremum is $+\infty$ and no maximizer exists.
+
+  - If $w_t\equiv0$, every feasible allocation is optimal (objective value $0$).
+  ",
+  "Let $S_\theta(k)=\mathbb P_\theta(T\ge k)$. Choose Full-Step weights $r_t:=S_{\theta_{\mathrm{ref}}}(t)$. Consider the KL-regularized improvement step defined by the mixed-advantage optimizer with $A_{\mathrm{mix}}$ replaced by the step objective of $\mathcal L_{\mathrm{FS}}$ (Full-Step). Then the Gateaux derivative of the survival curve along this natural-gradient direction is nonnegative at $\theta_{\mathrm{ref}}$:
+  $$
+  \left.\frac{\mathrm d}{\mathrm d\epsilon}S_{\theta+\epsilon}(k)\right|_{\epsilon=0}\ge 0\quad\forall k,
+  $$
+  with strict positivity for some $k$ whenever $\mathbb P_{\theta_{\mathrm{ref}}}(\Delta_T(\theta_{\mathrm{ref}};u_T)<+\infty)>0$ and $\mathbb P_{\theta_{\mathrm{ref}}}(T=k)>0$.
+  ",
+  "
+  Under symmetric flipping of stepwise preferences with rate $\eta_t\in[0,1/2)$, the Step-DPO expected gradient gating factor satisfies
+  $$
+  \mathbb E\big[\ell'_{\log}(\Delta_t)\mid u_t\big]= -\beta\,\big(\sigma(-\beta\Delta_t)-\eta_t\big).
+  $$
+  Consequently, introducing an explicit per-step margin shift
+  $$
+  m_t:=\frac{1}{\beta}\log\frac{1-\eta_t}{\eta_t}
+  $$
+  inside the sigmoid (i.e. replacing $\sigma(\beta\Delta_t)$ by $\sigma(\beta(\Delta_t-m_t))$) restores the Bayes decision boundary and Fisher consistency for ranking $s_t^{\mathrm{win}}$ above $s_t^{\mathrm{lose}}$ at each step: after the shift, the expected gate has its unique zero at $\Delta_t^*=0$.
+  ",
+  "
+  Let the required reasoning length be $n$. Under the hazard-weighted Full-Step natural-gradient direction of Theorem 2, the first-order change of the exact-solution probability
+  $$
+  \mathrm{pass}@1(\theta)=\mathbb P_\theta(T>n)=S_\theta(n+1)
+  $$
+  obeys
+  $$
+  \left.\frac{\mathrm d}{\mathrm d\epsilon}\,\mathrm{pass}@1(\theta+\epsilon)\right|_{\epsilon=0}\ge 0,
+  $$
+  with a lower bound proportional to $\min_{1\le k\le n+1}\left.\tfrac{\mathrm d}{\mathrm d\epsilon}S_{\theta+\epsilon}(k)\right|_{\epsilon=0}$.
+  ",
+  "
+  When the dispreferred sequence $y^-$ is constructed to first diverge at $T$ and share the prefix with $y^+$ up to $T-1$, the sequence-level DPO gradient at $\theta_{\mathrm{ref}}$ decomposes as the survival-weighted sum of step gradients:
+  $$
+  \nabla_\theta \mathcal L_{\mathrm{DPO}}(\theta_{\mathrm{ref}})= -\,\mathbb E\Big[\sum_{t\ge1} S_{\theta_{\mathrm{ref}}}(t)\,\beta\,\sigma\big(-\beta\,\Delta_t(\theta_{\mathrm{ref}};u_t)\big)\,\nabla_\theta\Delta_t(\theta_{\mathrm{ref}};u_t)\Big].
+  $$
+  In particular, at $\theta_{\mathrm{ref}}$ one may identify the Full-Step weights $r_t\equiv S_{\theta_{\mathrm{ref}}}(t)$ as those that align Full-Step updates with sequence-level DPO to first order.
+  ",
+  "
+  Define per-step targets $c\in(0,1/2)$ and choose $\beta_t$ online such that
+  $$
+  \mathrm{median}\big(\sigma(-\beta_t\,\Delta_t(\theta;u_t))\big)=c.
+  $$
+  Under mild continuity of the margin distribution, the per-step gradient gate $\sigma(-\beta_t\,\Delta_t)$ has identical median across steps. However, without further uniform regularity linking the per-step gradient norms to margin dispersion, the per-step gradient signal-to-noise ratios
+  $$
+  \mathrm{SNR}_t:=\frac{\|\mathbb E[G_t]\|^2}{\mathrm{Var}(G_t)}
+  $$
+  need not stay within a constant factor across steps; in fact, they can diverge. A simple two-step Gaussian counterexample demonstrates this failure.
+  ",
+  "
+  Let
+  $$L_n:=\Big(\sum_{t=1}^{n} S_{\theta_{\mathrm{ref}}}(t)^2\,\mathcal I_t^{\mathrm{mix}}/c_t\Big)^{1/2},$$
+  where $\mathcal I_t^{\mathrm{mix}}:=\mathbb E\big[\mathrm{Var}_{a\sim\pi_{\mathrm{ref}}(\cdot\mid u_t)}\{A_{\mathrm{mix}}(u_t,a)\}\big]$ and $S_{\theta_{\mathrm{ref}}}(t)$ is the survival under the reference policy. Then, under the conditions of the budget‑to‑gain separable linearization (Result 1), the maximal first‑order improvement in pass@1 obeys the sharp inequality
+  $$\sup_{\sum_t\varepsilon_t\le\varepsilon}\,\delta\,\mathrm{pass@1}\;\le\;C_n\,L_n\,\sqrt{\varepsilon},$$
+  with equality to first order achieved by the Neyman allocation in Result 1. Here $C_n\in[0,\infty)$ is an alignment constant (defined below) that is finite under mild alignment assumptions.
+  ",
+  "
+  Fix integers $K<\infty$ and nonnegative weights $v_1,\dots,v_K$. Define the finite‑horizon survival utility
+  $$U_v(\theta):=\sum_{k=1}^K v_k\,S_\theta(k).$$
+  Under the same local regime as the separable budget–to–gain result, there exists a finite constant $C_v>0$ such that for sufficiently small budgets,
+  $$\delta U_v\;\ge\; C_v\sum_{t=1}^{K-1}\Big(\sum_{k=t+1}^{K} v_k\Big)\,S_{\theta_{\mathrm{ref}}}(t)\,\sqrt{\mathcal I_t^{\mathrm{mix}}}\,\sqrt{\tfrac{\varepsilon_t}{c_t}}\ .$$
+  The corresponding Neyman‑type maximizer of the separable right‑hand side under $\sum_t\varepsilon_t\le\varepsilon$ is
+  $$\varepsilon_t^{\star}[v]=\varepsilon\,\frac{\Big((\sum_{k=t+1}^{K} v_k)^2\,S_{\theta_{\mathrm{ref}}}(t)^2\,\mathcal I_t^{\mathrm{mix}}/c_t\Big)}{\sum_{s=1}^{K-1}\Big((\sum_{k=s+1}^{K} v_k)^2\,S_{\theta_{\mathrm{ref}}}(s)^2\,\mathcal I_s^{\mathrm{mix}}/c_s\Big)}\quad(1\le t\le K-1),$$
+  with $\varepsilon_t^{\star}[v]=0$ for $t\ge K$.
+  ",
+  "
+  If SCDPO preserves the marginal distribution of contexts $u_t$ at each $t$ (i.e., only the dispreferred $s_t^{\mathrm{lose}}$ is conditioned on $T=t$), then, for any finite‑support $U_v$, the Gâteaux derivative at $\theta_{\mathrm{ref}}$ along the natural‑gradient direction coincides with that obtained under unconditional sampling. Thus SCDPO trades reduced variance for no loss in first‑order signal for survival‑based training.
+  ",
+  "
+  Consider the min–max program
+  $$\max_{\{\varepsilon_t\ge 0\, ,\,\sum_t\varepsilon_t\le \varepsilon\}}\ \min_{1\le k\le n+1}\,\delta S_\theta(k)$$
+  under the mixed‑advantage natural‑gradient linearization at $\theta_{\mathrm{ref}}$. Any optimizer equalizes the active per‑step marginal contributions
+  $$S_{\theta_{\mathrm{ref}}}(t)\sqrt{\mathcal I_t^{\mathrm{mix}}}\,\sqrt{\varepsilon_t/c_t}$$
+  across active $t\in\{1,\dots,n\}$, i.e., there exists $\lambda\ge 0$ with
+  $$S_{\theta_{\mathrm{ref}}}(t)\sqrt{\mathcal I_t^{\mathrm{mix}}}\,\sqrt{\varepsilon_t/c_t}=\lambda$$
+  for all active $t$, yielding a fair (max–min) distribution of budget toward uniform first‑order survival improvements over the horizon. In fact, the first‑order epigraph program is allocation‑degenerate and attains optimal value $0$, so no strict equalization is enforced in the exact first‑order limit.
+  ",
+  "
+  Let $A_{\mathrm{mix}}(u,a)$ be the mixed advantage and define the Fisher‑type mixed information
+  $$\mathbb I_t^{\mathrm{mix}}:=\mathbb E\big[\operatorname{Var}_{a\sim\pi_{ref}(\cdot\mid u_t)}\{A_{\mathrm{mix}}(u_t,a)\}\big].$$
+  For each step $t$ with $\mathbb I_t^{\mathrm{mix}}>0$ define the normalized advantage
+  $$\widetilde A_{\mathrm{mix}}(u_t,a):=A_{\mathrm{mix}}(u_t,a)/\sqrt{\mathbb I_t^{\mathrm{mix}}}.$$
+  Under the separable linearization regime with per‑step budgets $\{\varepsilon_t\}$ and costs $\{c_t\}$, the per‑step information induced by $\widetilde A_{\mathrm{mix}}$ equals $1$ by construction, and the first‑order improvement bound for pass@1 reduces to
+  $$\delta\,\mathrm{pass@1}\le C\sum_t S_{\theta_{ref}}(t)\sqrt{\varepsilon_t/c_t}.$$
+  Consequently the Neyman allocation becomes
+  $$\varepsilon_t^{\star}\propto \frac{S_{\theta_{ref}}(t)^2}{c_t},$$
+  so allocation depends purely on survival and costs (hazard‑driven).
+  ",
+  "
+  In the small‑margin regime at $\theta_{ref}$ (so $\Delta_t\approx0$), symmetric stepwise flips at rate $\eta_t\in[0,1/2)$ scale the expected gate by $\kappa_t:=1-2\eta_t$: approximately
+  $$\mathbb E[\ell'_{\log}(\Delta_t)\mid u_t]\approx -\beta\big(\tfrac12-\eta_t\big)=\kappa_t\cdot(-\beta/2).$$
+  Consequently the linearized first‑order coefficients in the separable objective deform to
+  $$\widetilde w_t\approx\kappa_t\,\dfrac{S_{\theta_{ref}}(t)\sqrt{\mathbb I_t}}{\sqrt{c_t}}.$$
+  Inserting an appropriate per‑step margin shift $\mu_t$ inside the sigmoid (i.e. replacing $\sigma(\beta\Delta_t)$ by $\sigma(\beta(\Delta_t-\mu_t))$) with
+  $$\mu_t:=\frac{1}{\beta}\log\frac{\tfrac12+\eta_t}{\tfrac12-\eta_t}$$
+  restores the noise‑free weighting (effects of $\kappa_t$ disappear to leading order) and hence the clean Neyman allocation.
+  ",
+  "
+  Let $T\in\{1,2,\dots\}$ have pmf $q_s=\mathbb P(T=s)$ and tail probabilities $Q_{\ge t}:=\sum_{s\ge t}q_s$. Let nonnegative hazard weights $r_t:=S_{\theta_{ref}}(t)$ be given, and let $G_t\in L^2$ with the convention $G_t\equiv0$ on $\{T<t\}$. Define the target Full‑Step sum
+  $$G_{FS}:=\sum_{t\ge1} r_t\,\mathbb E[G_t\mid T\ge t].$$
+  Assume the summability condition
+  \begin{equation*}
+  (\mathsf A)\qquad \sum_{t\ge1} r_t\,\mathbb E\big[|G_t|\mid T\ge t\big]<\infty,
+  \end{equation*}
+  with terms with $Q_{\ge t}=0$ understood to vanish. Then the inverse‑survival reweighting estimator
+  $$\widehat G_{FS}:=\sum_{t\ge1} r_t\,\frac{\mathbf 1_{\{T\ge t\}}}{Q_{\ge t}}\,G_t$$
+  is unbiased: $\mathbb E[\widehat G_{FS}]=G_{FS}$. Moreover, among all $\sigma(T)$‑measurable linear reweightings that are uniformly unbiased for every admissible conditional law of $(G_t\mid T)$, the estimator $\widehat G_{FS}$ is unique and attains minimum variance for the summed step gradient.
+  ",
+  "
+  \textbf{(Link-function invariance of first-order allocation)}\;\;\text{Replace the logistic surrogate by any strictly increasing, twice-differentiable link }\varphi\text{ with }\varphi(0)=1/2\text{ and slope }\varphi'(0)\in(0,\infty).\text{ In the small-margin regime at }\theta_{\mathrm{ref}},\text{ all first-order coefficients are proportional to }\varphi'(0),\text{ hence the hazard-driven Neyman allocation }\varepsilon_t^{\star}\propto S_t^2 I_t/c_t\text{ is unchanged (up to a global scale) by the choice of link.}
+  ",
+  "
+  \textbf{(Monotone front-loading under slowly varying information; equal costs)}\;\;\text{Let costs be equal }c_t\equiv c>0.\text{ Let }S_t=\mathbb P(T\ge t)\text{ be the survival sequence (so }S_{t+1}\le S_t\text{). Assume the information sequence }\{I_t\}_t\text{ satisfies }\frac{I_{t+1}}{I_t}\le\Big(\frac{S_t}{S_{t+1}}\Big)^2,\text{ interpreted with the standard extended-real conventions inside inequalities (}a/0:=+\infty,\ 0/0:=0\text{). Then the Neyman allocation }\varepsilon_t^{\star}\propto S_t^2 I_t\text{ is nonincreasing in }t.\text{ In particular, if }I_t\text{ is nonincreasing, the optimal budget is weakly front-loaded across steps.}
+  ",
+  "
+  \textbf{(Extreme-point optimality of sequence/step mixing)}\;\;\text{Let }F(\alpha):=\sum_{t\ge1}\frac{S_t^2}{c_t}\,I_t^{\mathrm{mix}}(\alpha).\text{ Under the separable linearization with Neyman allocation for fixed }\alpha,\text{ the maximal first-order gain in pass@1 is }C\sqrt{\varepsilon}\,\sqrt{F(\alpha)}.\text{ Since }I_t^{\mathrm{mix}}(\alpha)\text{ is a convex quadratic in }\alpha\text{ and }J_t\le\sqrt{I_t^{\mathrm{seq}}I_t^{\mathrm{step}}}\text{ (Cauchy--Schwarz), }F(\alpha)\text{ is convex on }[0,1].\text{ Hence any maximizer lies at }\alpha^{\star}\in\{0,1\};\text{ ties occur iff }F(0)=F(1).\text{ Therefore, to first order, it is optimal to use either pure sequence-level or pure step-level updates, not a mixture.}
+  ",
+  "
+  \textbf{Pass@k first-order scaling}. For independent restarts (k draws per prompt) on length-n reasoning, \mathrm{pass}@k(\theta)=1-(1-S_\theta(n+1))^k. Along the hazard-weighted Full-Step natural-gradient direction at \theta_{\mathrm{ref}}, the directional derivative at \epsilon=0 satisfies\n\[ \Big.\tfrac{\mathrm d}{\mathrm d\epsilon}\,\mathrm{pass}@k(\theta+\epsilon)\Big|_{\epsilon=0}=k\,(1-S_{\theta_{\mathrm{ref}}}(n+1))^{k-1}\,\Big.\tfrac{\mathrm d}{\mathrm d\epsilon}\,S_{\theta+\epsilon}(n+1)\Big|_{\epsilon=0}\ \ge0. \]In the separable small-budget regime, the maximal first-order gain obeys\n\[ \sup_{\sum_t\varepsilon_t\le\varepsilon}\,\delta\,\mathrm{pass}@k\ \le\ k\,(1-S_{\theta_{\mathrm{ref}}}(n+1))^{k-1}\,C_n\,L_n\,\sqrt{\varepsilon}, \]with near-attainment under the Neyman allocation for the mixed advantage.
+  ",
+  "
+  \textbf{(Front-loading with variable costs)}\;\;\text{Let }S_t=\mathbb P(T\ge t)\text{ with }S_{t+1}\le S_t,\ I_t:=\mathcal I_t^{\mathrm{mix}}\ge0\text{ with }I_{t+1}\le I_t,\text{ and costs }c_t>0\text{ with }c_{t+1}\ge c_t.\text{ Then the Neyman allocation }\varepsilon_t^{\star}\propto S_t^2 I_t/c_t\text{ is nonincreasing in }t.\text{ When }S_t,I_t>0,\text{ this is equivalently }\frac{c_{t+1}}{c_t}\ge\Big(\frac{S_{t+1}}{S_t}\Big)^2\frac{I_{t+1}}{I_t}.\text{ Under the stated monotonicities this condition holds automatically.}
+  ",
+  "
+  \textbf{(No interior maximizer for second-order mixing with convex quadratic penalty)}\;\;\text{Let }F:[0,1]\to\mathbb R\text{ be convex (e.g., the first-order objective) and let }G(\alpha)=-\Lambda\,\alpha(1-\alpha)\text{ with }\Lambda>0.\text{ Then }H(\alpha)=F(\alpha)+G(\alpha)\text{ is strictly convex on }[0,1],\text{ so any maximizer lies at }\alpha\in\{0,1\};\text{ no interior maximizer exists. The endpoint-slope conditions }F'(0)>\Lambda\text{ and }F'(1)<-\Lambda\text{ cannot both hold for convex }F.\text{ The same endpoint optimality holds when maximizing }C\sqrt{\varepsilon}\,\sqrt{F(\alpha)}+G(\alpha).
+  ",
+  "
+  \textbf{No first-order benefit from step-dependent temperatures after unit-information normalization}. Replace A_{\mathrm{mix}} by the normalized \(\widetilde A_{\mathrm{mix}}:=A_{\mathrm{mix}}/\sqrt{\mathbb I_t^{\mathrm{mix}}}\) and allow arbitrary step-dependent link slopes \(\beta_t>0\). In the local KL regime at \theta_{\mathrm{ref}}, for any feasible \{\varepsilon_t\}\,\{\beta_t\}, the maximal first-order pass@1 gain equals\n\[ \sup_{\sum_t\varepsilon_t\le\varepsilon}\,\delta\,\mathrm{pass}@1\ =\ C\sum_t S_t\sqrt{\varepsilon_t/c_t}\ \le\ C\,\sqrt{\varepsilon}\,\sqrt{\sum_t S_t^2/c_t}, \]with Neyman solution \(\varepsilon_t^{\star}\propto S_t^2/c_t\) independent of \(\{\beta_t\}\). Thus, once advantages are unit-information normalized, nonuniform temperatures confer no first-order advantage.
+  ",
+  "
+  (Noise‑corrected Step‑DPO under symmetric label flips). Suppose step‑wise preference labels are flipped independently with rate η∈[0,1/2). Let z_t be the clean margin used inside σ and let the observed surrogate use z̃_t. Replacing z̃_t by z̃_t/(1−2η) (equivalently, rescaling β→β′=(1−2η)β in the logistic) yields
+  \[E\big[\nabla_θ\,\ell_{\mathrm{log}}(z̃_t/(1−2η))\big]\;=\; c(η)\,E\big[\nabla_θ\,\ell_{\mathrm{log}}(z_t)\big]\quad\text{for some }c(η)>0,\]
+  so the corrected Step‑DPO gradient is aligned with the clean gradient (Fisher‑consistent decision rule) while preserving KL control.
+  ",
+  "
+  (Specialization to survival: budget allocation for maximizing log‑pass@1). For J(θ)=\log S_θ(n+1)=\sum_{t=1}^{n}\log(1−λ_θ(t)), the step gradient is g_t=−E\big[(1−λ_θ(t))^{−1}\,∂_θ λ_θ(t)\big]. Under the assumptions of Conjecture 4, the KL budget maximizing first‑order increase in log‑survival obeys
+  \[\varepsilon_t^{\star}\;\propto\; \big(g_t^\top F_t^{−1} g_t\big)\,;\quad\text{equivalently, focus KL where the hazard‑sensitivity }(1−λ_θ(t))^{−1}∂_θλ_θ(t)\text{ is largest in the Fisher metric.}\]
+  In turn, this allocation maximizes first‑order pass@1 since pass@1=S_θ(n+1).
+  ",
+  "
+  (Pass@k‑aware Neyman sampling). For the pass@k objective with independent restarts, weight each sample from prompt x by w_k(x):=k(1−S_θ^{(x)}(n+1))^{k−1}. The HT estimator of ∇_θ pass@k using step‑wise gradients {G_{x,t}} reweighted by w_k(x) remains unbiased. The Neyman‑optimal allocation becomes
+  \[q_{x,t,k}^{\star} \propto \frac{p_{x,t}\,\sigma_{x,t}\,w_k(x)}{\sqrt{c_{x,t}}}\,;\quad\text{thus }q_{t,k}^{\star}\propto \Big(\sum_x p_{x,t}\,\sigma_{x,t}\,w_k(x)\Big)/\sqrt{c_t}.\]
+  When optimizing a fixed prompt x, w_k(x) is constant across t, so the optimal step allocation reduces to Conjecture 1.
+  ",
+  "
+  (Restart‑aware reweighting equivalence at first order). Let L_step be a Step‑DPO logistic loss aggregated over steps. For small parameter moves, optimizing the w_k(x)‑reweighted loss \(\sum_{x,t} w_k(x)\,L_{\mathrm{step}}^{(x,t)}\) induces the same first‑order parameter update direction as directly maximizing pass@k(θ). Since w_k(x)>0, any small increase in the reweighted objective implies a first‑order increase in pass@1 as well.
+  ",
+  "
+  (Composing token‑ and step‑level tilts under joint KL control). Consider a joint objective combining token‑level TDPO advantage A_token(u_t,a_t) and a step‑level advantage A_step(u_t) (constant over tokens within step t), with separate KL budgets ε_t^{\mathrm{tok}}, ε_t^{\mathrm{step}}. The joint KL‑constrained optimizer has the product‑tilt form
+  \[\pi_{\mathrm{new}}(a_t\mid u_t)\;\propto\; \pi_{\mathrm{ref}}(a_t\mid u_t)\,\exp\Big\{\frac{A_{\mathrm{token}}(u_t,a_t)}{\beta_t^{\mathrm{tok}}}+\frac{A_{\mathrm{step}}(u_t)}{\beta_t^{\mathrm{step}}}\Big\},\]
+  with temperatures determined (locally) by \(\beta_t^{\mathrm{tok}}\approx\sqrt{\mathrm{Var}_{\pi_{\mathrm{ref}}}(A_{\mathrm{token}})/(2\varepsilon_t^{\mathrm{tok}})}\) and \(\beta_t^{\mathrm{step}}\approx\sqrt{\mathrm{Var}_{\pi_{\mathrm{ref}}}(A_{\mathrm{step}})/(2\varepsilon_t^{\mathrm{step}})}\). Under block‑diagonal Fisher, the overall first‑order gain in log‑survival equals the sum of the two water‑filled gains and is maximized by allocating \(\varepsilon_t^{\mathrm{tok}}\propto s_{t,\mathrm{tok}}^2\) and \(\varepsilon_t^{\mathrm{step}}\propto s_{t,\mathrm{step}}^2\), where \(s_{t,\cdot}^2=g_{t,\cdot}^\top F_{t,\cdot}^{−1} g_{t,\cdot}.\)
+  ",
+  "
+  (Pass@k invariance of the KL schedule). Under independent restarts, \(\mathrm{pass}@k(\theta)=1-(1-\mathrm{pass}@1(\theta))^k\). For any base \(p=\mathrm{pass}@1\), the first‑order gradient \(\partial\,\mathrm{pass}@k/\partial p=k(1-p)^{k-1}\) is a t‑independent scalar. Hence, the budget fractions \({\varepsilon_t^{\star}/\varepsilon}\) that maximize the first‑order improvement of pass@k coincide exactly with those for pass@1.
+  ",
+  "
+  (Logistic upper bound on negative log survival via stepwise margins) If there exist stepwise margins Δ_t with \(\rho_\theta(t)\le \sigma(−\beta\,Δ_t)\) for all t and some β>0, then \(-\log p_\theta=\sum_t−\log(1−\rho_\theta(t))\le \sum_t \ell_{\mathrm{log}}(Δ_t).\) Equality holds iff \(\rho_\theta(t)=\sigma(−\beta\,Δ_t)\) for all active t.
+  ",
+  "
+  (Water‑filling KL allocation for log pass@k) Under a block‑diagonal Fisher F≈⊕_t F_t and per‑step trust regions (1/2)Δθ_t^T F_t Δθ_t≤ε_t with costs c_t and ∑_t ε_t≤ε, the maximum linearized improvement in log pass@k equals \(\sqrt{2\varepsilon}\,\sqrt{\sum_t a_t^2/c_t}\) with \(a_t:=α_k w_t\,\zeta_t\) and \(\zeta_t:=\sqrt{g_t^T F_t^{−1} g_t}\). The maximizer obeys \(\varepsilon_t\propto a_t^2/c_t.\)
+  ",
+  "Under the first‑order lower bound $\Delta F_\kappa \ge \sum_t w_t\sqrt{2\varepsilon_t I_t}$ and a linear cost model $\mathrm{Cost}(\varepsilon)=\sum_t c_t\varepsilon_t$ with $c_t>0$, if a total budget $B>0$ must be allocated entirely to a single step $t$, then the choice that maximizes the guaranteed improvement per unit cost selects\n$$t^{\star}\in\arg\max_t\;\frac{w_t^2 I_t}{c_t}.$$",
+  "Suppose two survival sequences satisfy $S_t^{\mathrm{new}}\ge S_t^{\mathrm{old}}$ for all $t$, with strict inequality for some $t$, and the positive cost sequence $(c_t)_t$ is unchanged. Assume the normalized Neyman schedules are well defined, i.e., $W^{\mathrm{old}}:=\sum_t (S_t^{\mathrm{old}})^2/c_t<\infty$ and $W^{\mathrm{new}}:=\sum_t (S_t^{\mathrm{new}})^2/c_t<\infty$. Then, after unit‑information normalization with $p_t\propto S_t^2/c_t$, the allocation for $S^{\mathrm{new}}$ does not majorize that for $S^{\mathrm{old}}$ in the prefix‑majorization sense; in fact $p_1^{\mathrm{new}}<p_1^{\mathrm{old}}$.",
+  "Assume the geometric envelopes with $\gamma\in(0,1)$. Then $a_t^2\le (C_S^2 C_I/c_0)\,\gamma^{t-1}$, and under the Neyman allocation the best first‑order pass@1 gain using only steps $1..T$ equals $\sqrt{\tfrac{\sum_{t=1}^T a_t^2}{\sum_{t\ge1} a_t^2}}\ge \sqrt{1-\gamma^{T}}$. Equality holds when all three envelopes are tight equalities and the allocation is Neyman.",
+  "Under the first‑order bound $\Delta F_\kappa\ge\sum_t w_t\sqrt{2\varepsilon_t I_t}$ and a linear per‑step cost model $\mathrm{Cost}(\varepsilon)=\sum_t c_t\varepsilon_t$ with $c_t>0$, if a total budget $B>0$ must be allocated entirely to a single step $t$, then the choice that maximizes improvement per unit cost is\n$$t^{\star}\in\arg\max_t\;\frac{w_t^2 I_t}{c_t}.$$\n",
+  "Under the first-order bound $\Delta F_\kappa\ge\sum_t w_t\sqrt{2\varepsilon_t I_t}$ and a linear cost model $\mathrm{Cost}(\varepsilon)=\sum_t c_t\varepsilon_t$ with $c_t>0$, if a total budget $B>0$ must be allocated entirely to a single step $t$, then the maximal improvement per unit cost is achieved by choosing $$t^{\star}\in\arg\max_t\;\frac{w_t^2 I_t}{c_t}.$$",
+  "Safe step‑dropout under unit‑information normalization. After normalizing to unit per‑step information ($I_t^{\mathrm{mix}}\equiv1$), for any subset $K\subset\mathbb N$ of active steps and any total forward‑KL budget $\varepsilon>0$, the best attainable first‑order pass@1 improvement over allocations supported on $K$ satisfies\n\[\delta\,\mathrm{pass}@1\;\le\;C\sqrt{\varepsilon}\,\sqrt{\sum_{t\in K}\tfrac{S_t^2}{c_t}}.\]\nIf $A:=\sum_{t\ge1} S_t^2/c_t\in(0,\infty)$ and $B:=\sum_{t\in K} S_t^2/c_t$, then the ratio of the $K$‑restricted optimum to the unrestricted optimum equals $\sqrt{B/A}$. Moreover, with $D:=\mathbb N\setminus K$, the absolute first‑order loss from dropping $D$ is at most\n\[C\sqrt{\varepsilon}\,(\sqrt{A}-\sqrt{B})\;\le\;C\sqrt{\varepsilon}\,\frac{\sum_{t\in D} S_t^2/c_t}{\sqrt{A}+\sqrt{B}}.\]",
+  "Micro‑allocation across prompts and steps. Let prompts be drawn as $x\sim p=(p_x)_x$. For each prompt $x$ and step $t$, let $(S_t^{(x)},I_t^{(x)},c_{x,t})$ with $I_t^{(x)}\ge0$ and $c_{x,t}>0$. Suppose the stepwise separable first‑order bound holds for each $x$ with constant $C_x$, and assume a uniform bound $C:=\sup_x C_x<\infty$. For KL micro‑budgets $(\varepsilon_{x,t})$ with $\sum_{x,t}\varepsilon_{x,t}\le\varepsilon$, the global improvement satisfies\n$$\n\delta\,\mathrm{pass}@1\;\le\;C\,\sqrt{\varepsilon}\,\sqrt{\sum_{x,t}\frac{p_x^2\,(S_t^{(x)})^2\,I_t^{(x)}}{c_{x,t}}}\,.\n$$\nWhen $\sum_{x,t}\tfrac{p_x^2(S_t^{(x)})^2I_t^{(x)}}{c_{x,t}}<\infty$ and some weight is positive, the micro‑allocation that maximizes the separable bound is Neyman‑type $\varepsilon_{x,t}^{\star}\propto p_x^2(S_t^{(x)})^2 I_t^{(x)}/c_{x,t}$. Marginalizing over $t$ yields the optimal per‑prompt share $\varepsilon_x^{\star}\propto p_x^2\sum_t (S_t^{(x)})^2I_t^{(x)}/c_{x,t}$.",
+  "Order-commutativity of small token/step tilts. Let q_0(u,a)=d_0(u)\,\pi_{\mathrm{ref}}(a\mid u). For measurable advantages A_{\mathrm{tok}}(u,a) and A_{\mathrm{step}}(u) (constant in a for fixed u) and small tilt sizes, sequential token-level and step-level exponential tilts commute to first order and equal a single tilt by their sum; the induced change in the conditional policy depends only on A_{\mathrm{tok}} to first order. Moreover, if the Fisher information is block-diagonal between token and step parameter blocks and the tilts are chosen as the blockwise natural-gradient trust-region optimizers for J(\theta)=\log S_\theta(n+1) with small budgets \varepsilon_{\mathrm{tok}},\varepsilon_{\mathrm{step}}, then the first-order gain in J (and hence in pass@1) is additive and order-invariant.",
+  "Positive cross‑Fisher synergy. Let the joint Fisher be $F=\begin{psmallmatrix}F_{tok}&F_{cross}\\F_{cross}^{\top}&F_{step}\end{psmallmatrix}\succeq0$ and let $g=\binom{g_{tok}}{g_{step}}$. Under a single joint KL trust region of size $\varepsilon$, the maximal first‑order improvement equals $\sqrt{2\varepsilon}\,\sqrt{g^{\top}F^{+}g}$ if $g\in\operatorname{ran}F$ (and is $+\infty$ otherwise); in the nondegenerate case $F\succ0$ it reduces to $\sqrt{2\varepsilon}\,\sqrt{g^{\top}F^{-1}g}$. If $F\succ0$ and $g_{tok},g_{step}$ are positively aligned through $F^{-1}$ (i.e., $g_{tok}^{\top}(F^{-1})_{12}g_{step}>0$ whenever both are nonzero), then $$g^{\top}F^{-1}g\;\ge\;g_{tok}^{\top}F_{tok}^{-1}g_{tok}+g_{step}^{\top}F_{step}^{-1}g_{step},$$ with strict inequality unless one component vanishes. Thus coupling can strictly outperform splitting KL across blocks under positive cross‑alignment.",
+  "Robustness of Neyman to coefficient mis‑specification; cosine bound. Let c_t>0 and a_t≥0, and define A_t:=a_t/\sqrt{c_t}. Assume A:=(A_t)_t\neq0. For perturbations \hat a_t=a_t(1+\delta_t) with \max_t|\delta_t| sufficiently small so that \hat a_t≥0 (equivalently \hat A_t:=\hat a_t/\sqrt{c_t}≥0), allocate under the budget constraint \sum_t\varepsilon_t\le\varepsilon and \varepsilon_t\ge0 the Neyman rule \varepsilon_t\propto\hat a_t^2/c_t. Then the achieved first‑order gain equals\n$$\nG(\hat a)=C\sqrt{\varepsilon}\,\frac{\langle A,\hat A\rangle}{\|\hat A\|_2}\n= C\sqrt{\varepsilon}\,\|A\|_2\cos\vartheta,\n$$\nwhere \( \vartheta \) is the angle between \(A\) and \( \hat A \), and the true optimum is \(G^{\star}=C\sqrt{\varepsilon}\,\|A\|_2\). Writing weights \(w_t:=A_t^2/\|A\|_2^2\), for small errors\n$$\n\cos\vartheta\ge 1-\tfrac12\sum_t w_t\,\delta_t^2+o(\|\delta\|_2^2),\n$$\nso the relative first‑order loss \(1-G(\hat a)/G^{\star}\) is second order in the weighted \( \ell_2 \) error.",
+  "Under a total cost constraint $\sum_{t=1}^H c_t\,\varepsilon_t\le C$ and the per–step small‑budget bound $\Delta F_{\kappa,t}(\theta)\ge w_t\sqrt{2I_t\,\delta_t}+o(\sqrt{\delta_t})$ as $\delta_t\downarrow 0$, with $w_t=\kappa\,\mathbb E[\sigma(-\kappa\Delta_t)]$ and $\delta_t=\varepsilon_t/c_t$, the allocation that maximizes the first‑order lower bound on $\Delta F_\kappa$ satisfies\n\[ \varepsilon_t^{\star}\;\propto\; \frac{w_t^2\,I_t}{c_t}\,, \]\nwith the achievable bound $\Delta F_\kappa(\theta)\ge \sqrt{2C}\,\Big(\sum_{t=1}^H \tfrac{w_t^2I_t}{c_t}\Big)^{1/2}+o(C^{1/2})$. In particular, for equal costs $c_t$, budgets should be proportional to $w_t^2 I_t$, prioritizing steps with large failure propensity (high $w_t$) and high information $I_t$.",
+  "Suppose as t→∞ that S_t\asymp t^{-\alpha}, I_t\asymp t^{-\beta}, and c_t\asymp t^{p}. Then \sum_{t\ge 1} S_t^2 I_t/c_t converges iff 2\alpha+\beta-p>1. In the convergent regime, the Neyman allocation exists (uniquely) and the maximal first‑order gain is finite; in the divergent regime, the linearized supremum under \sum_t \varepsilon_t\le\varepsilon is +\infty and no maximizer exists.",
+  "Given nonnegative weights $w_k(x)$ and coefficients $a_{x,t}\ge0$ with $\|A_x\|_2:=\big(\sum_t a_{x,t}^2\big)^{1/2}\in(0,\infty)$ for every prompt $x$, consider\n$$\n\max_{\{\varepsilon_{x,t}\ge0\}}\ \inf_{x} w_k(x)\sum_t a_{x,t}\sqrt{\varepsilon_{x,t}}\quad\text{s.t.}\quad\sum_{x,t}\varepsilon_{x,t}\le\varepsilon.\n$$\nIn the nondegenerate regime where $b_x:=w_k(x)\,\|A_x\|_2>0$ for all $x$ and $\sum_x b_x^{-2}<\infty$, the unique maximizer has per‑prompt budgets $E_x\propto (w_k(x)\,\|A_x\|_2)^{-2}$ and within‑prompt allocations $\varepsilon_{x,t}\propto a_{x,t}^2$; otherwise the optimal value is $0$ and every feasible allocation is optimal. Thus the allocation tilts budget toward prompts with smaller $w_k(x)\,\|A_x\|_2$.",
+  "Hierarchical factorization of Neyman under separable structure. Suppose weights $p_x$ and steps factor as $S_t^{(x)}=\sigma_x S_t$, $I_t^{(x)}=\rho_x I_t$, and costs $c_{x,t}=c_x c_t$. Then the global Neyman allocation over pairs $(x,t)$ factorizes exactly: \[\varepsilon_{x,t}^{\star}\ \propto\ \frac{\big(p_x^2\sigma_x^2\rho_x/c_x\big)\,\big(S_t^2 I_t/c_t\big)}{\sum_{x',t'} \big(p_{x'}^2\sigma_{x'}^2\rho_{x'}/c_{x'}\big)\,\big(S_{t'}^2 I_{t'}/c_{t'}\big)}\,.\] Equivalently, first allocate per‑prompt budgets $\varepsilon_x^{\star}\propto p_x^2\sigma_x^2\rho_x/c_x$, then distribute within each prompt by $\varepsilon_{x,t}^{\star}\propto S_t^2 I_t/c_t$.",
+  "(Random‑restart invariance) If the number of independent restarts K is random with distribution \nu independent of \theta, then with p:=\mathrm{pass}@1 we have \mathbb E_{K\sim\nu}[\mathrm{pass}@K]=\mathbb E[1-(1-p)^K] and \tfrac{\partial}{\partial p}\,\mathbb E[\mathrm{pass}@K]=\mathbb E[K(1-p)^{K-1}], a scalar independent of step index t. Therefore the first‑order KL fractions \varepsilon_t/\varepsilon that maximize \delta\,\mathbb E[\mathrm{pass}@K] coincide with those for pass@1.",
+  "(Isotonic smoothing of per‑step weights improves first‑order gain under monotone truth) Assume the true a_t is nonincreasing in t and nonnegative, and we have a noisy plug‑in estimate \( \hat a_t \). Let \( \hat a_t^{\downarrow} \) be its isotonic (nonincreasing) projection. Then the Neyman allocation built from \( \hat a^{\downarrow} \) attains a first‑order pass@1 gain at least as large as that from \( \hat a \), up to second‑order terms in the estimation error; in particular, the suboptimality gap shrinks by an amount proportional to the \( \ell_2 \) projection error \( \|\hat a-\hat a^{\downarrow}\|_2^2 \).",
+  "Let coefficients satisfy $a_t\in[\hat a_t-\delta_t,\,\hat a_t+\delta_t]$ with $\delta_t\ge0$, costs $c_t>0$, and budgets $\varepsilon_t\ge0$ with $\sum_t\varepsilon_t\le\varepsilon$ (with $\varepsilon\ge0$). Define the robust weights $a_t^{\mathrm{rob}}:=\max\{\hat a_t-\delta_t,0\}$ and S:=\sum_t (a_t^{\mathrm{rob}})^2/c_t. For the minimax problem $$\max_{\{\varepsilon_t\ge0,\,\sum_t\varepsilon_t\le\varepsilon\}}\ \min_{a\in\prod_t[\hat a_t-\delta_t,\,\hat a_t+\delta_t]}\ \sum_t a_t\sqrt{\varepsilon_t/c_t},$$ the following hold: (i) If S=0, the optimal value is 0 and every minimax optimizer assigns zero budget to all indices with $\hat a_t<\delta_t$; in particular $\varepsilon_t\equiv0$ is optimal. (ii) If $0<S<\infty$, an optimizer exists, is unique when some $a_t^{\mathrm{rob}}>0$, saturates the budget, and has the Neyman form $$\varepsilon_t^{\star}=\varepsilon\,\frac{\dfrac{(a_t^{\mathrm{rob}})^2}{c_t}}{\sum_s\dfrac{(a_s^{\mathrm{rob}})^2}{c_s}}\ \propto\ \frac{(a_t^{\mathrm{rob}})^2}{c_t},$$ so any index with $\hat a_t\le\delta_t$ receives zero budget. (iii) If S=\infty$, the supremum is $+\infty$ and no optimizer exists.",
+  "(Tightness of the margin–survival bound under calibration.) If, for all t, there exists b_t(u_t) such that $\lambda_\theta(t\mid u_t)=\sigma(-\kappa\,\Delta_t(\theta;u_t)+b_t(u_t))$ holds up to a mean‑zero error with sub‑Gaussian tails of proxy variance $\nu_t^2$, then the gap between $\log\mathrm{pass}@1$ and the surrogate $F_\kappa$ satisfies the high‑probability bound\n\[ \big|\log S_\theta(H{+}1) - F_\kappa(\theta)\big|\;\le\; \sum_{t=1}^H O\!\left(\frac{\nu_t}{\min\{\sigma(\kappa\Delta_t-b_t),\,\sigma(-\kappa\Delta_t+b_t)\}}\right). \]",
+  "(Pass@k allocation invariance under exchangeable restarts) Suppose restarts for a prompt x are exchangeable with random success probability \(P_x\). For any local parameter move that changes only \( \mu_x:=\mathbb E[P_x] \) to first order, \[\frac{\mathrm d}{\mathrm d\epsilon}\,\mathbb E[\mathrm{pass}@k(x)]\Big|_{\epsilon=0}=\mathbb E\big[k(1-P_x)^{k-1}\big]\;\frac{\mathrm d\mu_x}{\mathrm d\epsilon}\Big|_{\epsilon=0}.\] The scalar factor \( \mathbb E[k(1-P_x)^{k-1}] \) is independent of step index t; hence the budget fractions \( \varepsilon_t/\varepsilon \) that maximize the first‑order gain for pass@k coincide with those for pass@1, even under correlated restarts.",
+  "Iterative water‑filling dominance under monotone feedback. Let n\in\mathbb N and let (I_t^{\mathrm{mix}})_{t=1}^n and (c_t)_{t=1}^n be iteration‑invariant with I_t^{\mathrm{mix}}\ge 0 and c_t>0. For each iteration j, let S^{(j)}=(S_t^{(j)})_{t=1}^n be the survival profile before iteration j with S^{(j+1)}\ge S^{(j)} coordinatewise. At iteration j, allocate a KL budget \varepsilon^{(j)}\ge 0 across steps by the Neyman rule with respect to S^{(j)}. Then the cumulative first‑order gain \sum_j \Delta^{(j)}\mathrm{pass}@1 is at least the one‑shot first‑order gain obtained by spending the total KL \sum_j\varepsilon^{(j)} once under the initial profile S^{(1)}. Moreover, strict inequality holds whenever S^{(j+1)}>S^{(j)} on a set of steps that are active under the Neyman allocation at iteration j+1 for some j.",
+  "Robustness to cost mis-specification. Let $A=(A_t)_t$ with $A_t:=S_t\sqrt{I_t^{\mathrm{mix}}/c_t}$, and suppose one deploys the Neyman schedule using perturbed costs $\hat c_t=c_t(1+\delta_t)>0$, yielding weights $\hat A_t:=S_t\sqrt{I_t^{\mathrm{mix}}/\hat c_t}=A_t(1+\delta_t)^{-1/2}$. Assume $A\neq0$. Then the ratio of the first-order pass@1 gain achieved by the Neyman schedule based on $\hat A$ to the optimal first-order gain equals\n$$\n\frac{\langle A,\hat A\rangle}{\|A\|_2\,\|\hat A\|_2}\n\;=\;\cos\varphi(A,\hat A)\in(0,1],\n$$\nwith equality $1$ iff $\hat A$ is a positive scalar multiple of $A$ (equivalently, $\delta_t$ is constant on the support of $A$). For small perturbations $\delta=(\delta_t)_t$, writing $p_t:=A_t^2/\|A\|_2^2$ and $w_t:=2p_t$, we have\n$$\n\cos\varphi(A,\hat A)=1-\tfrac18\,\mathrm{Var}_{p}(\delta)+o(\|\delta\|_2^2)\n\;=\;1-\tfrac1{16}\sum_t w_t\Bigl(\delta_t-\sum_s p_s\delta_s\Bigr)^2+o(\|\delta\|_2^2).\n$$\nIn particular, under the normalization \sum_t p_t\delta_t=0,\n$$\n\cos\varphi(A,\hat A)=1-\tfrac1{16}\sum_t w_t\,\delta_t^2+o(\|\delta\|_2^2).\n$$"
+]
