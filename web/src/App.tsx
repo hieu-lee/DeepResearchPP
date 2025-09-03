@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -56,7 +56,7 @@ const computeApiBase = () => {
 
 const API_BASE = computeApiBase();
 
-const models = ["o4-mini", "o3", "gpt-5", "gpt-5-mini"] as const;
+const models = ["o4-mini", "o3", "gpt-5", "gpt-5-mini", "gpt-oss-120b"] as const;
 
 function App() {
   const [model, setModel] = useState<(typeof models)[number]>("gpt-5");
@@ -73,6 +73,23 @@ function App() {
   const [predictionItems, setPredictionItems] = useState<PredItem[]>([]);
   const [hideFailed, setHideFailed] = useState(true);
   const awaitingAcceptanceRef = useRef<string[]>([]); // FIFO of proved → accepted mapping
+  const hasScrolledOnReportRef = useRef(false);
+
+  useEffect(() => {
+    if (reportMarkdown && !hasScrolledOnReportRef.current) {
+      hasScrolledOnReportRef.current = true;
+      try {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+      } catch {
+        try {
+          window.scrollTo(0, document.documentElement.scrollHeight);
+        } catch {}
+      }
+    }
+    if (!reportMarkdown) {
+      hasScrolledOnReportRef.current = false;
+    }
+  }, [reportMarkdown]);
 
   const canStart = useMemo(() => seedsText.trim().length > 0 && !loading, [seedsText, loading]);
 
@@ -139,10 +156,30 @@ function App() {
             } else if (evt.phase === "proving" && evt.status === "accepted") {
               setCounters((c) => ({ ...c, accepted: c.accepted + 1 }));
               const s = String(evt.statement || awaitingAcceptanceRef.current.shift() || "");
-              if (s) setPredictionItems((items) => items.map((it) => it.id === s ? { ...it, status: "accepted" } : it));
+              if (s) setPredictionItems((items) => items.map((it) => it.id === s ? { ...it, status: it.status === "accepted_both" ? it.status : "accepted" } : it));
             } else if (evt.phase === "proving" && evt.status === "accepted_both") {
               const s = String(evt.statement || "");
               if (s) setPredictionItems((items) => items.map((it) => it.id === s ? { ...it, status: "accepted_both" } : it));
+              else {
+                setPredictionItems((items) => {
+                  const idxAccepted = (() => {
+                    for (let i = items.length - 1; i >= 0; i--) {
+                      if (items[i].status === "accepted") return i;
+                    }
+                    return -1;
+                  })();
+                  if (idxAccepted >= 0) {
+                    const clone = items.slice();
+                    clone[idxAccepted] = { ...clone[idxAccepted], status: "accepted_both" };
+                    return clone;
+                  }
+                  const fallback = awaitingAcceptanceRef.current.shift();
+                  if (fallback) {
+                    return items.map((it) => it.id === fallback ? { ...it, status: "accepted_both" } : it);
+                  }
+                  return items;
+                });
+              }
             } else if (evt.phase === "complete" && typeof evt.report_markdown === "string") {
               setReportMarkdown(evt.report_markdown);
             } else if (evt.phase === "error" && evt.error) {

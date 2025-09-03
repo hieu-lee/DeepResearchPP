@@ -31,13 +31,20 @@ def run_automate_math_research(
     logger.info("[Phase] Start research pipeline (model=%s, guideline=%s, seeds_len=%s)", model, bool(research_guideline), seed_len)
     # Literature review
     logger.info("[Phase] Literature review: begin")
+    def _map_model(name: str, *, has_tools: bool = False, is_prover: bool = False) -> str:
+        if name == "gpt-oss-120b":
+            if is_prover:
+                return "openai/gpt-oss-120b"
+            return "o4-mini" if has_tools else "openai/gpt-oss-120b"
+        return name
+
     pipeline = ResearchPipeline(
         ResearchConfig(
-            lit_model=model,
-            predict_model=model,
-            prove_model=model,
-            reporter_model=model if model else "gpt-5-mini",
-            novelty_model=model,
+            lit_model=_map_model(model, has_tools=True),
+            predict_model=_map_model(model, has_tools=True),
+            prove_model=_map_model(model, has_tools=True),
+            reporter_model=_map_model(model, has_tools=False),
+            novelty_model=_map_model(model, has_tools=True),
             research_guideline=research_guideline,
         )
     )
@@ -63,7 +70,7 @@ def run_automate_math_research(
 
     results: list[tuple[str, str]] = []
     futures = []
-    refiner = ResultRefiner(model=model, reasoning_effort="medium")
+    refiner = ResultRefiner(model=_map_model(model, has_tools=False), reasoning_effort="medium")
     def _prove_stmt(statement: str) -> tuple[bool, str]:
         local_solver = Solver(model=model)
         return local_solver.solve(statement, 8, lit)
@@ -93,7 +100,7 @@ def run_automate_math_research(
                     tightened = refiner.tighten(rs, rp)
                     if tightened is not None:
                         t_stmt, t_proof = tightened
-                        j = Judge(model=model)
+                        j = Judge(model=_map_model(model, has_tools=True))
                         jres = j.assess(t_stmt, t_proof)
                         if jres.correctness:
                             logger.info("[Proving] Tighten accepted by Judge")
@@ -455,7 +462,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             return 2
 
         from concurrent.futures import ThreadPoolExecutor, as_completed
-        refiner = ResultRefiner(model=args.model, reasoning_effort="medium")
+        refiner = ResultRefiner(model=(_map_model(args.model, has_tools=False) if ' _map_model' in globals() else args.model), reasoning_effort="medium")
 
         def _refine_item(item: dict) -> dict:
             stmt = str(item.get("statement", ""))
@@ -473,7 +480,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                 tightened = refiner.tighten(base_stmt, base_proof)
                 if tightened is not None:
                     t_stmt, t_proof = tightened
-                    j = Judge(model=args.model)
+                    j = Judge(model=(_map_model(args.model, has_tools=True) if ' _map_model' in globals() else args.model))
                     jres = j.assess(t_stmt, t_proof)
                     if jres.correctness:
                         return {"statement": t_stmt, "proof_markdown": t_proof}

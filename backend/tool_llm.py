@@ -79,6 +79,17 @@ def generate_structured_with_tools(
             timeout=timeout,
         )
 
+    # For Groq, there is no tool-use loop supported; fall back to provider-agnostic call
+    if provider == "groq":
+        from llm_provider import generate_structured as _gen
+        return _gen(
+            messages=messages,
+            response_model=response_model,
+            model=model,
+            reasoning_effort=reasoning_effort,
+            timeout=timeout,
+        )
+
     from openai import OpenAI  # type: ignore
 
     client = OpenAI(timeout=timeout)

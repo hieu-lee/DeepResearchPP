@@ -27,11 +27,12 @@ class Prover:
     Maintains conversation state to enable iterative reproving with feedback.
     """
 
-    def __init__(self, model: str = "gpt-5-mini", reasoning_effort: str = "high", timeout: float = 2400.0, max_timeout_retries: int = 2) -> None:
+    def __init__(self, model: str = "gpt-5-mini", reasoning_effort: str = "high", timeout: float = 2400.0, max_timeout_retries: int = 2, use_tools: bool = True) -> None:
         self.model = model
         self.reasoning_effort = reasoning_effort
         self.timeout = timeout
         self.max_timeout_retries = max(0, int(max_timeout_retries))
+        self.use_tools = bool(use_tools)
         self._messages: List[Dict[str, Any]] = []
         self.logger = logging.getLogger(self.__class__.__name__)
 
@@ -66,16 +67,24 @@ class Prover:
         while True:
             try:
                 self.logger.debug("LLM request (prove): parse attempt %d", attempt + 1)
-                # Use tool-aware path to enable local Python scratchpad
-                resp = generate_structured_with_tools(
-                    messages=self._messages,
-                    response_model=ProofResponse,
-                    model=selected_model,
-                    tools=[build_run_python_tool_definition()],
-                    tool_registry={"run_python": lambda args: run_python(**args)},
-                    reasoning_effort=selected_effort,
-                    timeout=self.timeout,
-                )
+                if self.use_tools:
+                    resp = generate_structured_with_tools(
+                        messages=self._messages,
+                        response_model=ProofResponse,
+                        model=selected_model,
+                        tools=[build_run_python_tool_definition()],
+                        tool_registry={"run_python": lambda args: run_python(**args)},
+                        reasoning_effort=selected_effort,
+                        timeout=self.timeout,
+                    )
+                else:
+                    resp = generate_structured(
+                        messages=self._messages,
+                        response_model=ProofResponse,
+                        model=selected_model,
+                        reasoning_effort=selected_effort,
+                        timeout=self.timeout,
+                    )
                 break
             except (APITimeoutError, APIConnectionError) as e:
                 self.logger.warning(
@@ -133,15 +142,24 @@ class Prover:
         while True:
             try:
                 self.logger.debug("LLM request (reprove): parse attempt %d", attempt + 1)
-                resp = generate_structured_with_tools(
-                    messages=self._messages,
-                    response_model=ProofResponse,
-                    model=selected_model,
-                    tools=[build_run_python_tool_definition()],
-                    tool_registry={"run_python": lambda args: run_python(**args)},
-                    reasoning_effort=selected_effort,
-                    timeout=self.timeout,
-                )
+                if self.use_tools:
+                    resp = generate_structured_with_tools(
+                        messages=self._messages,
+                        response_model=ProofResponse,
+                        model=selected_model,
+                        tools=[build_run_python_tool_definition()],
+                        tool_registry={"run_python": lambda args: run_python(**args)},
+                        reasoning_effort=selected_effort,
+                        timeout=self.timeout,
+                    )
+                else:
+                    resp = generate_structured(
+                        messages=self._messages,
+                        response_model=ProofResponse,
+                        model=selected_model,
+                        reasoning_effort=selected_effort,
+                        timeout=self.timeout,
+                    )
                 break
             except (APITimeoutError, APIConnectionError) as e:
                 self.logger.warning(

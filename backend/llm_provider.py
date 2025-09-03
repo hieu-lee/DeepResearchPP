@@ -37,11 +37,14 @@ def generate_structured(
 ) -> LLMResponse:
     """Provider-agnostic structured generation.
 
-    Selects provider via env var LLM_PROVIDER: 'openai' (default) or 'google'.
-    - OpenAI: uses Responses API parse with Pydantic
+    Selects provider via LLM_PROVIDER env (openai|google|groq) with auto-detection:
+    - If model is 'openai/gpt-oss-120b' and GROQ_API_KEY is set, route to Groq
     - Google: uses google-genai with response_schema=Pydantic model
+    - OpenAI-compatible: uses Responses API parse with Pydantic
     """
     provider = (os.getenv("LLM_PROVIDER", "openai") or "openai").lower()
+    if (model == "openai/gpt-oss-120b") and os.getenv("GROQ_API_KEY"):
+        provider = "groq"
 
     if provider == "google":
         # Lazy import to avoid requiring the dependency when unused
@@ -64,6 +67,71 @@ def generate_structured(
             # Best-effort: attempt to parse from text using the Pydantic model
             parsed = response_model.model_validate_json(text)
         return LLMResponse(output_parsed=parsed, output_text=text)
+
+    if provider == "groq":
+        # Use Groq Chat Completions with JSON schema response_format
+        from groq import Groq  # type: ignore
+        import json as _json
+
+        client = Groq()
+        groq_kwargs: Dict[str, Any] = {
+            "model": model,
+            "messages": messages,
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "structured_output",
+                    "schema": response_model.model_json_schema(),
+                },
+            },
+            "reasoning_format": "hidden",
+            "temperature": 0.8,
+            "top_p": 1,
+            "max_completion_tokens": 40000,
+        }
+        if reasoning_effort:
+            groq_kwargs["reasoning_effort"] = reasoning_effort
+        try:
+            resp = client.chat.completions.create(**groq_kwargs)
+            text = (getattr(resp.choices[0].message, "content", None) or "")
+            try:
+                raw = _json.loads(text or "{}")
+                parsed = response_model.model_validate(raw)
+                return LLMResponse(output_parsed=parsed, output_text=_json.dumps(raw, ensure_ascii=False))
+            except Exception:
+                parsed = response_model.model_validate_json(text)
+                return LLMResponse(output_parsed=parsed, output_text=text)
+        except Exception as e:
+            err_str = str(e)
+            # Retry with a schema-inlined instruction if schema-validate failed or token limit reached
+            if ("json_validate_failed" in err_str) or ("max completion tokens" in err_str):
+                try:
+                    schema_json = _json.dumps(response_model.model_json_schema(), ensure_ascii=False)
+                except Exception:
+                    schema_json = "{}"
+                repair_messages = list(messages) + [
+                    {
+                        "role": "user",
+                        "content": (
+                            "Return ONLY a valid JSON object that conforms exactly to the following JSON Schema. "
+                            "Do not include any prose, code fences, or extra text. Output a single JSON object.\n"
+                            f"JSON Schema:\n{schema_json}"
+                        ),
+                    }
+                ]
+                groq_kwargs["messages"] = repair_messages
+                # increase the budget a bit for retry
+                groq_kwargs["max_completion_tokens"] = 40000
+                resp = client.chat.completions.create(**groq_kwargs)
+                text = (getattr(resp.choices[0].message, "content", None) or "")
+                try:
+                    raw = _json.loads(text or "{}")
+                    parsed = response_model.model_validate(raw)
+                    return LLMResponse(output_parsed=parsed, output_text=_json.dumps(raw, ensure_ascii=False))
+                except Exception:
+                    parsed = response_model.model_validate_json(text)
+                    return LLMResponse(output_parsed=parsed, output_text=text)
+            raise
 
     # Default: OpenAI-compatible provider (OpenAI or Ollama via base URL)
     from openai import OpenAI  # type: ignore

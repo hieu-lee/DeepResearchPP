@@ -11,7 +11,11 @@ class Solver:
 
     def __init__(self, model: str = "gpt-5") -> None:
         self.model = model
-        self.prover: Prover = Prover(model=model)
+        # If user selected gpt-oss-120b, use 120b for Prover with no tools; otherwise default behavior
+        if model == "gpt-oss-120b":
+            self.prover = Prover(model="openai/gpt-oss-120b", use_tools=False)
+        else:
+            self.prover = Prover(model=model)
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def solve(
@@ -34,8 +38,10 @@ class Solver:
 
         feedback: str = ""
         last_proof: str = ""
-        judge1 = Judge(model=self.model)
-        judge2 = Judge(model=self.model)
+        # Judges: if user selected gpt-oss-120b, prefer o4-mini for judges (tool-capable)
+        judge_model = "o4-mini" if self.model == "gpt-oss-120b" else self.model
+        judge1 = Judge(model=judge_model)
+        judge2 = Judge(model=judge_model)
 
         for _ in range(max_tries_per_prover):
             self.logger.info("Prover: attempting proof%s", " (with feedback)" if feedback else "")

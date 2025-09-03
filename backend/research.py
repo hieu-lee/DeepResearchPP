@@ -28,7 +28,8 @@ def _python_tool_impl(args: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _web_search_tool_for_model(model_name: str) -> dict:
-    # Use legacy web_search tool uniformly across models
+    # Use legacy web_search tool for models that support tools.
+    # If model has been mapped to o4-mini, tools are allowed; if it is an OSS text-only model, caller should avoid tools.
     return {"type": "web_search", "search_context_size": "medium"}
 
 

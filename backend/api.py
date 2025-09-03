@@ -60,12 +60,19 @@ def generate_report_stream(req: ReportRequest) -> StreamingResponse:
             yield json.dumps({"phase": "start", "model": req.model}) + "\n"
             from .research import ResearchPipeline, ResearchConfig
             from .cli import _append_correct_result_json  # reuse util if desired
+            def _map_model(name: str, *, has_tools: bool = False, is_prover: bool = False) -> str:
+                if name == "gpt-oss-120b":
+                    if is_prover:
+                        return "openai/gpt-oss-120b"
+                    return "o4-mini" if has_tools else "openai/gpt-oss-120b"
+                return name
+
             cfg = ResearchConfig(
-                lit_model=req.model,
-                predict_model=req.model,
-                prove_model=req.model,
-                reporter_model=(req.model or "gpt-5-mini"),
-                novelty_model=req.model,
+                lit_model=_map_model(req.model, has_tools=True),
+                predict_model=_map_model(req.model, has_tools=True),
+                prove_model=_map_model(req.model, has_tools=True),
+                reporter_model=_map_model(req.model, has_tools=False),
+                novelty_model=_map_model(req.model, has_tools=True),
                 research_guideline=req.research_guideline,
             )
             pipe = ResearchPipeline(cfg)
@@ -102,7 +109,7 @@ def generate_report_stream(req: ReportRequest) -> StreamingResponse:
                     # Refine/tighten/judge sequentially here but per-item (already parallel per future)
                     from .result_refiner import ResultRefiner
                     from .judge import Judge
-                    ref = ResultRefiner(model=req.model, reasoning_effort="medium")
+                    ref = ResultRefiner(model=_map_model(req.model, has_tools=False), reasoning_effort="medium")
                     try:
                         r = ref.refine(stmt, payload)
                     except Exception:
@@ -115,14 +122,14 @@ def generate_report_stream(req: ReportRequest) -> StreamingResponse:
                         t = ref.tighten(base_stmt, base_proof)
                         if t is not None:
                             t_stmt, t_proof = t
-                            j = Judge(model=req.model)
+                            j = Judge(model=_map_model(req.model, has_tools=True))
                             jres = j.assess(t_stmt, t_proof)
                             if jres.correctness:
                                 results.append((t_stmt, t_proof))
                                 yield json.dumps({"phase": "proving", "status": "accepted", "tightened": True, "statement": t_stmt}) + "\n"
                                 # Second independent judge confirmation
                                 try:
-                                    j2 = Judge(model=req.model)
+                                    j2 = Judge(model=_map_model(req.model, has_tools=True))
                                     j2res = j2.assess(t_stmt, t_proof)
                                     if j2res.correctness:
                                         yield json.dumps({"phase": "proving", "status": "accepted_both", "statement": t_stmt}) + "\n"
@@ -135,7 +142,7 @@ def generate_report_stream(req: ReportRequest) -> StreamingResponse:
                     yield json.dumps({"phase": "proving", "status": "accepted", "tightened": False, "statement": base_stmt}) + "\n"
                     # Second independent judge confirmation
                     try:
-                        j2 = Judge(model=req.model)
+                        j2 = Judge(model=_map_model(req.model, has_tools=True))
                         j2res = j2.assess(base_stmt, base_proof)
                         if j2res.correctness:
                             yield json.dumps({"phase": "proving", "status": "accepted_both", "statement": base_stmt}) + "\n"
