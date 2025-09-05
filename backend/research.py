@@ -154,7 +154,7 @@ class ResearchPipeline:
         tools = [_web_search_tool_for_model(self.config.novelty_model)]
         registry: dict[str, Any] = {}
 
-        def _check(stmt: str) -> tuple[str, bool]:
+        def _check(stmt: str) -> tuple[str, bool, str | None, str | None]:
             messages = [
                 {"role": "system", "content": NOVELTY_SYSTEM_PROMPT},
                 {"role": "user", "content": build_novelty_user_prompt(lit.annotations, stmt)},
@@ -168,20 +168,39 @@ class ResearchPipeline:
                 reasoning_effort=self.config.novelty_reasoning,
                 timeout=900.0,
             )
-            return stmt, bool(resp.output_parsed.is_novel)  # type: ignore[attr-defined]
+            parsed = resp.output_parsed  # type: ignore[assignment]
+            is_novel = bool(getattr(parsed, "is_novel", False))
+            matched_stmt = getattr(parsed, "matched_statement", None)
+            matched_url = getattr(parsed, "matched_url", None)
+            return stmt, is_novel, matched_stmt, matched_url
 
         kept: list[str] = []
+        appended_non_novel = 0
         with ThreadPoolExecutor(max_workers=8) as ex:
             futures = {ex.submit(_check, s): s for s in preds.predicted_results}
             for fut in as_completed(futures):
                 try:
-                    stmt, is_novel = fut.result()
+                    stmt, is_novel, matched_stmt, matched_url = fut.result()
                 except Exception:
                     # If a single novelty check fails, treat it as not novel
                     continue
                 if is_novel:
                     kept.append(stmt)
-        self.logger.info("[Research] Novelty check: kept %d/%d results", len(kept), len(preds.predicted_results))
+                else:
+                    # If not novel and we have a matched known result with source, append it like Literature Review
+                    if matched_stmt and matched_url is not None:
+                        try:
+                            lit.results.append(type(lit.results[0])(statement=str(matched_stmt), url=str(matched_url)))
+                            appended_non_novel += 1
+                        except Exception:
+                            # Be resilient if schema shape changes; skip append on error
+                            pass
+        self.logger.info(
+            "[Research] Novelty check: kept %d/%d results (appended known=%d)",
+            len(kept),
+            len(preds.predicted_results),
+            appended_non_novel,
+        )
         return kept
 
     def compile_final_report(

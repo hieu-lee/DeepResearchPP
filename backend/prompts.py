@@ -552,8 +552,10 @@ NOVELTY_SYSTEM_PROMPT: str = dedent(
     - If you only find weaker/special cases, survey notes without proof, or no convincing match, return is_novel=true.
     - Be conservative: if clear strong evidence of prior existence is found, mark as not novel.
 
-    Return ONLY a JSON object with field:
+    Return ONLY a JSON object with fields:
     - "is_novel": boolean
+    - "matched_statement": string (if is_novel=false; else empty)
+    - "matched_url": string (if is_novel=false; else empty)
     """
 ).strip()
 
@@ -567,6 +569,7 @@ def build_novelty_user_prompt(literature_annotations: str, predicted_result_late
         Predicted result (LaTeX):
         {predicted_result_latex}
 
-        Use web search to check for existing equal/stronger results. Return ONLY the JSON object.
+        Use web search to check for existing equal/stronger results. Return ONLY the JSON object with fields
+        is_novel (boolean), matched_statement (string if not novel else empty), matched_url (string if not novel else empty).
         """
     ).strip()

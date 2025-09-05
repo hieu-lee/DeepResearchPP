@@ -241,6 +241,30 @@ class NoveltyCheck(BaseModel):
         ),
         validation_alias=AliasChoices("is_novel", "novel", "is_new", "novelty"),
     )
+    matched_statement: str | None = Field(
+        None,
+        description=(
+            "If not novel, the closest matched known result statement (Markdown/LaTeX) that justifies non-novelty."
+        ),
+        validation_alias=AliasChoices(
+            "matched_statement",
+            "existing_statement",
+            "prior_statement",
+            "match_statement",
+        ),
+    )
+    matched_url: str | None = Field(
+        None,
+        description="If not novel, a reliable source URL for the matched known result.",
+        validation_alias=AliasChoices(
+            "matched_url",
+            "existing_url",
+            "prior_url",
+            "source",
+            "url",
+            "link",
+        ),
+    )
 
 
 class ResultRefinementResponse(BaseModel):
