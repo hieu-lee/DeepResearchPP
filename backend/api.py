@@ -71,7 +71,7 @@ def generate_report_stream(req: ReportRequest) -> StreamingResponse:
                 lit_model=_map_model(req.model, has_tools=True),
                 predict_model=_map_model(req.model, has_tools=True),
                 prove_model=_map_model(req.model, has_tools=True),
-                reporter_model=_map_model(req.model, has_tools=False),
+                reporter_model=("o4-mini" if req.model == "gpt-oss-120b" else _map_model(req.model, has_tools=False)),
                 novelty_model=_map_model(req.model, has_tools=True),
                 research_guideline=req.research_guideline,
             )

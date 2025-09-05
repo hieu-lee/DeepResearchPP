@@ -43,7 +43,7 @@ def run_automate_math_research(
             lit_model=_map_model(model, has_tools=True),
             predict_model=_map_model(model, has_tools=True),
             prove_model=_map_model(model, has_tools=True),
-            reporter_model=_map_model(model, has_tools=False),
+            reporter_model=("o4-mini" if model == "gpt-oss-120b" else _map_model(model, has_tools=False)),
             novelty_model=_map_model(model, has_tools=True),
             research_guideline=research_guideline,
         )
