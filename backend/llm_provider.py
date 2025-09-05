@@ -73,7 +73,17 @@ def generate_structured(
         from groq import Groq  # type: ignore
         import json as _json
 
-        client = Groq()
+        # Configure a long timeout for Groq requests (default 30 minutes)
+        groq_timeout: float = (
+            float(timeout) if timeout is not None else float(os.getenv("GROQ_TIMEOUT_SECONDS", "1800"))
+        )
+        try:
+            client = Groq(timeout=groq_timeout)
+            _timeout_in_kwargs = False
+        except TypeError:
+            # Older SDKs may not support timeout on the client; pass per-request instead
+            client = Groq()
+            _timeout_in_kwargs = True
         groq_kwargs: Dict[str, Any] = {
             "model": model,
             "messages": messages,
@@ -89,6 +99,8 @@ def generate_structured(
             "top_p": 1,
             "max_completion_tokens": 40000,
         }
+        if _timeout_in_kwargs:
+            groq_kwargs["timeout"] = groq_timeout
         if reasoning_effort:
             groq_kwargs["reasoning_effort"] = reasoning_effort
         try:
