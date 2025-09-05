@@ -14,6 +14,10 @@ class LLMResponse:
     output_text: str
 
 
+class GroqRetriesExhaustedError(RuntimeError):
+    """Raised when Groq chat.completions.create fails after all retry attempts."""
+
+
 def _join_messages_as_text(messages: List[Dict[str, Any]]) -> str:
     parts: List[str] = []
     for msg in messages:
@@ -168,7 +172,9 @@ def generate_structured(
                     messages_patched = True
                 attempt += 1
                 time.sleep(1.0)
-        raise RuntimeError(f"Groq request failed after {max_attempts} attempts.")
+        raise GroqRetriesExhaustedError(
+            f"Groq request failed after {max_attempts} attempts. Last error: {last_exception}"
+        )
 
     # Default: OpenAI-compatible provider (OpenAI or Ollama via base URL)
     from openai import OpenAI  # type: ignore

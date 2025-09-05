@@ -18,6 +18,7 @@ from .prompts import (
 from .tool_llm import generate_structured_with_tools
 from .code_tool import run_python, build_run_python_tool_definition
 from .markdown_tool import validate_markdown, build_validate_markdown_tool_definition
+from .llm_provider import GroqRetriesExhaustedError
 
 
 def _python_tool_impl(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -62,15 +63,21 @@ class ResearchPipeline:
         ]
 
         # The model is responsible for placing the seed result as the first tuple
-        resp = generate_structured_with_tools(
-            messages=messages,
-            response_model=LiteratureReviewResult,
-            model=self.config.lit_model,
-            tools=[_web_search_tool_for_model(self.config.lit_model)],
-            tool_registry={},  # no local tools for this step
-            reasoning_effort=self.config.lit_reasoning,
-            timeout=2400.0,
-        )
+        try:
+            resp = generate_structured_with_tools(
+                messages=messages,
+                response_model=LiteratureReviewResult,
+                model=self.config.lit_model,
+                tools=[_web_search_tool_for_model(self.config.lit_model)],
+                tool_registry={},  # no local tools for this step
+                reasoning_effort=self.config.lit_reasoning,
+                timeout=2400.0,
+            )
+        except GroqRetriesExhaustedError:
+            # Skip straight to report generation later; return minimal literature context
+            self.logger.warning("[Research] Groq retries exhausted in literature review; continuing with minimal context")
+            minimal = LiteratureReviewResult(annotations="", results=[])
+            return minimal
         lit = resp.output_parsed  # type: ignore[assignment]
         try:
             count = len(getattr(lit, "results", []) or [])
@@ -119,6 +126,11 @@ class ResearchPipeline:
                     count = 0
                 self.logger.info("[Research] Prediction: done (%d predicted results)", count)
                 return preds  # type: ignore[return-value]
+            except GroqRetriesExhaustedError:
+                # Treat as no predictions; proceed to report
+                self.logger.warning("[Research] Groq retries exhausted in prediction; no new results.")
+                empty = PredictedResults(annotations=lit.annotations, predicted_results=[])
+                return empty
             except Exception as e:
                 err_str = str(e)
                 last_err = e
@@ -160,15 +172,19 @@ class ResearchPipeline:
                 {"role": "system", "content": NOVELTY_SYSTEM_PROMPT},
                 {"role": "user", "content": build_novelty_user_prompt(lit.annotations, stmt)},
             ]
-            resp = generate_structured_with_tools(
-                messages=messages,
-                response_model=NoveltyCheck,
-                model=self.config.novelty_model,
-                tools=tools,
-                tool_registry=registry,
-                reasoning_effort=self.config.novelty_reasoning,
-                timeout=900.0,
-            )
+            try:
+                resp = generate_structured_with_tools(
+                    messages=messages,
+                    response_model=NoveltyCheck,
+                    model=self.config.novelty_model,
+                    tools=tools,
+                    tool_registry=registry,
+                    reasoning_effort=self.config.novelty_reasoning,
+                    timeout=900.0,
+                )
+            except GroqRetriesExhaustedError:
+                # If novelty check fails globally by retries, mark as not novel to skip proving
+                return stmt, False, None, None
             parsed = resp.output_parsed  # type: ignore[assignment]
             is_novel = bool(getattr(parsed, "is_novel", False))
             matched_stmt = getattr(parsed, "matched_statement", None)
@@ -238,15 +254,21 @@ class ResearchPipeline:
         round_idx = 0
         last_report: FinalReport | None = None
         while round_idx < max_rounds:
-            resp = generate_structured_with_tools(
-                messages=messages,
-                response_model=FinalReport,
-                model=self.config.reporter_model,
-                tools=tools,
-                tool_registry=registry,
-                reasoning_effort=self.config.reporter_reasoning,
-                timeout=1800.0,
-            )
+            try:
+                resp = generate_structured_with_tools(
+                    messages=messages,
+                    response_model=FinalReport,
+                    model=self.config.reporter_model,
+                    tools=tools,
+                    tool_registry=registry,
+                    reasoning_effort=self.config.reporter_reasoning,
+                    timeout=1800.0,
+                )
+            except GroqRetriesExhaustedError:
+                # If the final report cannot be generated via Groq after retries, synthesize a minimal report
+                self.logger.warning("[Research] Groq retries exhausted in final report; returning minimal report")
+                minimal = FinalReport(report_markdown="# Research Report\n\n_No content due to upstream model failures._")
+                return minimal
             report = resp.output_parsed  # type: ignore[assignment]
             last_report = report
             report_md = getattr(report, "report_markdown", "") or ""
