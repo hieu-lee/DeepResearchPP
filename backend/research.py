@@ -17,6 +17,7 @@ from .prompts import (
 )
 from .tool_llm import generate_structured_with_tools
 from .code_tool import run_python, build_run_python_tool_definition
+from .markdown_tool import validate_markdown, build_validate_markdown_tool_definition
 
 
 def _python_tool_impl(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -229,18 +230,64 @@ class ResearchPipeline:
             },
         ]
 
-        resp = generate_structured_with_tools(
-            messages=messages,
-            response_model=FinalReport,
-            model=self.config.reporter_model,
-            tools=[],
-            tool_registry={},
-            reasoning_effort=self.config.reporter_reasoning,
-            timeout=1800.0,
+        # Allow the model to optionally call a validator tool, and also validate locally after each attempt.
+        tools = [build_validate_markdown_tool_definition()]
+        registry = {"validate_markdown": lambda args: validate_markdown(str(args.get("markdown", "")))}
+
+        max_rounds = 5
+        round_idx = 0
+        last_report: FinalReport | None = None
+        while round_idx < max_rounds:
+            resp = generate_structured_with_tools(
+                messages=messages,
+                response_model=FinalReport,
+                model=self.config.reporter_model,
+                tools=tools,
+                tool_registry=registry,
+                reasoning_effort=self.config.reporter_reasoning,
+                timeout=1800.0,
+            )
+            report = resp.output_parsed  # type: ignore[assignment]
+            last_report = report
+            report_md = getattr(report, "report_markdown", "") or ""
+            result = validate_markdown(report_md)
+            if bool(result.get("ok")):
+                self.logger.info("[Research] Final report: valid markdown (length %d)", len(report_md))
+                return report  # type: ignore[return-value]
+
+            errors = list(result.get("errors", []) or [])
+            try:
+                err_count = len(errors)
+            except Exception:
+                err_count = 0
+            self.logger.info(
+                "[Research] Final report validation failed (round %d/%d, errors=%d)",
+                round_idx + 1,
+                max_rounds,
+                err_count,
+            )
+
+            # Feed the exact validator errors back to the model to repair.
+            error_list = "\n".join([f"- {e}" for e in errors])
+            messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "Your previous report failed Markdown/KaTeX validation.\n"
+                        "Fix ALL issues below and regenerate a clean report.\n"
+                        "Do not add backticks or unsupported environments/macros.\n"
+                        "Validation errors:\n" + error_list
+                    ),
+                }
+            )
+            round_idx += 1
+
+        # If still invalid after max rounds, return the last attempt (best effort)
+        self.logger.info(
+            "[Research] Final report: returning best-effort after %d rounds (still invalid)",
+            max_rounds,
         )
-        report = resp.output_parsed  # type: ignore[assignment]
-        self.logger.info("[Research] Final report: done (length %d)", len(getattr(report, "report_markdown", "") or ""))
-        return report  # type: ignore[return-value]
+        return last_report or resp.output_parsed  # type: ignore[return-value]
 
     def predict_and_filter(self, lit: LiteratureReviewResult) -> list[str]:
         preds = self.predict(lit)
