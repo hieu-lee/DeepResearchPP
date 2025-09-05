@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
 
@@ -103,47 +104,71 @@ def generate_structured(
             groq_kwargs["timeout"] = groq_timeout
         if reasoning_effort:
             groq_kwargs["reasoning_effort"] = reasoning_effort
-        try:
-            resp = client.chat.completions.create(**groq_kwargs)
-            text = (getattr(resp.choices[0].message, "content", None) or "")
+        max_attempts: int = int(os.getenv("GROQ_MAX_RETRIES", "10"))
+        attempt: int = 0
+        last_exception: Optional[Exception] = None
+        messages_patched: bool = False
+        while attempt < max_attempts:
             try:
-                raw = _json.loads(text or "{}")
-                parsed = response_model.model_validate(raw)
-                return LLMResponse(output_parsed=parsed, output_text=_json.dumps(raw, ensure_ascii=False))
-            except Exception:
-                parsed = response_model.model_validate_json(text)
-                return LLMResponse(output_parsed=parsed, output_text=text)
-        except Exception as e:
-            err_str = str(e)
-            # Retry with a schema-inlined instruction if schema-validate failed or token limit reached
-            if ("json_validate_failed" in err_str) or ("max completion tokens" in err_str):
-                try:
-                    schema_json = _json.dumps(response_model.model_json_schema(), ensure_ascii=False)
-                except Exception:
-                    schema_json = "{}"
-                repair_messages = list(messages) + [
-                    {
-                        "role": "user",
-                        "content": (
-                            "Return ONLY a valid JSON object that conforms exactly to the following JSON Schema. "
-                            "Do not include any prose, code fences, or extra text. Output a single JSON object.\n"
-                            f"JSON Schema:\n{schema_json}"
-                        ),
-                    }
-                ]
-                groq_kwargs["messages"] = repair_messages
-                # increase the budget a bit for retry
-                groq_kwargs["max_completion_tokens"] = 40000
                 resp = client.chat.completions.create(**groq_kwargs)
                 text = (getattr(resp.choices[0].message, "content", None) or "")
+                # Try strict JSON then fallback to pydantic JSON parsing; if both fail, retry
                 try:
                     raw = _json.loads(text or "{}")
                     parsed = response_model.model_validate(raw)
                     return LLMResponse(output_parsed=parsed, output_text=_json.dumps(raw, ensure_ascii=False))
                 except Exception:
-                    parsed = response_model.model_validate_json(text)
-                    return LLMResponse(output_parsed=parsed, output_text=text)
-            raise
+                    try:
+                        parsed = response_model.model_validate_json(text)
+                        return LLMResponse(output_parsed=parsed, output_text=text)
+                    except Exception as parse_exc:
+                        last_exception = parse_exc
+                        # Treat parsing errors as retryable
+                        if not messages_patched:
+                            try:
+                                schema_json = _json.dumps(response_model.model_json_schema(), ensure_ascii=False)
+                            except Exception:
+                                schema_json = "{}"
+                            repair_messages = list(messages) + [
+                                {
+                                    "role": "user",
+                                    "content": (
+                                        "Return ONLY a valid JSON object that conforms exactly to the following JSON Schema. "
+                                        "Do not include any prose, code fences, or extra text. Output a single JSON object.\n"
+                                        f"JSON Schema:\n{schema_json}"
+                                    ),
+                                }
+                            ]
+                            groq_kwargs["messages"] = repair_messages
+                            groq_kwargs["max_completion_tokens"] = 40000
+                            messages_patched = True
+                        attempt += 1
+                        time.sleep(1.0)
+                        continue
+            except Exception as e:
+                last_exception = e
+                err_str = str(e)
+                if (("json_validate_failed" in err_str) or ("max completion tokens" in err_str)) and not messages_patched:
+                    try:
+                        schema_json = _json.dumps(response_model.model_json_schema(), ensure_ascii=False)
+                    except Exception:
+                        schema_json = "{}"
+                    repair_messages = list(messages) + [
+                        {
+                            "role": "user",
+                            "content": (
+                                "Return ONLY a valid JSON object that conforms exactly to the following JSON Schema. "
+                                "Do not include any prose, code fences, or extra text. Output a single JSON object.\n"
+                                f"JSON Schema:\n{schema_json}"
+                            ),
+                        }
+                    ]
+                    groq_kwargs["messages"] = repair_messages
+                    groq_kwargs["max_completion_tokens"] = 40000
+                    messages_patched = True
+                attempt += 1
+                time.sleep(1.0)
+        raise RuntimeError(f"Groq request failed after {max_attempts} attempts.")
 
     # Default: OpenAI-compatible provider (OpenAI or Ollama via base URL)
     from openai import OpenAI  # type: ignore
