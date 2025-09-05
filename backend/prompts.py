@@ -28,6 +28,22 @@ PROOF_SYSTEM_PROMPT: str = dedent(
       5) Forbidden in geometry proofs: angle chasing by named theorems (e.g., tangent–chord) unless rederived in complex form; unproved synthetic steps; vector/barycentric/projective setups; coordinate geometry in $\mathbb{R}^2$.
     Structure suggestion (not mandatory): bold Claim (if restated) and begin with a bold "Proof."; end with the tombstone symbol ∎.
     Keep the proof self-contained, well-formatted, and concise while remaining rigorous.
+    
+    STRICT JSON FORMAT (MANDATORY):
+    - Return EXACTLY one UTF-8 JSON object with a single top-level field "proof_markdown" (type: string).
+    - Do NOT include any additional fields.
+    - Do NOT include any text before or after the JSON object.
+    - Keys and all string values MUST be enclosed in double quotes ".
+    - Use strict RFC 8259 JSON: no comments, no trailing commas, no NaN/Infinity, no unquoted strings.
+    - Inside the "proof_markdown" string:
+      - Escape all backslashes as \\\ (e.g., write \\mathbb{R}, \\pmod{}).
+      - Encode newlines as \n. Do NOT put literal newlines inside the JSON string.
+      - Encode tabs as \t if needed. Do NOT include code fences ``` anywhere.
+    - Single-line JSON is preferred (but any whitespace outside strings is acceptable).
+    
+    VALID EXAMPLE (shape and escaping only; content is illustrative):
+    {"proof_markdown":"**Proof.** Let x\\in\\mathbb{R}.\n\nWe proceed by cases... \\square"}
+    
     Return ONLY the JSON object. Do not include backticks, explanations, or any extra text.
     """
 ).strip()
@@ -60,6 +76,22 @@ REPROVE_SYSTEM_PROMPT: str = dedent(
       5) Forbidden in geometry proofs: angle chasing by named theorems unless rederived in complex form; unproved synthetic steps; vector/barycentric/projective setups; coordinate geometry in $\\mathbb{R}^2$.
     Structure suggestion (not mandatory): bold Claim (if restated) and begin with a bold "Proof."; end with the tombstone symbol ∎.
     Keep the proof self-contained, well-formatted, and concise while remaining rigorous.
+    
+    STRICT JSON FORMAT (MANDATORY):
+    - Return EXACTLY one UTF-8 JSON object with a single top-level field "proof_markdown" (type: string).
+    - Do NOT include any additional fields.
+    - Do NOT include any text before or after the JSON object.
+    - Keys and all string values MUST be enclosed in double quotes ".
+    - Use strict RFC 8259 JSON: no comments, no trailing commas, no NaN/Infinity, no unquoted strings.
+    - Inside the "proof_markdown" string:
+      - Escape all backslashes as \\\ (e.g., write \\mathbb{R}, \\pmod{}).
+      - Encode newlines as \n. Do NOT put literal newlines inside the JSON string.
+      - Encode tabs as \t if needed. Do NOT include code fences ``` anywhere.
+    - Single-line JSON is preferred (but any whitespace outside strings is acceptable).
+    
+    VALID EXAMPLE (shape and escaping only; content is illustrative):
+    {"proof_markdown":"**Proof.** Modify the prior argument as follows...\n\nHence, the claim holds. \\square"}
+    
     Return ONLY the JSON object. Do not include backticks, explanations, or any extra text.
     """
 ).strip()
@@ -85,7 +117,13 @@ def build_proof_user_prompt(question: str) -> str:
         - For Euclidean geometry problems, a complex-number solution is encouraged: you may set the complex plane, assign complex coordinates to points, optionally normalize via a Möbius transform (e.g., send a circumcircle to the unit circle), and finish with algebraic verification.
         - Optionally restate a short bold Claim, start the argument with bold "Proof.", and end with the symbol ∎.
         - Keep the proof concise yet rigorous and self-contained.
-        Return ONLY the JSON object and nothing else.
+        
+        STRICT JSON FORMAT (MANDATORY):
+        - Return EXACTLY one JSON object with a single field "proof_markdown" (string). No other keys.
+        - Do NOT include any text before or after the JSON.
+        - Escape backslashes as \\\ and newlines as \n inside the string.
+        - Do NOT include code fences or Markdown outside the JSON.
+        - Example: {"proof_markdown":"**Proof.** ...\\square"}
         """
     ).strip()
 
@@ -194,6 +232,13 @@ def build_reprove_user_prompt(problem: str, previous_proof_markdown: str, feedba
         - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
         - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, DISCARD it and produce a fresh complex-number solution (set the complex plane, possibly normalize via a Möbius transform, and argue purely with complex identities).
         - Do not include any other commentary outside the JSON. Return ONLY the JSON object.
+        
+        STRICT JSON FORMAT (MANDATORY):
+        - Return EXACTLY one JSON object with a single field "proof_markdown" (string). No other keys.
+        - Do NOT include any text before or after the JSON.
+        - Escape backslashes as \\\ and newlines as \n inside the string.
+        - Do NOT include code fences or Markdown outside the JSON.
+        - Example: {"proof_markdown":"**Proof.** ...\\square"}
         """
     ).strip()
 
@@ -216,6 +261,13 @@ def build_feedback_only_reprove_prompt(feedback: str) -> str:
         - Begin the proof content immediately from the first character of "proof_markdown".
         - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
         - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, replace it entirely with a complex-number solution as per the system policy.
+        
+        STRICT JSON FORMAT (MANDATORY):
+        - Return EXACTLY one JSON object with a single field "proof_markdown" (string). No other keys.
+        - Do NOT include any text before or after the JSON.
+        - Escape backslashes as \\\ and newlines as \n inside the string.
+        - Do NOT include code fences or Markdown outside the JSON.
+        - Example: {"proof_markdown":"**Proof.** ...\\square"}
         Return ONLY the JSON object. No other text.
         """
     ).strip()
