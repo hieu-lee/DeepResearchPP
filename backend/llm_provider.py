@@ -82,6 +82,8 @@ def generate_structured(
         groq_timeout: float = (
             float(timeout) if timeout is not None else float(os.getenv("GROQ_TIMEOUT_SECONDS", "1800"))
         )
+        # Allow configuring the maximum completion tokens (default to 90k)
+        groq_max_completion_tokens: int = int(os.getenv("GROQ_MAX_COMPLETION_TOKENS", "65536"))
         try:
             client = Groq(timeout=groq_timeout)
             _timeout_in_kwargs = False
@@ -102,7 +104,7 @@ def generate_structured(
             "reasoning_format": "hidden",
             "temperature": 0.8,
             "top_p": 1,
-            "max_completion_tokens": 40000,
+            "max_completion_tokens": groq_max_completion_tokens,
         }
         if _timeout_in_kwargs:
             groq_kwargs["timeout"] = groq_timeout
@@ -144,7 +146,7 @@ def generate_structured(
                                 }
                             ]
                             groq_kwargs["messages"] = repair_messages
-                            groq_kwargs["max_completion_tokens"] = 40000
+                            groq_kwargs["max_completion_tokens"] = groq_max_completion_tokens
                             messages_patched = True
                         attempt += 1
                         time.sleep(1.0)
@@ -168,7 +170,7 @@ def generate_structured(
                         }
                     ]
                     groq_kwargs["messages"] = repair_messages
-                    groq_kwargs["max_completion_tokens"] = 40000
+                    groq_kwargs["max_completion_tokens"] = groq_max_completion_tokens
                     messages_patched = True
                 attempt += 1
                 time.sleep(1.0)
