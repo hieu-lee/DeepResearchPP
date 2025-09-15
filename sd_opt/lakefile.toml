@@ -1,0 +1,10 @@
+name = "sd_opt"
+version = "0.1.0"
+defaultTargets = ["sd_opt"]
+
+[[lean_lib]]
+name = "SdOpt"
+
+[[lean_exe]]
+name = "sd_opt"
+root = "Main"
