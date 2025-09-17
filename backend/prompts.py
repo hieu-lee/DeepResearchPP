@@ -398,11 +398,11 @@ OPEN_PROBLEM_CONTEXT_SYSTEM_PROMPT: str = dedent(
 
     Requirements:
     - Include the open problem itself as the first entry in "results" with url "problem://input".
-    - Collect between 20 and 30 supporting results (lemmas, theorems, propositions, conjectures) that are most relevant to attacking the problem.
-    - Prefer peer-reviewed or otherwise authoritative sources; cite the canonical version when possible.
-    - Keep statements concise, self-contained, and expressed in the shared notation from "annotations".
-    - Avoid duplicates and skip sources that restate the same fact.
-    - Think critically about different proof strategies and cover a diverse toolkit that could make progress on the problem.
+    - Collect between 20 and 30 supporting results (lemmas, theorems, propositions) that are already proved in the mathematical literature and directly aid a potential proof strategy. Absolutely do NOT include conjectures, open questions, heuristics, folklore claims without published proofs, or speculative statements.
+    - Prefer peer-reviewed or otherwise authoritative sources; cite the canonical version when possible, and only when you can confirm that a complete proof is presented in that source.
+    - Keep statements concise, self-contained, and expressed in the shared notation from "annotations". If you are unsure that a statement is rigorously proven, exclude it.
+    - Avoid duplicates, skip sources that restate the same fact, and favor results that cover distinct techniques or tools.
+    - Think critically about different proof strategies and ensure the collection spans a diverse toolkit grounded in established results.
     """
 ).strip()
 
@@ -424,8 +424,9 @@ def build_open_problem_context_user_prompt(problem_statement: str, target_result
         2. Use the web_search tool as many times as necessary to gather between {lower_bound} and 30 distinct supporting results that could aid in proving the problem. Aim for roughly {desired} high-quality items.
         3. Restate the open problem itself as the first entry in "results" with url "problem://input".
         4. For each supporting result, write a clean statement in Markdown/LaTeX and provide a reliable URL.
-        5. Favor results that directly supply techniques, lemmas, bounds, structural insights, or heuristics that could combine into a proof.
-        6. Double-check there are at least {lower_bound} entries, no duplicates, and all statements align with the shared annotations.
+        5. Include ONLY results that are already rigorously proved in the cited source. Exclude conjectures, open questions, numerical evidence, or statements whose proof is unavailable in the referenced material.
+        6. Favor results that directly supply techniques, lemmas, bounds, structural insights, or heuristics that could combine into a proof, while ensuring each item is an established theorem/lemma.
+        7. Double-check there are at least {lower_bound} entries, no duplicates, and all statements align with the shared annotations. If a candidate result fails any requirement above, drop it and search again.
 
         Return only the JSON object described in the system prompt.
         """
@@ -899,3 +900,5 @@ def build_latex_refiner_user_prompt(
         - Reply with JSON listing the files to overwrite.
         """
     ).strip()
+
+

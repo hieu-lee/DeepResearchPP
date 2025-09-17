@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Any
 import logging
 
 from .judge import Judge
@@ -39,31 +39,38 @@ class Solver:
         feedback: str = ""
         last_proof: str = ""
         # Judges: if user selected gpt-oss-120b, prefer o4-mini for judges (tool-capable)
-        judge_model = "o4-mini" if self.model == "gpt-oss-120b" else self.model
+        judge_model = "o4-mini" if self.model in {"gpt-oss-120b", "openai/gpt-oss-120b"} else self.model
         judge1 = Judge(model=judge_model)
         judge2 = Judge(model=judge_model)
+
+        judge_context: dict[str, Any] = {}
+        if literature is not None:
+            judge_context = {
+                "literature_annotations": literature.annotations,
+                "literature_results": [(x.statement, x.url) for x in literature.results],
+            }
 
         for _ in range(max_tries_per_prover):
             self.logger.info("Prover: attempting proof%s", " (with feedback)" if feedback else "")
 
             # Produce or revise proof
             if not feedback:
-                if literature is not None:
+                if judge_context:
                     proof_resp = self.prover.prove(
                         problem,
-                        literature_annotations=literature.annotations,
-                        literature_results=[(x.statement, x.url) for x in literature.results],
+                        literature_annotations=judge_context["literature_annotations"],
+                        literature_results=judge_context["literature_results"],
                     )
                 else:
                     proof_resp = self.prover.prove(problem)
             else:
-                if literature is not None:
+                if judge_context:
                     proof_resp = self.prover.reprove(
                         problem,
                         last_proof,
                         feedback,
-                        literature_annotations=literature.annotations,
-                        literature_results=[(x.statement, x.url) for x in literature.results],
+                        literature_annotations=judge_context["literature_annotations"],
+                        literature_results=judge_context["literature_results"],
                     )
                 else:
                     proof_resp = self.prover.reprove(problem, last_proof, feedback)
@@ -73,12 +80,12 @@ class Solver:
 
             # Judge #1 assessment
             self.logger.info("Submitting to Judge #1")
-            if literature is not None:
+            if judge_context:
                 j1 = judge1.assess(
                     problem,
                     proof_markdown,
-                    literature_annotations=literature.annotations,
-                    literature_results=[(x.statement, x.url) for x in literature.results],
+                    literature_annotations=judge_context["literature_annotations"],
+                    literature_results=judge_context["literature_results"],
                 )
             else:
                 j1 = judge1.assess(problem, proof_markdown)
@@ -90,12 +97,12 @@ class Solver:
 
             # Judge #2 assessment only if Judge #1 accepted
             self.logger.info("Judge #1 accepted; submitting to Judge #2")
-            if literature is not None:
+            if judge_context:
                 j2 = judge2.assess(
                     problem,
                     proof_markdown,
-                    literature_annotations=literature.annotations,
-                    literature_results=[(x.statement, x.url) for x in literature.results],
+                    literature_annotations=judge_context["literature_annotations"],
+                    literature_results=judge_context["literature_results"],
                 )
             else:
                 j2 = judge2.assess(problem, proof_markdown)
@@ -111,5 +118,6 @@ class Solver:
         # Exhausted tries; return the last available feedback
         self.logger.info("Exhausted max tries; returning last feedback")
         return False, feedback or "No correct proof found within allotted attempts."
+
 
 

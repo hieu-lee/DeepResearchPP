@@ -26,7 +26,7 @@ def _map_model(name: str, *, requires_tools: bool = False) -> str:
 
 
 def _web_search_tool() -> Dict[str, str]:
-    return {"type": "web_search", "search_context_size": "large"}
+    return {"type": "web_search", "search_context_size": "high"}
 
 
 def _collect_related_results(problem: str, *, model: str, target_results: int) -> LiteratureReviewResult:
