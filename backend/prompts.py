@@ -387,6 +387,51 @@ def build_lit_review_user_prompt(seed_result_latex: str | list[str]) -> str:
     ).strip()
 
 
+
+OPEN_PROBLEM_CONTEXT_SYSTEM_PROMPT: str = dedent(
+    """
+    You are a senior mathematical research assistant tasked with preparing auxiliary references for a difficult open problem.
+    You can call the web_search tool to consult the literature.
+    Return ONLY a JSON object with:
+    - "annotations": Markdown with LaTeX summarizing unified notation/definitions that will be used across all results.
+    - "results": array of objects, each with keys "statement" (Markdown with LaTeX) and "url" (reliable source link).
+
+    Requirements:
+    - Include the open problem itself as the first entry in "results" with url "problem://input".
+    - Collect between 20 and 30 supporting results (lemmas, theorems, propositions, conjectures) that are most relevant to attacking the problem.
+    - Prefer peer-reviewed or otherwise authoritative sources; cite the canonical version when possible.
+    - Keep statements concise, self-contained, and expressed in the shared notation from "annotations".
+    - Avoid duplicates and skip sources that restate the same fact.
+    - Think critically about different proof strategies and cover a diverse toolkit that could make progress on the problem.
+    """
+).strip()
+
+
+def build_open_problem_context_user_prompt(problem_statement: str, target_results: int) -> str:
+    try:
+        desired = int(target_results)
+    except Exception:
+        desired = 25
+    desired = max(10, min(desired, 30))
+    lower_bound = max(20, desired)
+    return dedent(
+        f"""
+        Open problem to solve (Markdown/LaTeX):
+        {problem_statement}
+
+        Instructions:
+        1. Understand the problem and identify the key mathematical themes.
+        2. Use the web_search tool as many times as necessary to gather between {lower_bound} and 30 distinct supporting results that could aid in proving the problem. Aim for roughly {desired} high-quality items.
+        3. Restate the open problem itself as the first entry in "results" with url "problem://input".
+        4. For each supporting result, write a clean statement in Markdown/LaTeX and provide a reliable URL.
+        5. Favor results that directly supply techniques, lemmas, bounds, structural insights, or heuristics that could combine into a proof.
+        6. Double-check there are at least {lower_bound} entries, no duplicates, and all statements align with the shared annotations.
+
+        Return only the JSON object described in the system prompt.
+        """
+    ).strip()
+
+
 PREDICT_SYSTEM_PROMPT: str = dedent(
     """
     You are a creative but careful mathematical researcher.
@@ -571,5 +616,286 @@ def build_novelty_user_prompt(literature_annotations: str, predicted_result_late
 
         Use web search to check for existing equal/stronger results. Return ONLY the JSON object with fields
         is_novel (boolean), matched_statement (string if not novel else empty), matched_url (string if not novel else empty).
+        """
+    ).strip()
+PAPER_LABEL_SYSTEM_PROMPT: str = dedent(
+    """
+    You assign concise, descriptive LaTeX labels to mathematical results.
+    Respond strictly as JSON with a single field "label" containing the identifier (no additional prose).
+    Rules:
+      - Use lowercase letters and optional digits separated by hyphens.
+      - You may add a single colon to prefix a high-level category (e.g., thm:, lem:, prop:), but never include more than one colon.
+      - Do not include spaces, underscores, or other punctuation.
+      - Reflect the mathematical topic referenced by the statement in just a few words.
+    """
+).strip()
+
+
+def build_paper_label_prompt(index: int, statement: str) -> str:
+    return dedent(
+        f"""
+        Result index: {index}
+
+        Statement:
+        {statement}
+
+        Requirements:
+        - Produce a memorable LaTeX label that hints at the central concept.
+        - Keep the identifier shorter than 32 characters.
+        - Reply with JSON such as {{"label": "thm-martingale-bound"}}.
+        """
+    ).strip()
+
+
+PAPER_DEPENDENCY_SYSTEM_PROMPT: str = dedent(
+    """
+    You analyse a proof and enumerate its dependencies.
+    Respond strictly as JSON with field "dependencies" containing a list of dependency objects.
+    Each dependency object must have:
+      - "kind": "internal" or "external".
+      - If internal: "target_label" matching one of the provided labels.
+      - If external: "url" referencing a web resource (HTTP/HTTPS).
+      - Optional "note" describing how the dependency is used (short phrase).
+    Do not invent URLs; only reference ones explicitly mentioned in the proof or statement.
+    """
+).strip()
+
+
+def build_paper_dependency_prompt(
+    label: str,
+    statement: str,
+    proof_markdown: str,
+    labeled_statements: list[tuple[str, str]],
+) -> str:
+    labeled_text = "\n".join(f"- {lbl}: {stmt}" for lbl, stmt in labeled_statements)
+    return dedent(
+        f"""
+        Target result label: {label}
+
+        Statement:
+        {statement}
+
+        Proof (Markdown):
+        {proof_markdown}
+
+        Available internal results:
+        {labeled_text if labeled_text else '(none)'}
+
+        Tasks:
+        - List every internal reference (\\ref{{...}}) the proof relies on.
+        - Identify any external sources, URLs, or literature the proof cites.
+        - For each dependency add a short note describing the usage, when helpful.
+        - Return JSON with the dependencies list only.
+        """
+    ).strip()
+
+
+PAPER_BIBLIOGRAPHY_SYSTEM_PROMPT: str = dedent(
+    """
+    You convert external URLs into polished bibliography entries for LaTeX.
+    Respond strictly as JSON with field "entries" containing a list of objects with keys "key", "citation_text", and "url".
+    Rules:
+      - Keys must be alphanumeric (no spaces) and unique.
+      - Citation text should contain authors, title, venue/journal, and year when available.
+      - Always include the provided canonical URL.
+    If the input contains no valid URLs, return an empty list.
+    """
+).strip()
+
+
+def build_paper_bibliography_prompt(items: list[str]) -> str:
+    inventory = "\n".join(f"- {item}" for item in items) if items else "(none)"
+    return dedent(
+        f"""
+        Items requiring bibliography consideration:
+        {inventory}
+
+        Guidance:
+        - Produce entries only for HTTP/HTTPS URLs that correspond to external references.
+        - Derive a short, memorable citation key (e.g., Doe2021OptimalTransport).
+        - Use standard sentence casing in the citation text.
+        - Reply with JSON describing the bibliography entries.
+        """
+    ).strip()
+
+
+PAPER_RELATED_BIB_SYSTEM_PROMPT: str = dedent(
+    """
+    You augment a bibliography with additional related-work references discovered via research.
+    Respond strictly as JSON with field "entries" (same structure as the main bibliography prompt).
+    Rules:
+      - Only add genuinely relevant, high-quality scholarly sources.
+      - Avoid keys that already exist in the current bibliography.
+      - Include persistent URLs whenever possible (arXiv, DOI, journal pages).
+    Return an empty list if no additional references are warranted.
+    """
+).strip()
+
+
+def build_related_work_bibliography_prompt(
+    labeled_statements: list[tuple[str, str]],
+    existing_keys: list[str],
+) -> str:
+    statements = "\n".join(f"- {label}: {stmt}" for label, stmt in labeled_statements)
+    taken = ", ".join(existing_keys) if existing_keys else "(none)"
+    return dedent(
+        f"""
+        Current results and statements:
+        {statements if statements else '(none)'}
+
+        Existing bibliography keys: {taken}
+
+        Task:
+        - Suggest at most five additional references that contextualise these results.
+        - Avoid duplicating any existing key.
+        - Respond with JSON containing the new entries (or an empty list).
+        """
+    ).strip()
+
+
+PAPER_RESULT_SYSTEM_PROMPT: str = dedent(
+    """
+    You convert a proved result into polished LaTeX using theorem-style environments.
+    Respond strictly as JSON with fields "content" (LaTeX source) and "newcommands" (list of \newcommand definitions added).
+    Requirements:
+      - Wrap the statement in an appropriate environment (theorem, lemma, proposition, corollary, etc.).
+      - Provide a proof environment with \qedhere when the final equation deserves it.
+      - Reference internal results using \ref{...} and cite external sources using \cite{...} at the exact point of use.
+      - Only introduce \newcommand definitions that are essential; list them in "newcommands" exactly as written.
+    """
+).strip()
+
+
+def build_paper_result_tex_prompt(
+    label: str,
+    statement: str,
+    proof_markdown: str,
+    internal_pairs: list[tuple[str, str]],
+    external_pairs: list[tuple[str, str, str]],
+    bib_preview: str,
+    dependency_summary: list[str],
+) -> str:
+    internal_text = "\n".join(f"- {lbl}: {stmt}" for lbl, stmt in internal_pairs) if internal_pairs else "(none)"
+    external_text = "\n".join(f"- {key}: {url} :: {citation}" for key, url, citation in external_pairs) if external_pairs else "(none)"
+    dep_text = "\n".join(dependency_summary) if dependency_summary else "(none)"
+    return dedent(
+        f"""
+        Result label: {label}
+
+        Statement (Markdown):
+        {statement}
+
+        Proof (Markdown):
+        {proof_markdown}
+
+        Internal results:
+        {internal_text}
+
+        External bibliography entries:
+        {external_text}
+
+        Current bib.tex preview:
+        {bib_preview}
+
+        Raw dependency summary:
+        {dep_text}
+
+        Instructions:
+        - Convert statement and proof into LaTeX using amsthm environments.
+        - Preserve logical structure and refer to dependencies precisely.
+        - Ensure every environment is properly closed and paragraphs are formatted cleanly.
+        - Report any \newcommand definitions you introduce via the JSON "newcommands" list.
+        """
+    ).strip()
+
+
+PAPER_MAIN_SYSTEM_PROMPT: str = dedent(
+    """
+    You are compiling the main LaTeX file for a mathematics research paper.
+    Respond strictly as JSON with field "content" containing the full LaTeX document.
+    The document must be self-contained:
+      - Provide \documentclass and useful packages (amsmath, amsthm, amssymb, hyperref).
+      - Set up amsthm theorem environments so theorems, lemmas, propositions, and corollaries can appear inside larger proofs; rely on proof titles (e.g., \begin{proof}[Proof of Lemma]) to nest lemma proofs inside theorem proofs.
+      - Craft an abstract, introduction, and narrative that weaves together the provided results.
+      - Conduct a literature review using web search to identify state-of-the-art work related to the provided results. Extend the bibliography if necessary with new scholarly citations.
+      - Include a dedicated Related Work section summarizing and citing the discovered literature.
+      - Use \input{...} to include each result file and the bibliography file provided.
+      - Place \input{bib.tex} at the end inside the bibliography section.
+      - Reference results via \ref{...} and cite related work using the available (and newly added) bibliography keys.
+      - Consolidate macros: inspect the aggregated \newcommand list, deduplicate by command name, and define each macro exactly once in the preamble (never repeat an existing definition).
+    Do not output anything besides the JSON.
+    """
+).strip()
+
+
+def build_paper_main_prompt(
+    labeled_statements: list[tuple[str, str]],
+    bibliography_keys: list[str],
+    result_filenames: list[str],
+) -> str:
+    labels_block = "\n".join(f"- {label}: {stmt}" for label, stmt in labeled_statements)
+    keys_block = ", ".join(bibliography_keys) if bibliography_keys else "(no external citations)"
+    inputs_block = "\n".join(f"- {fname}" for fname in result_filenames)
+    return dedent(
+        f"""
+        Available results (label -> statement):
+        {labels_block if labels_block else '(none)'}
+
+        Bibliography keys: {keys_block}
+
+        Each result has been written to its own LaTeX file and should be included using \input with the filenames below:
+        {inputs_block if inputs_block else '(none)'}
+
+        Requirements:
+        - Tell a coherent research story connecting the results.
+        - Perform additional literature review using web search to place these results in context. Extend the bibliography if new scholarly references are required.
+        - Insert a dedicated Related Work section summarizing the state of the art with proper citations.
+        - Insert \input commands in logical sections (e.g., Preliminaries, Main Results, Applications).
+        - Reference the results using \ref and cite related work with the available or newly introduced keys.
+        - Close with a conclusion and the bibliography input.
+        - Return only JSON with the LaTeX content.
+        """
+    ).strip()
+
+LATEX_REFINER_SYSTEM_PROMPT: str = dedent(
+    """
+    You triage LaTeX compilation failures and repair the source files.
+    Respond strictly as JSON containing:
+      - "updates": list of file patches, each with "file_path" and "content" (full replacement text).
+      - Optional "notes" with a terse summary of the applied changes.
+    Rules:
+      - Modify only the provided LaTeX project files and keep macro definitions unique (no duplicate \newcommand or \renewcommand entries).
+      - Return UTF-8 plain text for each updated file.
+      - Do not wrap the JSON in Markdown fences or prose.
+    """
+).strip()
+
+
+def build_latex_refiner_user_prompt(
+    command_line: str,
+    return_code: int,
+    error_message: str,
+    error_file: str | None,
+    error_line: int | None,
+    log_excerpt: str,
+) -> str:
+    return dedent(
+        f"""
+        LaTeX compilation command: {command_line}
+        Exit code: {return_code}
+
+        First compiler error summary:
+          message: {error_message}
+          file: {error_file or '(unknown)'}
+          line: {error_line or '(unknown)'}
+
+        Log excerpt:
+        {log_excerpt}
+
+        Tasks:
+        - Diagnose the underlying issue that caused the compilation failure.
+        - Edit the relevant source file(s) to resolve the error while respecting existing macro definitions.
+        - Avoid introducing duplicate \newcommand or \renewcommand definitions.
+        - Reply with JSON listing the files to overwrite.
         """
     ).strip()

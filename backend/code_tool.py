@@ -98,7 +98,7 @@ def build_run_python_tool_definition() -> Dict[str, Any]:
         "name": "run_python",
         "type": "function",
         "description": (
-            "Execute a Python snippet in an isolated subprocess and return stdout, stderr, and exit_code."
+            "Execute a Python snippet in an isolated subprocess (numpy and scipy preinstalled) and return stdout, stderr, and exit_code."
         ),
         "parameters": {
             "type": "object",

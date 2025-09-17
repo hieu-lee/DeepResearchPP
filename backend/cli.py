@@ -11,6 +11,8 @@ from .solver import Solver
 from .judge import Judge
 from .research import ResearchPipeline, ResearchConfig
 from .result_refiner import ResultRefiner
+from .paper_converter import LatexPaperConverter, LatexPaperConverterConfig
+from .open_problem_tool import run_open_problem_solver
 
 
 def request_proof(question: str, model: str = "gpt-5") -> tuple[bool, str]:
@@ -354,6 +356,31 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         help="Run continuous research loop: iterate predictions->proofs until none can be proved; append successes to correct_predicted_results.json (configurable via --correct-out)",
     )
     parser.add_argument(
+        "--open-problem",
+        action="store_true",
+        help="Use the Open Problem Solver: gather related results first, then run the prover/judge loop.",
+    )
+    parser.add_argument(
+        "--open-search-model",
+        dest="open_search_model",
+        default=None,
+        help="Optional model override for the literature search phase in --open-problem mode.",
+    )
+    parser.add_argument(
+        "--open-target-results",
+        dest="open_target_results",
+        type=int,
+        default=None,
+        help="Desired number of supporting results to gather in --open-problem mode (range 20-30).",
+    )
+    parser.add_argument(
+        "--open-max-iterations",
+        dest="open_max_iterations",
+        type=int,
+        default=None,
+        help="Maximum prover iterations before giving up in --open-problem mode (default 12).",
+    )
+    parser.add_argument(
         "-S",
         "--seed-file",
         dest="seed_file",
@@ -390,6 +417,14 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         default=None,
         help=(
             "Path to a JSON results file (array of {statement, proof_markdown}); refines all entries in parallel and updates the file."
+        ),
+    )
+    parser.add_argument(
+        "--latex-paper",
+        dest="latex_paper_json",
+        default=None,
+        help=(
+            "Convert a results JSON file (array of {statement, proof_markdown}) into a LaTeX paper folder next to the JSON file."
         ),
     )
     parser.add_argument(
@@ -448,6 +483,41 @@ def main(argv: Optional[list[str]] = None) -> int:
         if args.model == "gpt-5":
             args.model = "gemini-2.5-pro"
         os.environ["LLM_PROVIDER"] = "google"
+
+    if args.open_problem and (args.research or args.continuous):
+        print("Error: --open-problem cannot be combined with --research or --continuous.", file=sys.stderr)
+        return 2
+
+    if args.latex_paper_json:
+        try:
+            converter = LatexPaperConverter(
+                LatexPaperConverterConfig(
+                    label_model="gpt-5-mini",
+                    label_reasoning="medium",
+                    dependency_model=args.model,
+                    dependency_reasoning="medium",
+                    bib_model="gpt-5-mini",
+                    bib_reasoning="medium",
+                    result_model=args.model,
+                    result_reasoning="medium",
+                    main_model=args.model,
+                    main_reasoning="medium",
+                )
+            )
+            output_dir = converter.convert(args.latex_paper_json)
+        except Exception as e:
+            payload = {"error": f"LaTeX paper conversion failed: {type(e).__name__}: {e}"}
+            if args.json:
+                print(json.dumps(payload, ensure_ascii=False, indent=2))
+            else:
+                print(payload["error"], file=sys.stderr)
+            return 1
+
+        if args.json:
+            print(json.dumps({"output_dir": str(output_dir)}, ensure_ascii=False, indent=2))
+        else:
+            print(f"LaTeX paper written to {output_dir}")
+        return 0
 
     # Batch refine an existing JSON results file and exit (handled early to avoid stdin prompt)
     if args.refine_json_path:
@@ -551,6 +621,85 @@ def main(argv: Optional[list[str]] = None) -> int:
     else:
         if not (os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY_PATH")):
             logger.warning("OPENAI_API_KEY not set. The request may fail unless the client is otherwise configured.")
+
+    if args.open_problem:
+        payload = {"problem": question, "model": args.model}
+        if args.open_search_model:
+            payload["search_model"] = args.open_search_model
+        if args.open_max_iterations is not None:
+            payload["max_iterations"] = args.open_max_iterations
+        if args.open_target_results is not None:
+            payload["target_results"] = args.open_target_results
+        result = run_open_problem_solver(payload)
+        status = str(result.get("status") or "").lower()
+        if status == "error":
+            message = result.get("message") or "Open Problem Solver encountered an error."
+            if args.json:
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+            else:
+                print(f"Open Problem Solver failed: {message}", file=sys.stderr)
+            return 1
+        if args.json:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        else:
+            print("=== Open Problem Solver ===")
+            print(f"Status: {status or 'unknown'}")
+            model_name = result.get("model")
+            if model_name:
+                print(f"Model: {model_name}")
+            search_model = result.get("search_model")
+            if search_model and search_model != model_name:
+                print(f"Search model: {search_model}")
+            iterations = result.get("max_iterations")
+            if iterations is not None:
+                print(f"Max iterations: {iterations}")
+            annotations = (result.get("annotations") or "").strip()
+            if annotations:
+                print("\nAnnotations:\n" + annotations)
+            related = result.get("related_results") or []
+            if related:
+                print(f"\nRelated results ({len(related)}):")
+                for item in related:
+                    stmt = (item.get("statement") or "").strip()
+                    url = (item.get("url") or "").strip()
+                    if url:
+                        print(f"- {stmt} [{url}]")
+                    else:
+                        print(f"- {stmt}")
+            if status == "solved":
+                proof = result.get("proof_markdown") or ""
+                if proof:
+                    print("\nProof:\n")
+                    print(proof)
+            else:
+                message = result.get("message")
+                if message:
+                    print(f"\n{message}")
+                feedback = result.get("feedback")
+                if feedback:
+                    print("\nFeedback:\n" + feedback)
+        if args.out:
+            try:
+                output_path = Path(args.out).expanduser().resolve()
+                if status == "solved":
+                    output_path.write_text(result.get("proof_markdown") or "", encoding="utf-8")
+                else:
+                    lines = ["### Open Problem Solver Report", "", f"- **status**: {status}"]
+                    message = result.get("message")
+                    if message:
+                        lines.append(f"- **message**: {message}")
+                    feedback = result.get("feedback")
+                    if feedback:
+                        lines.extend(["", "Feedback:", feedback])
+                    output_path.write_text("\n".join(lines), encoding="utf-8")
+            except Exception as e:
+                err_msg = f"Failed to write output: {type(e).__name__}: {e}"
+                if args.json:
+                    print(json.dumps({"error": err_msg}, ensure_ascii=False), file=sys.stderr)
+                else:
+                    print(err_msg, file=sys.stderr)
+                return 1
+        return 0
 
     # Remove special geometry classification mode; '@' prefix no longer has special meaning
 
@@ -695,7 +844,6 @@ def main(argv: Optional[list[str]] = None) -> int:
                 f.write(markdown)
 
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

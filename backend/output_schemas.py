@@ -1,6 +1,6 @@
 """Pydantic output schemas for structured responses."""
 
-from typing import List, Optional
+from typing import List, Optional, Literal
 from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
 
 
@@ -329,4 +329,161 @@ class RefineTightenResult(BaseModel):
             "If can_tighten is true, an updated proof in Markdown fully consistent with updated_statement; otherwise may be empty or copy of original."
         ),
         validation_alias=AliasChoices("updated_proof", "new_proof_markdown", "proof_markdown", "proof"),
+    )
+
+
+class PaperLabelAssignment(BaseModel):
+    """Structured label assignment for a single result."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    label: str = Field(
+        ...,
+        description="Candidate LaTeX label identifier (letters, digits, optional single colon).",
+        validation_alias=AliasChoices("label", "latex_label"),
+    )
+
+
+class PaperDependencyItem(BaseModel):
+    """Dependency descriptor for LaTeX paper generation."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    kind: Literal["internal", "external"] = Field(
+        ...,
+        description="'internal' for references to other results in the batch; 'external' for literature sources requiring bibliography.",
+        validation_alias=AliasChoices("kind", "type"),
+    )
+    target_label: str | None = Field(
+        None,
+        description="Label of the referenced internal result when kind='internal'.",
+        validation_alias=AliasChoices("target_label", "label", "latex_label"),
+    )
+    url: str | None = Field(
+        None,
+        description="URL for the referenced external source when kind='external'.",
+        validation_alias=AliasChoices("url", "source", "link"),
+    )
+    note: str | None = Field(
+        None,
+        description="Optional short note describing how the dependency is used.",
+        validation_alias=AliasChoices("note", "description", "reason"),
+    )
+
+    @field_validator("target_label", mode="after")
+    @classmethod
+    def _validate_internal(cls, v, info):  # type: ignore[no-untyped-def]
+        kind = info.data.get("kind")
+        if kind == "internal":
+            if v is None:
+                return None
+            cleaned = str(v).strip()
+            return cleaned or None
+        return v
+
+    @field_validator("url", mode="after")
+    @classmethod
+    def _validate_external(cls, v, info):  # type: ignore[no-untyped-def]
+        kind = info.data.get("kind")
+        if kind == "external":
+            if v is None:
+                return None
+            cleaned = str(v).strip()
+            return cleaned or None
+        return v
+
+
+class PaperDependenciesResponse(BaseModel):
+    """Structured output capturing dependency lists for a result."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    dependencies: List[PaperDependencyItem] = Field(
+        default_factory=list,
+        description="Dependencies referencing internal labels or external URLs required by the proof.",
+        validation_alias=AliasChoices("dependencies", "refs", "references"),
+    )
+
+
+class BibliographyEntry(BaseModel):
+    """Structured bibliography entry for bib.tex generation."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    key: str = Field(
+        ...,
+        description="Citation key used for \cite commands and \bibitem identifiers (alphanumeric, no spaces).",
+        validation_alias=AliasChoices("key", "citation_key", "id"),
+    )
+    citation_text: str = Field(
+        ...,
+        description="Full text of the bibliographic entry to appear after \\bibitem, including authors, title, venue, and optional year.",
+        validation_alias=AliasChoices("citation_text", "text", "entry"),
+    )
+    url: str = Field(
+        ...,
+        description="Canonical URL for the source; included to ensure reproducibility and tie back to dependencies.",
+        validation_alias=AliasChoices("url", "link", "source"),
+    )
+
+
+class BibliographyEntries(BaseModel):
+    """Container for a list of bibliography entries."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    entries: List[BibliographyEntry] = Field(
+        default_factory=list,
+        description="List of bibliography entries for bib.tex generation.",
+        validation_alias=AliasChoices("entries", "items", "bibliography"),
+    )
+
+
+class GeneratedTex(BaseModel):
+    """Generic structured wrapper for generated LaTeX content."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    content: str = Field(
+        ...,
+        description="Complete LaTeX source for a file.",
+        validation_alias=AliasChoices("content", "latex", "tex"),
+    )
+    newcommands: List[str] = Field(
+        default_factory=list,
+        description="List of LaTeX newcommand definitions used within the content.",
+        validation_alias=AliasChoices("newcommands", "macros", "commands"),
+    )
+
+class LatexRefinerFileUpdate(BaseModel):
+    """Instruction describing a single LaTeX source update."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    file_path: str = Field(
+        ...,
+        description="Path to the file to update, relative to the LaTeX project root.",
+        validation_alias=AliasChoices("file_path", "path", "filename"),
+    )
+    content: str = Field(
+        ...,
+        description="Full replacement content for the target file in UTF-8.",
+        validation_alias=AliasChoices("content", "text", "body"),
+    )
+
+
+class LatexRefinerResponse(BaseModel):
+    """Structured response for LaTeX compilation repairs."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    updates: List[LatexRefinerFileUpdate] = Field(
+        default_factory=list,
+        description="Ordered list of file updates to apply.",
+        validation_alias=AliasChoices("updates", "files", "patches"),
+    )
+    notes: Optional[str] = Field(
+        None,
+        description="Optional short explanation of the fixes that were applied.",
+        validation_alias=AliasChoices("notes", "explanation", "summary"),
     )
