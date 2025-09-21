@@ -1,4 +1,4 @@
-"""Prompt templates for the math proof CLI and literature extractor."""
+﻿"""Prompt templates for the math proof CLI and literature extractor."""
 
 from textwrap import dedent
 
@@ -18,6 +18,7 @@ PROOF_SYSTEM_PROMPT: str = dedent(
     - Display math with $$...$$ on separate lines for important equations
     - Use LaTeX symbols and macros (\\equiv, \\pmod{}, \\prod, \\sum, \\forall, \\exists, \\mathbb{}, etc.)
     - Prefer mathematical notation over plain text where appropriate
+    - Prove or disprove the exact statement as written; do not solve any relaxed, weakened, or modified variant.
     - If the statement is an Euclidean geometry problem, a complex-number solution is encouraged but not strictly required.
       
       Required complex-geometry workflow:
@@ -28,6 +29,10 @@ PROOF_SYSTEM_PROMPT: str = dedent(
       5) Forbidden in geometry proofs: angle chasing by named theorems (e.g., tangent–chord) unless rederived in complex form; unproved synthetic steps; vector/barycentric/projective setups; coordinate geometry in $\mathbb{R}^2$.
     Structure suggestion (not mandatory): bold Claim (if restated) and begin with a bold "Proof."; end with the tombstone symbol ∎.
     Keep the proof self-contained, well-formatted, and concise while remaining rigorous.
+    Absolutely forbidden: meta-comments like "this remains open/unknown" or appeals to the state of the art.
+    Do NOT state that a conjecture is open or unknown; instead, attempt a direct proof or a counterexample.
+    Do not include literature-status summaries, phrases like "state of the art", "remains open", "unknown at this time",
+    "no proof is known", or the sentence beginning "Consequently, there is presently neither (i) ...".
     Return ONLY the JSON object. Do not include backticks, explanations, or any extra text.
     """
 ).strip()
@@ -51,6 +56,7 @@ REPROVE_SYSTEM_PROMPT: str = dedent(
     - Display math with $$...$$ on separate lines for important equations
     - Use LaTeX symbols and macros (\\equiv, \\pmod{}, \\prod, \\sum, \\forall, \\exists, \\mathbb{}, etc.)
     - Prefer mathematical notation over plain text where appropriate
+    - Prove or disprove the exact statement as written; do not solve any relaxed, weakened, or modified variant.
     - If the statement is an Euclidean geometry problem, a complex-number solution is encouraged but not strictly required.
       Required complex-geometry workflow:
       1) Set the complex plane and introduce complex coordinates for all relevant points, e.g. $z_A, z_B, z_C, \ldots$.
@@ -60,6 +66,10 @@ REPROVE_SYSTEM_PROMPT: str = dedent(
       5) Forbidden in geometry proofs: angle chasing by named theorems unless rederived in complex form; unproved synthetic steps; vector/barycentric/projective setups; coordinate geometry in $\\mathbb{R}^2$.
     Structure suggestion (not mandatory): bold Claim (if restated) and begin with a bold "Proof."; end with the tombstone symbol ∎.
     Keep the proof self-contained, well-formatted, and concise while remaining rigorous.
+    Absolutely forbidden: meta-comments like "this remains open/unknown" or appeals to the state of the art.
+    Do NOT state that a conjecture is open or unknown; instead, attempt a direct proof or a counterexample.
+    Do not include literature-status summaries, phrases like "state of the art", "remains open", "unknown at this time",
+    "no proof is known", or the sentence beginning "Consequently, there is presently neither (i) ...".
     Return ONLY the JSON object. Do not include backticks, explanations, or any extra text.
     """
 ).strip()
@@ -85,6 +95,8 @@ def build_proof_user_prompt(question: str) -> str:
         - For Euclidean geometry problems, a complex-number solution is encouraged: you may set the complex plane, assign complex coordinates to points, optionally normalize via a Möbius transform (e.g., send a circumcircle to the unit circle), and finish with algebraic verification.
         - Optionally restate a short bold Claim, start the argument with bold "Proof.", and end with the symbol ∎.
         - Keep the proof concise yet rigorous and self-contained.
+        - Do NOT include meta-statements about problem status (e.g., "remains open", "unknown", "no proof is known", "state of the art").
+        - Never answer by declaring the conjecture open or unknown; always attempt a proof or a disproof.
         Return ONLY the JSON object and nothing else.
         """
     ).strip()
@@ -98,6 +110,9 @@ JUDGE_SYSTEM_PROMPT: str = dedent(
     In the textual feedback, enumerate ALL logical flaws you find, each with a concise explanation of why it is a flaw.
     Do not propose fixes. Do not include extraneous commentary beyond the list of flaws. If no flaws are found, state that explicitly.
     Note: For Euclidean geometry problems, complex-number solutions are encouraged but not strictly required; do not penalize otherwise correct solutions solely for using a different method.
+    Disallowed proof pattern: any response that declares the statement "open", "unknown", cites lack of known algorithms/proofs,
+    or includes phrases like "remains open", "unknown at this time", "state of the art", "no proof is known",
+    or the sentence beginning "Consequently, there is presently neither (i) ...". Such responses must be judged incorrect.
     Return ONLY the JSON object with fields correctness (boolean) and feedback (string of the first flaw only). No other text.
     """
 ).strip()
@@ -123,6 +138,8 @@ def build_judge_user_prompt(problem: str, proof_markdown: str) -> str:
         - Determine correctness as a boolean: true if the proof is fully correct and rigorous, false otherwise.
         - In the textual feedback, list ALL logical flaws you identify, with a brief explanation for each.
         - No fix suggestions. No preface or trailing notes beyond the flaw list. If there are no flaws, say "No flaws found."
+        - Automatically mark as incorrect any submission that appeals to problem status (e.g., claims the conjecture "remains open" or is "unknown",
+          or says "no proof/algorithm is known" or similar). This is not a proof; the first flaw to report is "Appeal to literature status instead of a proof."
         """
     ).strip()
 
@@ -193,6 +210,7 @@ def build_reprove_user_prompt(problem: str, previous_proof_markdown: str, feedba
         - If the flaw is fundamental or the approach is unsalvageable, produce a correct proof via a different approach.
         - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
         - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, DISCARD it and produce a fresh complex-number solution (set the complex plane, possibly normalize via a Möbius transform, and argue purely with complex identities).
+        - Absolutely forbidden: declaring the statement "open" or "unknown", or appealing to literature status ("no proof is known", "state of the art", etc.). Always attempt a genuine proof or disproof.
         - Do not include any other commentary outside the JSON. Return ONLY the JSON object.
         """
     ).strip()
@@ -216,6 +234,7 @@ def build_feedback_only_reprove_prompt(feedback: str) -> str:
         - Begin the proof content immediately from the first character of "proof_markdown".
         - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
         - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, replace it entirely with a complex-number solution as per the system policy.
+        - Absolutely forbidden: declaring the statement "open" or "unknown", or appealing to literature status ("no proof is known", "state of the art", etc.). Always attempt a genuine proof or disproof.
         Return ONLY the JSON object. No other text.
         """
     ).strip()
@@ -900,5 +919,11 @@ def build_latex_refiner_user_prompt(
         - Reply with JSON listing the files to overwrite.
         """
     ).strip()
+
+
+
+
+
+
 
 
