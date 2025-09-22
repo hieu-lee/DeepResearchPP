@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 import logging
 import re
-import shutil
-import subprocess
-import textwrap
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import os
+import subprocess
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence
@@ -19,7 +19,6 @@ from .output_schemas import (
     PaperDependencyItem,
     PaperDependenciesResponse,
     PaperLabelAssignment,
-    LatexRefinerResponse,
 )
 from .prompts import (
     PAPER_BIBLIOGRAPHY_SYSTEM_PROMPT,
@@ -34,8 +33,6 @@ from .prompts import (
     build_related_work_bibliography_prompt,
     build_paper_main_prompt,
     build_paper_result_tex_prompt,
-    LATEX_REFINER_SYSTEM_PROMPT,
-    build_latex_refiner_user_prompt,
 )
 from .tool_llm import generate_structured_with_tools
 
@@ -58,29 +55,6 @@ class PreparedResult:
 
 
 @dataclass
-class LatexCompileError:
-    """Represents a single LaTeX compilation error extracted from the log."""
-
-    message: str
-    file_path: Optional[str] = None
-    line: Optional[int] = None
-    log_excerpt: Optional[str] = None
-
-
-@dataclass
-class LatexCompileResult:
-    """Outcome of a LaTeX compilation attempt."""
-
-    success: bool
-    command: tuple[str, ...]
-    returncode: int
-    stdout: str
-    stderr: str
-    log_path: Optional[Path]
-    log_text: str
-    errors: List[LatexCompileError]
-
-@dataclass
 class LatexPaperConverterConfig:
     label_model: str = "gpt-5-mini"
     label_reasoning: str = "medium"
@@ -94,16 +68,6 @@ class LatexPaperConverterConfig:
     main_reasoning: str = "medium"
     timeout: float = 300.0
     main_timeout: float = 900.0
-    latex_command_candidates: tuple[tuple[str, ...], ...] = (
-        ("tectonic", "--keep-logs", "--keep-intermediates"),
-        ("latexmk", "-pdf", "-interaction=nonstopmode", "-halt-on-error"),
-        ("pdflatex", "-interaction=nonstopmode", "-halt-on-error"),
-    )
-    latex_timeout: float = 240.0
-    refiner_model: str = "gpt-5"
-    refiner_reasoning: str = "medium"
-    refiner_timeout: float = 300.0
-    refiner_max_passes: int = 5
 
 
 def _web_search_tool() -> dict:
@@ -169,7 +133,6 @@ class LatexPaperConverter:
     def __init__(self, config: Optional[LatexPaperConverterConfig] = None) -> None:
         self.config = config or LatexPaperConverterConfig()
         self.logger = logging.getLogger(self.__class__.__name__)
-        self._latex_command: tuple[str, ...] | None = None
 
     def convert(self, json_path: str | Path) -> Path:
         """Convert a JSON file of results into a LaTeX paper folder."""
@@ -207,9 +170,29 @@ class LatexPaperConverter:
         )
 
         self._write_main_file(prepared, bib_entries, tex_files, output_dir)
-        self._compile_and_refine(output_dir)
 
         self.logger.info("[Paper] Conversion complete: %s", output_dir)
+
+        # Final step: generate a debugging prompt and copy it to the clipboard
+        prompt_text = (
+            f"there's a latex paper in {output_dir}\n\n"
+            "Debug it for me until there's no more error in the compiler.\n"
+            "You should:\n"
+            "- comment all \"\\input{{...}}\" lines first, compile, ignore all \\ref to unknown label messages, fix the other errors\n"
+            "- then one line at a time, uncomment \"\\input{{...}}\", compile, and fix the errors (still ignore all \\ref to unknown label messages)\n"
+            "- after fixing all errors, check for unidentified references (\\ref to unknown label) then fix them\n"
+            "- tidy all overfull and underfull \\hbox\n"
+        )
+        try:
+            self._copy_to_clipboard(prompt_text)
+            self.logger.info("[Paper] Copied debugging prompt to clipboard.")
+        except Exception as _e:
+            self.logger.warning("[Paper] Failed to copy prompt to clipboard: %s", _e)
+        # Also persist the prompt alongside the project for convenience
+        try:
+            (output_dir / "DEBUG_PROMPT.txt").write_text(prompt_text, encoding="utf-8")
+        except Exception:
+            pass
         return output_dir
 
     # ------------------------------------------------------------------
@@ -664,265 +647,56 @@ class LatexPaperConverter:
         (output_dir / "main.tex").write_text(main_tex, encoding="utf-8")
         self.logger.info("[Paper] Wrote main.tex to %s", output_dir / "main.tex")
 
-    def _resolve_latex_command(self) -> tuple[str, ...]:
-        if self._latex_command is not None:
-            return self._latex_command
-        candidates = list(self.config.latex_command_candidates)
-        local_tectonic = Path(__file__).resolve().parent / 'bin' / 'tectonic' / 'tectonic.exe'
-        if local_tectonic.exists():
-            candidates.insert(0, (str(local_tectonic), '--keep-logs', '--keep-intermediates'))
-        for candidate in candidates:
-            if not candidate:
-                continue
-            executable = candidate[0]
-            if shutil.which(executable):
-                self._latex_command = tuple(candidate)
-                self.logger.info("[Paper] Using LaTeX compiler command: %s", " ".join(candidate))
-                break
-        if self._latex_command is None:
-            raise FileNotFoundError(
-                "No LaTeX compiler found. Install Tectonic or ensure pdflatex/latexmk is on PATH."
-            )
-        return self._latex_command
+    # ------------------------------------------------------------------
+    # Utilities
 
-    def _run_latex_compile(self, output_dir: Path) -> LatexCompileResult:
-        command = self._resolve_latex_command()
-        cmdline = list(command) + ["main.tex"]
+    def _copy_to_clipboard(self, text: str) -> None:
+        """Copy the given text to the system clipboard using best-effort fallbacks.
+
+        Tries pyperclip if installed, else uses platform tools:
+        - Windows: clip
+        - macOS: pbcopy
+        - Linux: xclip or xsel (clipboard selection)
+        Raises on failure.
+        """
         try:
-            completed = subprocess.run(
-                cmdline,
-                cwd=output_dir,
-                capture_output=True,
-                text=True,
-                timeout=self.config.latex_timeout,
-                check=False,
-            )
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"LaTeX compiler {command[0]} not found on PATH") from exc
-        stdout = completed.stdout or ""
-        stderr = completed.stderr or ""
-        log_path = output_dir / "main.log"
-        if log_path.exists():
-            log_text = log_path.read_text(encoding="utf-8", errors="ignore")
-        else:
-            log_text = stdout + ("\n" + stderr if stderr else "")
-        errors: List[LatexCompileError] = []
-        if completed.returncode != 0:
-            extracted = self._extract_first_latex_error(log_text)
-            if extracted is None:
-                excerpt = "\n".join(snippet[:6])
-                extracted = LatexCompileError(
-                    message="LaTeX compilation failed",
-                    file_path="main.tex",
-                    log_excerpt=excerpt,
-                )
-            errors.append(extracted)
-        return LatexCompileResult(
-            success=completed.returncode == 0,
-            command=tuple(cmdline),
-            returncode=completed.returncode,
-            stdout=stdout,
-            stderr=stderr,
-            log_path=log_path if log_path.exists() else None,
-            log_text=log_text,
-            errors=errors,
-        )
-
-    @staticmethod
-    def _extract_first_latex_error(log_text: str) -> Optional[LatexCompileError]:
-        if not log_text:
-            return None
-        lines = log_text.splitlines()
-        file_stack: list[str] = []
-        for idx, raw in enumerate(lines):
-            if raw.count("("):
-                for match in re.finditer(r"\(([^()\s]+)", raw):
-                    candidate = match.group(1).rstrip(")")
-                    if candidate.endswith(".tex"):
-                        file_stack.append(candidate)
-            if raw.count(")") and file_stack:
-                pops = raw.count(")")
-                for _ in range(pops):
-                    if file_stack:
-                        file_stack.pop()
-            stripped = raw.strip()
-            if stripped.startswith("!"):
-                message = stripped.lstrip("!").strip() or "LaTeX error"
-                file_hint = None
-                for candidate in reversed(file_stack):
-                    if candidate.endswith(".tex"):
-                        file_hint = candidate.lstrip("./")
-                        break
-                line_no: Optional[int] = None
-                snippet = [raw]
-                for look in lines[idx + 1 : min(len(lines), idx + 6)]:
-                    snippet.append(look)
-                    trimmed = look.strip()
-                    if trimmed.startswith("l.") and len(trimmed) > 2:
-                        digits: list[str] = []
-                        for ch in trimmed[2:]:
-                            if ch.isdigit():
-                                digits.append(ch)
-                            else:
-                                break
-                        if digits:
-                            try:
-                                line_no = int("".join(digits))
-                            except ValueError:
-                                line_no = None
-                        break
-                excerpt = "\n".join(snippet[:6])
-                return LatexCompileError(
-                    message=message,
-                    file_path=file_hint,
-                    line=line_no,
-                    log_excerpt=excerpt,
-                )
-        return None
-
-
-
-    @staticmethod
-    def _resolve_error_path(output_dir: Path, file_hint: Optional[str]) -> Optional[Path]:
-        if not file_hint:
-            return None
-        output_root = output_dir.resolve()
-        candidates: list[Path] = []
-        hint = file_hint.strip()
-        if not hint:
-            return None
-        normalized = hint.lstrip('./')
-        candidates.append(output_root / normalized)
-        candidates.append(output_root / Path(normalized).name)
-        try:
-            absolute = Path(hint).resolve()
-            try:
-                relative = absolute.relative_to(output_root)
-                candidates.append(output_root / relative)
-            except ValueError:
-                pass
+            import pyperclip  # type: ignore
+            pyperclip.copy(text)
+            return
         except Exception:
             pass
-        seen: set[Path] = set()
-        for candidate in candidates:
+
+        if os.name == "nt":  # Windows
+            # Use built-in clip command
+            completed = subprocess.run(
+                "clip",
+                input=text,
+                text=True,
+                shell=True,
+                check=False,
+            )
+            if completed.returncode != 0:
+                raise RuntimeError("Failed to use Windows clip to set clipboard")
+            return
+
+        # macOS
+        if sys.platform == "darwin":
+            completed = subprocess.run(["pbcopy"], input=text, text=True, check=False)
+            if completed.returncode != 0:
+                raise RuntimeError("Failed to use pbcopy to set clipboard")
+            return
+
+        # Linux/X11 fallbacks
+        for cmd in (["xclip", "-selection", "clipboard"], ["xsel", "--clipboard", "--input"]):
             try:
-                resolved = candidate.resolve()
+                completed = subprocess.run(cmd, input=text, text=True, check=False)
+                if completed.returncode == 0:
+                    return
             except Exception:
                 continue
-            if resolved in seen:
-                continue
-            seen.add(resolved)
-            try:
-                resolved.relative_to(output_root)
-            except ValueError:
-                continue
-            if resolved.exists():
-                return resolved
-        target_name = Path(normalized).name
-        if target_name:
-            for match in output_root.rglob(target_name):
-                try:
-                    match.relative_to(output_root)
-                except ValueError:
-                    continue
-                if match.is_file():
-                    return match
-        return None
+        raise RuntimeError("No clipboard mechanism available (pyperclip/pbcopy/xclip/xsel)")
 
-    def _apply_latex_refiner(self, output_dir: Path, result: LatexCompileResult, error: LatexCompileError) -> None:
-        command_line = " ".join(result.command)
-        log_excerpt = (error.log_excerpt or result.log_text[:1000]).strip()
-        if len(log_excerpt) > 1500:
-            log_excerpt = log_excerpt[:1500] + "..."
-        messages = [
-            {"role": "system", "content": LATEX_REFINER_SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": build_latex_refiner_user_prompt(
-                    command_line,
-                    result.returncode,
-                    error.message,
-                    error.file_path,
-                    error.line,
-                    log_excerpt,
-                ),
-            },
-        ]
-        error_path = self._resolve_error_path(output_dir, error.file_path)
-        if error_path and error_path.exists():
-            try:
-                rel_path = error_path.relative_to(output_dir)
-            except ValueError:
-                rel_path = error_path
-            try:
-                error_content = error_path.read_text(encoding="utf-8")
-            except UnicodeDecodeError:
-                error_content = error_path.read_text(encoding="latin-1")
-            messages.append(
-                {
-                    "role": "user",
-                    "content": f"Current contents of {rel_path}:\n```latex\n{error_content}\n```",
-                }
-            )
-        main_content = (output_dir / "main.tex").read_text(encoding="utf-8")
-        messages.append(
-            {
-                "role": "user",
-                "content": f"Current contents of main.tex:\n```latex\n{main_content}\n```",
-            }
-        )
-        resp = generate_structured_with_tools(
-            messages=messages,
-            response_model=LatexRefinerResponse,
-            model=self.config.refiner_model,
-            tools=[_web_search_tool()],
-            tool_registry={},
-            reasoning_effort=self.config.refiner_reasoning,
-            timeout=self.config.refiner_timeout,
-        )
-        parsed = resp.output_parsed
-        if not parsed.updates:
-            raise RuntimeError("Refiner did not propose any file updates.")
-        project_root = output_dir.resolve()
-        for update in parsed.updates:
-            target_path = (output_dir / update.file_path).resolve()
-            try:
-                target_path.relative_to(project_root)
-            except ValueError as exc:
-                raise ValueError(
-                    f"Refiner attempted to write outside the LaTeX project: {target_path}"
-                ) from exc
-            target_path.parent.mkdir(parents=True, exist_ok=True)
-            target_path.write_text(update.content, encoding="utf-8")
-            self.logger.info("[Paper] Refiner updated %s", target_path.relative_to(project_root))
-
-
-
-    def _compile_and_refine(self, output_dir: Path) -> None:
-        max_passes = max(1, int(self.config.refiner_max_passes))
-        attempt = 1
-        while True:
-            result = self._run_latex_compile(output_dir)
-            if result.success:
-                self.logger.info("[Paper] LaTeX compilation succeeded on attempt %d", attempt)
-                return
-            error = result.errors[0] if result.errors else LatexCompileError(
-                message="LaTeX compilation failed",
-                file_path="main.tex",
-                log_excerpt=result.log_text[:200],
-            )
-            self.logger.warning(
-                "[Paper] LaTeX compilation failed (attempt %d, exit %d): %s",
-                attempt,
-                result.returncode,
-                error.message,
-            )
-            if attempt > max_passes:
-                raise RuntimeError(
-                    f"LaTeX compilation failed after {max_passes} refiner passes: {error.message}"
-                )
-            self._apply_latex_refiner(output_dir, result, error)
-            attempt += 1
+    # (No compile/refiner steps; conversion ends after writing main.tex.)
 
 
 

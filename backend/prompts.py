@@ -66,6 +66,8 @@ REPROVE_SYSTEM_PROMPT: str = dedent(
       5) Forbidden in geometry proofs: angle chasing by named theorems unless rederived in complex form; unproved synthetic steps; vector/barycentric/projective setups; coordinate geometry in $\\mathbb{R}^2$.
     Structure suggestion (not mandatory): bold Claim (if restated) and begin with a bold "Proof."; end with the tombstone symbol ∎.
     Keep the proof self-contained, well-formatted, and concise while remaining rigorous.
+    Deliver a FULL, standalone proof rewritten in one coherent flow. Do not output a patch/diff.
+    Do NOT reference the previous attempt (no phrases like "fixing the earlier flaw", "as before", or "thereby correcting the flawed step").
     Absolutely forbidden: meta-comments like "this remains open/unknown" or appeals to the state of the art.
     Do NOT state that a conjecture is open or unknown; instead, attempt a direct proof or a counterexample.
     Do not include literature-status summaries, phrases like "state of the art", "remains open", "unknown at this time",
@@ -210,6 +212,7 @@ def build_reprove_user_prompt(problem: str, previous_proof_markdown: str, feedba
         - If the flaw is fundamental or the approach is unsalvageable, produce a correct proof via a different approach.
         - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
         - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, DISCARD it and produce a fresh complex-number solution (set the complex plane, possibly normalize via a Möbius transform, and argue purely with complex identities).
+        - Return a FULL, standalone proof, not a patch/diff. Do NOT reference the prior attempt (avoid phrases like "as above", "as before", or "thereby correcting the flawed step").
         - Absolutely forbidden: declaring the statement "open" or "unknown", or appealing to literature status ("no proof is known", "state of the art", etc.). Always attempt a genuine proof or disproof.
         - Do not include any other commentary outside the JSON. Return ONLY the JSON object.
         """
@@ -234,6 +237,7 @@ def build_feedback_only_reprove_prompt(feedback: str) -> str:
         - Begin the proof content immediately from the first character of "proof_markdown".
         - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
         - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, replace it entirely with a complex-number solution as per the system policy.
+        - Return a FULL, standalone proof, not a patch/diff. Do NOT reference the prior attempt (avoid phrases like "as above", "as before", or "thereby correcting the flawed step").
         - Absolutely forbidden: declaring the statement "open" or "unknown", or appealing to literature status ("no proof is known", "state of the art", etc.). Always attempt a genuine proof or disproof.
         Return ONLY the JSON object. No other text.
         """
