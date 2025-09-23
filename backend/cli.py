@@ -158,6 +158,36 @@ def _parse_seed_content(text: str) -> str | list[str]:
         return text
 
 
+def _parse_seed_content2(text: str) -> str | list[str]:
+    """Enhanced parser for seed content supporting triple-quoted lists.
+
+    Tries JSON; then r\"\"\"...\"\"\" items inside [...]; then \"...\" items; then blank-line blocks; else raw text.
+    """
+    try:
+        import json as _json
+        val = _json.loads(text)
+        if isinstance(val, list) and all(isinstance(x, str) for x in val):
+            return val
+        if isinstance(val, str):
+            return val
+        return text
+    except Exception:
+        stripped = text.strip()
+        if stripped.startswith("[") and stripped.endswith("]"):
+            items3 = re.findall(r'r?"""(.*?)"""', stripped, flags=re.S | re.I)
+            items3 = [s.strip() for s in items3 if s and s.strip()]
+            if items3:
+                return items3
+            items = re.findall(r'"([^\\"]*)"', stripped, flags=re.S)
+            items = [s.strip() for s in items if s and s.strip()]
+            if items:
+                return items
+        blocks = [b.strip() for b in re.split(r"\n\s*\n+", text) if b.strip()]
+        if len(blocks) > 1:
+            return blocks
+        return text
+
+
 def _append_correct_result_json(path: str, statement: str, proof_markdown: str) -> None:
     """Append a correct result to a JSON array file in a durable way.
 
@@ -605,7 +635,16 @@ def main(argv: Optional[list[str]] = None) -> int:
         except Exception as e:
             print(f"Error reading seed file: {e}", file=sys.stderr)
             return 2
+    # If still no input, decide whether to prompt (single-proof mode) or error (research modes)
     if not question:
+        if args.research or args.continuous:
+            # In research modes we should not fall back to interactive stdin prompts
+            print(
+                "Error: no seed/question provided. Use -S/--seed-file, --in-file, or a positional question.",
+                file=sys.stderr,
+            )
+            return 2
+        # Single-shot proving mode may read from stdin interactively
         if sys.stdin.isatty():
             print("Enter the statement to prove, then press Ctrl-D:", file=sys.stderr)
         question = sys.stdin.read().strip()
@@ -772,7 +811,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     # Continuous research loop mode
     if args.continuous:
         try:
-            seeds = _parse_seed_content(question)
+            seeds = _parse_seed_content2(question)
             run_continuous_math_research(
                 seeds,
                 model=args.model,
@@ -788,7 +827,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     # One-shot research mode
     if args.research:
         try:
-            seed_parsed = _parse_seed_content(question)
+            seed_parsed = _parse_seed_content2(question)
             results, report_markdown = run_automate_math_research(
                 seed_result=seed_parsed,
                 model=args.model,

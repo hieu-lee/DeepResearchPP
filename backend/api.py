@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 import logging
 from pydantic import BaseModel
 
-from .cli import run_automate_math_research, _parse_seed_content
+from .cli import run_automate_math_research, _parse_seed_content2
 
 
 class ReportRequest(BaseModel):
@@ -32,7 +32,7 @@ def generate_report(req: ReportRequest) -> ReportResponse:
         # Normalize seeds to match CLI behavior (accept raw string or bracketed multi-seed text)
         normalized_seeds: Union[str, List[str]]
         if isinstance(req.seeds, str):
-            normalized_seeds = _parse_seed_content(req.seeds)
+            normalized_seeds = _parse_seed_content2(req.seeds)
         else:
             normalized_seeds = req.seeds
 
@@ -56,7 +56,7 @@ def generate_report_stream(req: ReportRequest) -> StreamingResponse:
     def _iter():
         try:
             logger.info("/report/stream: start")
-            seeds = _parse_seed_content(req.seeds) if isinstance(req.seeds, str) else req.seeds
+            seeds = _parse_seed_content2(req.seeds) if isinstance(req.seeds, str) else req.seeds
             yield json.dumps({"phase": "start", "model": req.model}) + "\n"
             from .research import ResearchPipeline, ResearchConfig
             from .cli import _append_correct_result_json  # reuse util if desired
