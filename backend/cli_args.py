@@ -64,7 +64,7 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         dest="open_max_iterations",
         type=int,
         default=None,
-        help="Maximum prover iterations before giving up in --open-problem mode (default 12).",
+        help="Maximum prover iterations before giving up in --open-problem mode (default 15).",
     )
     parser.add_argument(
         "-S",
@@ -136,4 +136,3 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         ),
     )
     return parser.parse_args(argv)
-

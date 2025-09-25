@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import Any, Dict
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .tool_llm import generate_structured_with_tools
 from .output_schemas import LiteratureReviewResult, LiteratureResultItem
@@ -16,7 +18,7 @@ logger = logging.getLogger("backend.open_problem_solver")
 
 DEFAULT_TARGET_RESULTS = 25
 MAX_RESULTS_CAP = 30
-DEFAULT_MAX_ITERATIONS = 12
+DEFAULT_MAX_ITERATIONS = 15
 
 
 def _map_model(name: str, *, requires_tools: bool = False) -> str:
@@ -98,15 +100,54 @@ def run_open_problem_solver(args: Dict[str, Any]) -> Dict[str, Any]:
             "message": f"Failed to collect related results: {type(exc).__name__}: {exc}",
         }
 
-    solver = Solver(model=solver_model)
+    # Determine parallel pairs for solver runs in open-problem mode.
+    # Respect DEEPRESEARCH_SOLVER_PAIRS if set; otherwise default to 3 for open-problem.
     try:
-        solved, proof_or_feedback = solver.solve(problem, max_iterations, literature)
-    except Exception as exc:  # pragma: no cover
-        logger.exception("[OpenProblemSolver] Solver execution failed: %s", exc)
-        return {
-            "status": "error",
-            "message": f"Solver execution failed: {type(exc).__name__}: {exc}",
-        }
+        pairs = int(os.getenv("DEEPRESEARCH_SOLVER_PAIRS", "") or "3")
+    except Exception:
+        pairs = 3
+    pairs = max(1, pairs)
+
+    def _run_one() -> tuple[bool, str]:
+        s = Solver(model=solver_model)
+        return s.solve(problem, max_iterations, literature)
+
+    if pairs == 1:
+        try:
+            solved, proof_or_feedback = _run_one()
+        except Exception as exc:  # pragma: no cover
+            logger.exception("[OpenProblemSolver] Solver execution failed: %s", exc)
+            return {
+                "status": "error",
+                "message": f"Solver execution failed: {type(exc).__name__}: {exc}",
+            }
+    else:
+        results: list[tuple[bool, str]] = []
+        first_success: tuple[bool, str] | None = None
+        try:
+            with ThreadPoolExecutor(max_workers=pairs) as ex:
+                futs = [ex.submit(_run_one) for _ in range(pairs)]
+                for fut in as_completed(futs):
+                    try:
+                        ok, payload = fut.result()
+                    except Exception as exc:  # pragma: no cover
+                        logger.exception("[OpenProblemSolver] Parallel solver failed: %s", exc)
+                        ok, payload = False, ""
+                    results.append((ok, payload))
+                    if ok and first_success is None:
+                        first_success = (ok, payload)
+        except Exception as exc:  # pragma: no cover
+            logger.exception("[OpenProblemSolver] Parallel execution failed: %s", exc)
+            return {
+                "status": "error",
+                "message": f"Parallel execution failed: {type(exc).__name__}: {exc}",
+            }
+        if first_success is not None:
+            solved, proof_or_feedback = first_success
+        elif results:
+            solved, proof_or_feedback = max(results, key=lambda x: len(x[1] or ""))
+        else:
+            solved, proof_or_feedback = False, "No result produced."
 
     related_payload = [
         {
@@ -168,8 +209,8 @@ def build_open_problem_solver_tool_definition() -> Dict[str, Any]:
                 "max_iterations": {
                     "type": "integer",
                     "minimum": 1,
-                    "maximum": 20,
-                    "description": "Maximum prover iterations before giving up (default 12).",
+                "maximum": 20,
+                "description": "Maximum prover iterations before giving up (default 15).",
                 },
                 "target_results": {
                     "type": "integer",
