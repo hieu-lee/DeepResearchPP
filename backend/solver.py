@@ -1,4 +1,5 @@
 from typing import Tuple, Optional, Any
+import threading
 import logging
 
 from .judge import Judge
@@ -26,6 +27,7 @@ class Solver:
         problem: str,
         max_tries_per_prover: int = 10,
         literature: Optional[LiteratureReviewResult] = None,
+        cancel_event: Optional[threading.Event] = None,
     ) -> Tuple[bool, str]:
         """Run a single Prover with two sequential Judges and iterative feedback.
 
@@ -54,9 +56,13 @@ class Solver:
             }
 
         for iter_idx in range(1, max_tries_per_prover + 1):
+            if cancel_event is not None and cancel_event.is_set():
+                return False, "Cancelled by parallel success"
             self.logger.info("Prover: attempting proof%s", " (with feedback)" if feedback else "")
 
             # Produce or revise proof
+            if cancel_event is not None and cancel_event.is_set():
+                return False, "Cancelled by parallel success"
             if not feedback:
                 if judge_context:
                     proof_resp = self.prover.prove(
@@ -67,6 +73,8 @@ class Solver:
                 else:
                     proof_resp = self.prover.prove(problem)
             else:
+                if cancel_event is not None and cancel_event.is_set():
+                    return False, "Cancelled by parallel success"
                 if judge_context:
                     proof_resp = self.prover.reprove(
                         problem,
@@ -88,6 +96,8 @@ class Solver:
 
             # Judge #1 assessment
             self.logger.info("Submitting to Judge #1")
+            if cancel_event is not None and cancel_event.is_set():
+                return False, "Cancelled by parallel success"
             if judge_context:
                 j1 = judge1.assess(
                     problem,
@@ -115,6 +125,8 @@ class Solver:
                 logging_manager.append_judge1_detail(self._pair_index, iter_idx, accepted=True, feedback=j1.feedback)
             except Exception:
                 pass
+            if cancel_event is not None and cancel_event.is_set():
+                return False, "Cancelled by parallel success"
             if judge_context:
                 j2 = judge2.assess(
                     problem,

@@ -4,6 +4,7 @@ import os
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
+import random
 
 from pydantic import BaseModel
 
@@ -180,15 +181,61 @@ def generate_structured(
 
     # Default: OpenAI-compatible provider (OpenAI or Ollama via base URL)
     from openai import OpenAI  # type: ignore
+    try:  # Best-effort import across SDK versions
+        from openai import (
+            APITimeoutError,
+            APIConnectionError,
+            RateLimitError,
+            InternalServerError,
+            APIStatusError,
+        )  # type: ignore
+    except Exception:  # pragma: no cover
+        APITimeoutError = Exception  # type: ignore
+        APIConnectionError = Exception  # type: ignore
+        RateLimitError = Exception  # type: ignore
+        InternalServerError = Exception  # type: ignore
+        APIStatusError = Exception  # type: ignore
 
     client = OpenAI(timeout=timeout)
-    resp = client.responses.parse(
-        model=model,
-        input=messages,
-        tools=tools or [],
-        reasoning={"effort": reasoning_effort} if reasoning_effort else None,
-        text_format=response_model,
-    )
+    # Simple retry loop for transient/network/server errors
+    try:
+        max_retries = max(0, int(os.getenv("OPENAI_RETRY_ATTEMPTS", "4")))
+    except Exception:
+        max_retries = 4
+    try:
+        base_backoff = max(0.1, float(os.getenv("OPENAI_RETRY_BACKOFF_SECONDS", "2")))
+    except Exception:
+        base_backoff = 2.0
+
+    def _should_retry_error(e: Exception) -> bool:
+        if isinstance(e, (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError)):
+            return True
+        if isinstance(e, APIStatusError):
+            try:
+                status = int(getattr(e, "status_code", 0) or 0)
+            except Exception:
+                status = 0
+            return 500 <= status < 600
+        return False
+
+    attempt = 0
+    while True:
+        try:
+            resp = client.responses.parse(
+                model=model,
+                input=messages,
+                tools=tools or [],
+                reasoning={"effort": reasoning_effort} if reasoning_effort else None,
+                text_format=response_model,
+            )
+            break
+        except Exception as e:
+            if attempt < max_retries and _should_retry_error(e):
+                delay = base_backoff * (2 ** attempt) + random.uniform(0, base_backoff)
+                time.sleep(min(60.0, delay))
+                attempt += 1
+                continue
+            raise
     return LLMResponse(output_parsed=resp.output_parsed, output_text=resp.output_text)
 
 

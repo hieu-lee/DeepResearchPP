@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import os
+import time
+import random
 from typing import Any, Dict, List, Optional, Callable, Tuple
 import logging
 
@@ -91,8 +93,95 @@ def generate_structured_with_tools(
         )
 
     from openai import OpenAI  # type: ignore
+    try:  # Best-effort import of typed exceptions across SDK versions
+        from openai import (
+            APITimeoutError,
+            APIConnectionError,
+            RateLimitError,
+            InternalServerError,
+            APIStatusError,
+        )  # type: ignore
+    except Exception:  # pragma: no cover
+        APITimeoutError = Exception  # type: ignore
+        APIConnectionError = Exception  # type: ignore
+        RateLimitError = Exception  # type: ignore
+        InternalServerError = Exception  # type: ignore
+        APIStatusError = Exception  # type: ignore
 
     client = OpenAI(timeout=timeout)
+
+    # Retry configuration (env-tunable)
+    try:
+        max_retries = max(0, int(os.getenv("OPENAI_RETRY_ATTEMPTS", "4")))
+    except Exception:
+        max_retries = 4
+    try:
+        base_backoff = max(0.1, float(os.getenv("OPENAI_RETRY_BACKOFF_SECONDS", "2")))
+    except Exception:
+        base_backoff = 2.0
+
+    def _sleep_backoff(attempt: int) -> None:
+        # Exponential backoff with jitter
+        delay = base_backoff * (2 ** attempt)
+        jitter = random.uniform(0, base_backoff)
+        time.sleep(min(60.0, delay + jitter))
+
+    def _should_retry_error(e: Exception) -> bool:
+        if isinstance(e, (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError)):
+            return True
+        # Treat generic 5xx status codes as retryable if surfaced as APIStatusError
+        if isinstance(e, APIStatusError):
+            try:
+                status = int(getattr(e, "status_code", 0) or 0)
+            except Exception:
+                status = 0
+            return 500 <= status < 600
+        return False
+
+    def _parse_with_retry(*, input_messages: List[Dict[str, Any]]) -> Any:
+        attempt = 0
+        while True:
+            try:
+                return client.responses.parse(
+                    model=model,
+                    input=input_messages,
+                    tools=tools or [],
+                    reasoning={"effort": reasoning_effort} if reasoning_effort else None,
+                    text_format=response_model,
+                )
+            except Exception as e:  # pragma: no cover
+                if attempt < max_retries and _should_retry_error(e):
+                    logger.warning(
+                        "[ToolLLM] parse failed (attempt %d/%d): %s",
+                        attempt + 1,
+                        max_retries + 1,
+                        e,
+                    )
+                    _sleep_backoff(attempt)
+                    attempt += 1
+                    continue
+                raise
+
+    def _submit_tool_outputs_with_retry(*, response_id: str, tool_outputs: List[Dict[str, str]]) -> Any:
+        attempt = 0
+        while True:
+            try:
+                return client.responses.submit_tool_outputs(
+                    response_id=response_id,
+                    tool_outputs=tool_outputs,
+                )
+            except Exception as e:  # pragma: no cover
+                if attempt < max_retries and _should_retry_error(e):
+                    logger.warning(
+                        "[ToolLLM] submit_tool_outputs failed (attempt %d/%d): %s",
+                        attempt + 1,
+                        max_retries + 1,
+                        e,
+                    )
+                    _sleep_backoff(attempt)
+                    attempt += 1
+                    continue
+                raise
 
     # First request via parse to get Pydantic-typed output enforced by the model
     logger.info(
@@ -101,13 +190,7 @@ def generate_structured_with_tools(
         [t.get("type") or t.get("name") for t in (tools or [])],
         reasoning_effort,
     )
-    resp = client.responses.parse(
-        model=model,
-        input=messages,
-        tools=tools or [],
-        reasoning={"effort": reasoning_effort} if reasoning_effort else None,
-        text_format=response_model,
-    )
+    resp = _parse_with_retry(input_messages=messages)
 
     # Tool-use loop
     while True:
@@ -147,19 +230,10 @@ def generate_structured_with_tools(
 
         if outputs:
             logger.info("[ToolLLM] submit_tool_outputs: count=%d", len(outputs))
-            resp = client.responses.submit_tool_outputs(
-                response_id=resp.id,
-                tool_outputs=outputs,
-            )
+            resp = _submit_tool_outputs_with_retry(response_id=resp.id, tool_outputs=outputs)
             # After tool outputs, request final structured parse to enforce schema
             # Supply the original conversation again to guide the model output
-            resp = client.responses.parse(
-                model=model,
-                input=messages,
-                tools=tools or [],
-                reasoning={"effort": reasoning_effort} if reasoning_effort else None,
-                text_format=response_model,
-            )
+            resp = _parse_with_retry(input_messages=messages)
         else:
             break
 

@@ -3,10 +3,19 @@ import logging
 
 try:
     # Newer OpenAI Python SDK exception names
-    from openai import APITimeoutError, APIConnectionError
+    from openai import (
+        APITimeoutError,
+        APIConnectionError,
+        RateLimitError,
+        InternalServerError,
+        APIStatusError,
+    )
 except Exception:  # pragma: no cover - fallback for older SDKs
     APITimeoutError = Exception  # type: ignore
     APIConnectionError = Exception  # type: ignore
+    RateLimitError = Exception  # type: ignore
+    InternalServerError = Exception  # type: ignore
+    APIStatusError = Exception  # type: ignore
 
 from .output_schemas import JudgeResponse, FinalJudgeResponse
 from .prompts import (
@@ -80,7 +89,7 @@ class Judge:
                 )
                 self.logger.debug("Judge assess: received response")
                 return resp.output_parsed
-            except (APITimeoutError, APIConnectionError) as e:
+            except (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError, APIStatusError) as e:
                 self.logger.warning(
                     "Judge assess timed out/connection error on attempt %d/%d: %s",
                     attempt + 1,
@@ -139,7 +148,7 @@ class FinalJudge:
                 )
                 self.logger.debug("FinalJudge select: received response")
                 return int(resp.output_parsed.chosen_index)
-            except (APITimeoutError, APIConnectionError) as e:
+            except (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError, APIStatusError) as e:
                 self.logger.warning(
                     "FinalJudge select timed out/connection error on attempt %d/%d: %s",
                     attempt + 1,

@@ -2,10 +2,19 @@ from typing import Optional, List, Dict, Any
 import json
 
 try:
-    from openai import APITimeoutError, APIConnectionError
+    from openai import (
+        APITimeoutError,
+        APIConnectionError,
+        RateLimitError,
+        InternalServerError,
+        APIStatusError,
+    )
 except Exception:  # pragma: no cover - fallback for older SDKs
     APITimeoutError = Exception  # type: ignore
     APIConnectionError = Exception  # type: ignore
+    RateLimitError = Exception  # type: ignore
+    InternalServerError = Exception  # type: ignore
+    APIStatusError = Exception  # type: ignore
 
 from .prompts import (
     PROOF_SYSTEM_PROMPT,
@@ -86,7 +95,7 @@ class Prover:
                         timeout=self.timeout,
                     )
                 break
-            except (APITimeoutError, APIConnectionError) as e:
+            except (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError, APIStatusError) as e:
                 self.logger.warning(
                     "LLM request (prove) timed out/connection error on attempt %d/%d: %s",
                     attempt + 1,
@@ -161,7 +170,7 @@ class Prover:
                         timeout=self.timeout,
                     )
                 break
-            except (APITimeoutError, APIConnectionError) as e:
+            except (APITimeoutError, APIConnectionError, RateLimitError, InternalServerError, APIStatusError) as e:
                 self.logger.warning(
                     "LLM request (reprove) timed out/connection error on attempt %d/%d: %s",
                     attempt + 1,

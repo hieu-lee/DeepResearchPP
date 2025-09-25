@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any, Dict
+import threading
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -108,9 +109,11 @@ def run_open_problem_solver(args: Dict[str, Any]) -> Dict[str, Any]:
         pairs = 3
     pairs = max(1, pairs)
 
+    cancel_event = threading.Event()
+
     def _run_one() -> tuple[bool, str]:
         s = Solver(model=solver_model)
-        return s.solve(problem, max_iterations, literature)
+        return s.solve(problem, max_iterations, literature, cancel_event=cancel_event)
 
     if pairs == 1:
         try:
@@ -124,24 +127,38 @@ def run_open_problem_solver(args: Dict[str, Any]) -> Dict[str, Any]:
     else:
         results: list[tuple[bool, str]] = []
         first_success: tuple[bool, str] | None = None
+        ex: ThreadPoolExecutor | None = None
         try:
-            with ThreadPoolExecutor(max_workers=pairs) as ex:
-                futs = [ex.submit(_run_one) for _ in range(pairs)]
-                for fut in as_completed(futs):
-                    try:
-                        ok, payload = fut.result()
-                    except Exception as exc:  # pragma: no cover
-                        logger.exception("[OpenProblemSolver] Parallel solver failed: %s", exc)
-                        ok, payload = False, ""
-                    results.append((ok, payload))
-                    if ok and first_success is None:
-                        first_success = (ok, payload)
+            ex = ThreadPoolExecutor(max_workers=pairs)
+            futs = [ex.submit(_run_one) for _ in range(pairs)]
+            for fut in as_completed(futs):
+                try:
+                    ok, payload = fut.result()
+                except Exception as exc:  # pragma: no cover
+                    logger.exception("[OpenProblemSolver] Parallel solver failed: %s", exc)
+                    ok, payload = False, ""
+                results.append((ok, payload))
+                if ok and first_success is None:
+                    first_success = (ok, payload)
+                    # Signal other workers to stop ASAP and cancel pending ones
+                    cancel_event.set()
+                    for other in futs:
+                        if other is not fut:
+                            other.cancel()
+                    break
         except Exception as exc:  # pragma: no cover
             logger.exception("[OpenProblemSolver] Parallel execution failed: %s", exc)
             return {
                 "status": "error",
                 "message": f"Parallel execution failed: {type(exc).__name__}: {exc}",
             }
+        finally:
+            if ex is not None:
+                try:
+                    # Do not wait; allow running tasks to see cancel_event and wind down
+                    ex.shutdown(wait=False, cancel_futures=True)
+                except Exception:
+                    pass
         if first_success is not None:
             solved, proof_or_feedback = first_success
         elif results:
