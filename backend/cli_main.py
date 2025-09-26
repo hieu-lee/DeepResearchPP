@@ -55,6 +55,7 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     # Determine the question/seed content
     question: Optional[str] = args.question
+    # Priority 1: explicit input file (-f/--in-file)
     if args.in_file:
         try:
             in_path = Path(args.in_file)
@@ -72,6 +73,19 @@ def main(argv: Optional[list[str]] = None) -> int:
                 pass
         except Exception as e:
             print(json.dumps({"error": f"Failed to read file: {type(e).__name__}: {e}"}), file=sys.stderr)
+            return 2
+    # Priority 2: seed file (-S/--seed-file) for research/continuous modes
+    # Many users expect -S to provide the seeds; accept it as the primary source
+    # when no positional question was given and no -f was provided.
+    if not question and args.seed_file:
+        try:
+            seed_path = Path(args.seed_file)
+            question = seed_path.read_text(encoding="utf-8").strip()
+        except Exception as e:
+            print(
+                json.dumps({"error": f"Failed to read seed file: {type(e).__name__}: {e}"}),
+                file=sys.stderr,
+            )
             return 2
     if not question:
         if sys.stdin.isatty():

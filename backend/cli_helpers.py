@@ -73,6 +73,11 @@ def _append_correct_result_json(path: str, statement: str, proof_markdown: str) 
     obj = {"statement": statement, "proof_markdown": proof_markdown}
     try:
         p = Path(path).expanduser().resolve()
+        # Ensure parent directory exists when a nested path is provided
+        try:
+            p.parent.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
         if p.exists():
             try:
                 raw = p.read_text(encoding="utf-8")
@@ -88,7 +93,12 @@ def _append_correct_result_json(path: str, statement: str, proof_markdown: str) 
     except Exception:
         # Best-effort fallback: write a minimal JSON array
         try:
-            Path(path).write_text(json.dumps([obj], indent=2, ensure_ascii=False), encoding="utf-8")
+            p = Path(path)
+            try:
+                p.parent.mkdir(parents=True, exist_ok=True)
+            except Exception:
+                pass
+            p.write_text(json.dumps([obj], indent=2, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
 
