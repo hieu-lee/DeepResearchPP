@@ -5,7 +5,7 @@ from textwrap import dedent
 
 """System and user prompts used across the application."""
 
- 
+
 PROOF_SYSTEM_PROMPT: str = dedent(
     """
     You are a rigorous mathematician. Produce clear, correct, and concise proofs.
@@ -183,7 +183,9 @@ def build_final_judge_user_prompt(problem: str, proofs: list[str]) -> str:
     ).strip()
 
 
-def build_reprove_user_prompt(problem: str, previous_proof_markdown: str, feedback: str) -> str:
+def build_reprove_user_prompt(
+    problem: str, previous_proof_markdown: str, feedback: str
+) -> str:
     """Build a user prompt to revise the previous proof using the problem, last proof, and feedback.
 
     The model must output a JSON object with a single field "proof_markdown"
@@ -215,31 +217,6 @@ def build_reprove_user_prompt(problem: str, previous_proof_markdown: str, feedba
         - Return a FULL, standalone proof, not a patch/diff. Do NOT reference the prior attempt (avoid phrases like "as above", "as before", or "thereby correcting the flawed step").
         - Absolutely forbidden: declaring the statement "open" or "unknown", or appealing to literature status ("no proof is known", "state of the art", etc.). Always attempt a genuine proof or disproof.
         - Do not include any other commentary outside the JSON. Return ONLY the JSON object.
-        """
-    ).strip()
-
-
-def build_feedback_only_reprove_prompt(feedback: str) -> str:
-    """Build a user prompt that only supplies reviewer feedback and asks to repair the prior proof.
-
-    The model must output a JSON object with a single field "proof_markdown" that contains the
-    updated proof as Markdown, preserving the original problem context from the ongoing conversation.
-    """
-    return dedent(
-        f"""
-        Task: Repair your previous proof to address the reviewer feedback below. Do not start a new proof; make the minimal set of changes needed so that the flaw is corrected.
-
-        Reviewer feedback (first flaw only):
-        {feedback}
-
-        Requirements:
-        - Produce ONLY a JSON object with a single field "proof_markdown" whose value is a self-contained Markdown proof for the same problem as before.
-        - Begin the proof content immediately from the first character of "proof_markdown".
-        - Use proper LaTeX math formatting (inline $...$, display $$...$$) and standard math macros.
-        - If the problem is Euclidean geometry and the prior attempt was not a complex-number proof, replace it entirely with a complex-number solution as per the system policy.
-        - Return a FULL, standalone proof, not a patch/diff. Do NOT reference the prior attempt (avoid phrases like "as above", "as before", or "thereby correcting the flawed step").
-        - Absolutely forbidden: declaring the statement "open" or "unknown", or appealing to literature status ("no proof is known", "state of the art", etc.). Always attempt a genuine proof or disproof.
-        Return ONLY the JSON object. No other text.
         """
     ).strip()
 
@@ -333,6 +310,7 @@ def build_tighten_user_prompt(statement: str, proof_markdown: str) -> str:
         """
     ).strip()
 
+
 # System prompt for literature extraction behavior and output constraints
 EXTRACT_SYSTEM_PROMPT: str = dedent(
     """
@@ -410,7 +388,6 @@ def build_lit_review_user_prompt(seed_result_latex: str | list[str]) -> str:
     ).strip()
 
 
-
 OPEN_PROBLEM_CONTEXT_SYSTEM_PROMPT: str = dedent(
     """
     You are a senior mathematical research assistant tasked with preparing auxiliary references for a difficult open problem.
@@ -430,7 +407,9 @@ OPEN_PROBLEM_CONTEXT_SYSTEM_PROMPT: str = dedent(
 ).strip()
 
 
-def build_open_problem_context_user_prompt(problem_statement: str, target_results: int) -> str:
+def build_open_problem_context_user_prompt(
+    problem_statement: str, target_results: int
+) -> str:
     try:
         desired = int(target_results)
     except Exception:
@@ -489,7 +468,9 @@ def build_predict_user_prompt(
     literature_results: list[list[str]],
     research_guideline: str | None = None,
 ) -> str:
-    results_md = "\n".join([f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results])
+    results_md = "\n".join(
+        [f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results]
+    )
     guideline_block = (
         f"\nResearch guideline (steer all conjectures toward this goal):\n{research_guideline}\n"
         if research_guideline
@@ -516,8 +497,12 @@ def build_predict_user_prompt(
     ).strip()
 
 
-def build_proof_user_prompt_with_context(statement: str, literature_annotations: str, literature_results: list[list[str]]) -> str:
-    lemmas_md = "\n".join([f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results])
+def build_proof_user_prompt_with_context(
+    statement: str, literature_annotations: str, literature_results: list[list[str]]
+) -> str:
+    lemmas_md = "\n".join(
+        [f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results]
+    )
     base = build_proof_user_prompt(statement)
     extra = dedent(
         f"""
@@ -532,8 +517,15 @@ def build_proof_user_prompt_with_context(statement: str, literature_annotations:
     return base + "\n\n" + extra
 
 
-def build_judge_user_prompt_with_context(problem: str, proof_markdown: str, literature_annotations: str, literature_results: list[list[str]]) -> str:
-    lemmas_md = "\n".join([f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results])
+def build_judge_user_prompt_with_context(
+    problem: str,
+    proof_markdown: str,
+    literature_annotations: str,
+    literature_results: list[list[str]],
+) -> str:
+    lemmas_md = "\n".join(
+        [f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results]
+    )
     base = build_judge_user_prompt(problem, proof_markdown)
     extra = dedent(
         f"""
@@ -589,8 +581,15 @@ def build_final_report_user_prompt(
     - literature_results: [(result_latex, url)]
     - compiled_results: [(new_result_latex, proof_markdown)]
     """
-    lit_md = "\n".join([f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results])
-    new_md = "\n\n".join([f"Result:\n${{{stmt}}}$\n\nProof (Markdown):\n{proof}" for stmt, proof in compiled_results])
+    lit_md = "\n".join(
+        [f"- ${{{stmt}}}$ (source: {url})" for stmt, url in literature_results]
+    )
+    new_md = "\n\n".join(
+        [
+            f"Result:\n${{{stmt}}}$\n\nProof (Markdown):\n{proof}"
+            for stmt, proof in compiled_results
+        ]
+    )
     return dedent(
         f"""
         Literature annotations (trusted):
@@ -629,7 +628,9 @@ NOVELTY_SYSTEM_PROMPT: str = dedent(
 ).strip()
 
 
-def build_novelty_user_prompt(literature_annotations: str, predicted_result_latex: str) -> str:
+def build_novelty_user_prompt(
+    literature_annotations: str, predicted_result_latex: str
+) -> str:
     return dedent(
         f"""
         Annotations (notation to interpret the statement):
@@ -642,6 +643,8 @@ def build_novelty_user_prompt(literature_annotations: str, predicted_result_late
         is_novel (boolean), matched_statement (string if not novel else empty), matched_url (string if not novel else empty).
         """
     ).strip()
+
+
 PAPER_LABEL_SYSTEM_PROMPT: str = dedent(
     """
     You assign concise, descriptive LaTeX labels to mathematical results.
@@ -799,8 +802,18 @@ def build_paper_result_tex_prompt(
     bib_preview: str,
     dependency_summary: list[str],
 ) -> str:
-    internal_text = "\n".join(f"- {lbl}: {stmt}" for lbl, stmt in internal_pairs) if internal_pairs else "(none)"
-    external_text = "\n".join(f"- {key}: {url} :: {citation}" for key, url, citation in external_pairs) if external_pairs else "(none)"
+    internal_text = (
+        "\n".join(f"- {lbl}: {stmt}" for lbl, stmt in internal_pairs)
+        if internal_pairs
+        else "(none)"
+    )
+    external_text = (
+        "\n".join(
+            f"- {key}: {url} :: {citation}" for key, url, citation in external_pairs
+        )
+        if external_pairs
+        else "(none)"
+    )
     dep_text = "\n".join(dependency_summary) if dependency_summary else "(none)"
     return dedent(
         f"""
@@ -858,7 +871,9 @@ def build_paper_main_prompt(
     result_filenames: list[str],
 ) -> str:
     labels_block = "\n".join(f"- {label}: {stmt}" for label, stmt in labeled_statements)
-    keys_block = ", ".join(bibliography_keys) if bibliography_keys else "(no external citations)"
+    keys_block = (
+        ", ".join(bibliography_keys) if bibliography_keys else "(no external citations)"
+    )
     inputs_block = "\n".join(f"- {fname}" for fname in result_filenames)
     return dedent(
         f"""
@@ -880,6 +895,7 @@ def build_paper_main_prompt(
         - Return only JSON with the LaTeX content.
         """
     ).strip()
+
 
 LATEX_REFINER_SYSTEM_PROMPT: str = dedent(
     """
@@ -923,11 +939,3 @@ def build_latex_refiner_user_prompt(
         - Reply with JSON listing the files to overwrite.
         """
     ).strip()
-
-
-
-
-
-
-
-
