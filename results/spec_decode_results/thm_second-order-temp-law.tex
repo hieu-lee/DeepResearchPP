@@ -1,0 +1,101 @@
+\begin{theorem}[Two-sided second-order temperature law with a single explicit constant]\label{thm:second-order-temp-law}
+Let $m\in\mathbb{N}$ and $\rho\in(0,1)$. If each conditional $q_n(\cdot\mid x_{1:n-1})$ has support size at most $m$ and $|\tau-1|\le \rho$, then uniformly over steps $n$ and prefixes $x_{1:n-1}$,
+\[
+\Big\|\operatorname{TV}(p_{\tau,n},q_n)-\frac{|\tau-1|}{2}\,\mathbb{E}_{q_n}\big[\,|\log q_n(V)-\mathbb{E}_{q_n}[\log q_n(V)]|\,\big]\Big\|\ \le\ C(m,\rho)\,(\tau-1)^2,
+\]
+where
+\[
+C(m,\rho)=(1+\rho\log m)\,m^{\rho}\Big(m\,B_1(\rho)+ (\log m)^2 m^{\rho}\Big),\qquad B_1(\rho)=\frac{4}{e^2(1-\rho)^2}.
+\]
+Equivalently, the two-sided bounds hold with the same constant: one may take $C_-(m,\rho)=C_+(m,\rho)=C(m,\rho)$. Consequently, $\sum_n\mathbb{E}[\operatorname{TV}(p_{\tau,n},q_n)]$ has matching linear terms in $|\tau-1|$ with a quadratic remainder bounded by $C(m,\rho)$ per step, uniformly in $n$.
+\end{theorem}
+
+\begin{proof}
+Fix $m\in\mathbb{N}$ and $\rho\in(0,1)$. For any step $n$ and prefix $x_{1:n-1}$, let $q\equiv q_n(\cdot\mid x_{1:n-1})$ be supported on a set $S$ with $|S|\le m$, and for $|\tau-1|\le\rho$ define
+\[
+ p_{\tau}(v)=\frac{q(v)^{\tau}}{\sum_{u\in S}q(u)^{\tau}},\qquad v\in S.
+\]
+Write $t:=\tau-1$ with $|t|\le\rho$. Let $V\sim q$, set $X:=\log q(V)$, $\mu:=\mathbb{E}_q[X]=\sum_v q(v)\log q(v)\in[-\log m,0]$, and $X_c:=X-\mu$. Then
+\[
+ p_t(v)=\frac{q(v)^{1+t}}{\sum_u q(u)^{1+t}}=q(v)\,\frac{e^{tX_c(v)}}{Z_t},\qquad Z_t:=\mathbb{E}_q\big[e^{tX_c}\big].
+\]
+Hence $\operatorname{TV}(p_t,q)=\tfrac12\sum_v|p_t(v)-q(v)|=\tfrac12\,\mathbb{E}_q[\,|e^{tX_c}/Z_t-1|\,]$. Define
+\[
+Y_t:=\frac{e^{tX_c}}{Z_t},\qquad R_t:=Y_t-1-tX_c,
+\]
+so that
+\[
+\operatorname{TV}(p_t,q)=\frac12\,\mathbb{E}_q\big[\,|tX_c+R_t|\,\big].
+\]
+We will prove a uniform bound $\mathbb{E}_q[|R_t|]\le K(m,\rho)\,t^2$ with $K(m,\rho)<\infty$ depending only on $(m,\rho)$. Then by the reverse triangle inequality,
+\[
+\Big|\mathbb{E}_q\big[|tX_c+R_t|\big]-|t|\,\mathbb{E}_q[|X_c|]\Big|\le \mathbb{E}_q[|R_t|],
+\]
+yielding
+\[
+\Big|\operatorname{{TV}}(p_t,q)-\tfrac{|t|}{2}\,\mathbb{E}_q[|X_c|]\Big|\le \tfrac12\,\mathbb{E}_q[|R_t|]\le \tfrac12 K(m,\rho)\,t^2.
+\]
+Thus the two-sided inequality holds with the same constant $C(m,\rho)=\tfrac12 K(m,\rho)$, once we bound $K(m,\rho)$ explicitly.
+
+From $R_t=e^{tX_c}/Z_t-1-tX_c$ we obtain
+\[
+R_t=\frac{e^{tX_c}-1-tX_c}{Z_t}+\Big(\frac{1}{Z_t}-1\Big)(1+tX_c)
+=\frac{e^{tX_c}-1-tX_c}{Z_t}-\frac{Z_t-1}{Z_t}-tX_c\,\frac{Z_t-1}{Z_t}.
+\]
+Since $e^y\ge 1+y$ for all $y$, $e^{tX_c}-1-tX_c\ge0$ almost surely; and by Jensen, $Z_t=\mathbb{E}_q[e^{tX_c}]\ge e^{t\mathbb{E}_q[X_c]}=1$. Therefore,
+\[
+\mathbb{E}_q[|R_t|]\le \frac{1}{Z_t}\,\mathbb{E}_q\big[e^{tX_c}-1-tX_c\big]+\frac{Z_t-1}{Z_t}+|t|\,\mathbb{E}_q[|X_c|] \cdot \frac{Z_t-1}{Z_t}.
+\]
+Let $\varepsilon:=\mathrm{sgn}(t)$ and $A(t):=\mathbb{E}_q\big[e^{tX_c}-1-tX_c\big]$. Using Taylor's integral remainder,
+\[
+A(t)=\int_0^{|t|}(|t|-s)\,\mathbb{E}_q\big[X_c^2 e^{s\varepsilon X_c}\big]ds.
+\]
+Because $\mathbb{E}_q[X_c]=0$, we also have $Z_t-1=\mathbb{E}_q[e^{tX_c}-1]=A(t)$. Hence
+\[
+\mathbb{E}_q[|R_t|]\le \frac{1}{Z_t}\big(2+|t|\,\mathbb{E}_q[|X_c|]\big)A(t).
+\]
+Bounding $Z_t\ge1$ and $\int_0^{|t|}(|t|-s)ds=\tfrac{|t|^2}{2}$ gives
+\[
+\mathbb{E}_q[|R_t|]\le \Big(1+\tfrac{|t|}{2}\,\mathbb{E}_q[|X_c|]\Big)|t|^2\,\sup_{0\le u\le |t|}\mathbb{E}_q\big[X_c^2 e^{u\varepsilon X_c}\big].
+\]
+Next, uniformly for $u\in[\,0,\rho\,]$,
+\[
+\mathbb{E}_q\big[X_c^2 e^{u\varepsilon X_c}\big]=e^{-u\varepsilon\mu}\sum_{v\in S} q(v)^{1+u\varepsilon}\big(\log q(v)-\mu\big)^2.
+\]
+Using $e^{|u\mu|}\le e^{\rho|\mu|}\le m^{\rho}$, $(a-b)^2\le2a^2+2b^2$, and $\sum_v q(v)^{1+u\varepsilon}\le m^{\rho}$ (since for $\alpha\ge1$, $\sum q^\alpha\le1\le m^{\rho}$, while for $\alpha\in(0,1)$, $\sum q^\alpha\le m^{1-\alpha}\le m^{\rho}$), we obtain
+\[
+\mathbb{E}_q\big[X_c^2 e^{u\varepsilon X_c}\big]\le 2 m^{\rho}\Big(\sum_{v} q(v)^{1+u\varepsilon}\log^2 q(v)\Big)+2 m^{\rho}\mu^2\!\sum_{v} q(v)^{1+u\varepsilon}.
+\]
+Since $1+u\varepsilon\ge 1-\rho$ and, for $x\in(0,1]$, the map $\alpha\mapsto x^\alpha$ decreases in $\alpha$, we have $x^{1+u\varepsilon}\le x^{1-\rho}$. Thus
+\[
+\sum_{v} q(v)^{1+u\varepsilon}\log^2 q(v)\le |S|\cdot \sup_{x\in(0,1]} x^{1-\rho}(\log x)^2\le m\,B_1(\rho),
+\]
+where
+\[
+B_1(\rho):=\sup_{x\in(0,1]} x^{1-\rho}(\log x)^2=\sup_{y\ge0} e^{-(1-\rho)y}y^2=\frac{4}{e^2(1-\rho)^2}.
+\]
+Using $|\mu|\le\log m$ yields the uniform bound
+\[
+\sup_{0\le u\le\rho}\mathbb{E}_q\big[X_c^2 e^{u\varepsilon X_c}\big]\le 2 m^{\rho}\big(m B_1(\rho)+ (\log m)^2 m^{\rho}\big)=:M(m,\rho).
+\]
+Finally, since $X\le0$ almost surely, $\mathbb{E}_q[|X|]=-\mu\le\log m$, and hence $\mathbb{E}_q[|X_c|]\le \mathbb{E}_q[|X|]+|\mu|\le 2\log m$. Combining the pieces, for $|t|\le\rho$,
+\[
+\mathbb{E}_q[|R_t|]\le \Big(1+\tfrac{|t|}{2}\,\mathbb{E}_q[|X_c|]\Big)|t|^2 M(m,\rho)\le (1+\rho\log m)\,M(m,\rho)\,t^2.
+\]
+Therefore
+\[
+\Big|\operatorname{TV}(p_t,q)-\frac{|t|}{2}\,\mathbb{E}_q[|X_c|]\Big|\le \frac12\,\mathbb{E}_q[|R_t|]\le \frac{(1+\rho\log m)\,M(m,\rho)}{2}\,t^2.
+\]
+Setting
+\[
+C(m,\rho):=\frac{(1+\rho\log m)\,M(m,\rho)}{2}=(1+\rho\log m)\,m^{\rho}\big(m B_1(\rho)+ (\log m)^2 m^{\rho}\big)
+\]
+proves the claimed absolute deviation bound, hence the two-sided inequalities with the same constant $C(m,\rho)$, uniformly over steps and prefixes. In particular,
+\[
+\begin{aligned}
+\Big\|\operatorname{TV}(p_{\tau,n},q_n)-\tfrac{|\tau-1|}{2}\,\mathbb{E}_{q_n}\big[\,|\log q_n(V)-\mathbb{E}_{q_n}[\log q_n(V)]|\,\big]\Big\|
+&\le C(m,\rho)\,(\tau-1)^2,\\
+&\quad \text{uniformly in $n$ and $x_{1:n-1}$}.\qedhere
+\end{aligned}
+\]
+\end{proof}

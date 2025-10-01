@@ -1,0 +1,39 @@
+﻿\begin{proposition}\label{prop:logit-threshold}
+Suppose that for nonnegative covariates $(L_0,M_0,T)\in\mathbb R_+^3$ the model satisfies
+\[
+\operatorname{logit}\,\mathbb P(E75\mid L_0,M_0,T)=\beta_0+\beta_L L_0+\beta_M M_0+\beta_T T+\beta_{LM}L_0M_0,
+\]
+with coefficients $\beta_L>0$, $\beta_M\ge 0$, $\beta_T\ge 0$, and $\beta_{LM}\ge 0$. For $A\subset\mathbb R_+$ (in $M_0$) and $B\subset\mathbb R_+$ (in $T$), define
+\[
+\tau_L(A,B):=\inf\big\{\tau\ge 0:[\tau,\infty)\times A\times B\subset\{(L_0,M_0,T):\mathbb P(E75\mid L_0,M_0,T)\ge p\}\big\}.
+\]
+Then for every $p\in(0,1)$, every $\tau_M\ge 0$, and every $B\subset\mathbb R_+$ with $0\in B$,
+\[
+\tau_L\big([\tau_M,\infty),B\big)=\Bigg[\,\frac{\operatorname{logit}(p)-\beta_0-\beta_M\tau_M}{\beta_L+\beta_{LM}\tau_M}\,\Bigg]_+,
+\]
+so in particular $\tau_L\big([\tau_M,\infty),[0,\tau_T]\big)=\tau_L\big([\tau_M,\infty),\mathbb R_+\big)$ for all $\tau_T\ge 0$. Here $[x]_+:=\max\{x,0\}$.
+\end{proposition}
+
+\begin{proof}
+Let $\sigma(x):=\tfrac{1}{1+e^{-x}}$ and write
+\[
+\mathbb P(E75\mid L_0{=}L,M_0{=}M,T)=\sigma\big(g(L,M,T)\big),\quad g(L,M,T):=\beta_0+\beta_L L+\beta_M M+\beta_T T+\beta_{LM}LM.
+\]
+Fix $p\in(0,1)$ and set $c:=\operatorname{logit}(p)$. For $L\ge 0$ we have
+\[
+\frac{\partial g}{\partial M}(L,M,T)=\beta_M+\beta_{LM}L\ge 0,\qquad \frac{\partial g}{\partial T}(L,M,T)=\beta_T\ge 0,
+\]
+by $\beta_M\ge 0$, $\beta_T\ge 0$, and $\beta_{LM}\ge 0$. Hence for any $\tau_M\ge 0$ and any $B\subset\mathbb R_+$ with $0\in B$,
+\[
+\inf\{g(L,M,T):M\in[\tau_M,\infty),\ T\in B\}=g(L,\tau_M,0).
+\]
+Because $\sigma$ is strictly increasing, the condition $\mathbb P(E75\mid L,M,T)\ge p$ is equivalent to $g(L,M,T)\ge c$. Therefore,
+\[
+[\tau,\infty)\times[\tau_M,\infty)\times B\subset\{g\ge c\}\quad\Longleftrightarrow\quad g(L,\tau_M,0)\ge c\text{ for all }L\ge\tau.
+\]
+Now $L\mapsto g(L,\tau_M,0)=\beta_0+(\beta_L+\beta_{LM}\tau_M)L+\beta_M\tau_M$ is strictly increasing because $\beta_L>0$ and $\beta_{LM}\ge 0$, so $\beta_L+\beta_{LM}\tau_M>0$. Consequently, the minimal $\tau\ge 0$ satisfying $g(\tau,\tau_M,0)\ge c$ is
+\begin{equation*}
+\tau_L\big([\tau_M,\infty),B\big)=\Bigg[\,\frac{c-\beta_0-\beta_M\tau_M}{\beta_L+\beta_{LM}\tau_M}\,\Bigg]_+.
+\end{equation*}
+independent of $B$ whenever $0\in B$, and hence of $[0,\tau_T]$ versus $\mathbb R_+$.\qedhere
+\end{proof}

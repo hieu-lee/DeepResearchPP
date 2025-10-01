@@ -1,0 +1,1 @@
+Let f: \mathbb{R}^d \to \mathbb{R} be convex with L-Lipschitz gradient (i.e., L-smooth). Run gradient descent with constant step size \(\eta \in (0,\tfrac{2}{L}]\): \(x_{n+1}=x_n-\eta\nabla f(x_n)\), and set \(f_n=f(x_n)\). Define the two-step smoothing \(s_n:=\tfrac12\,(f_n+f_{n+1})\). Then the sequence \((s_n)\) is convex in \(n\) and nonincreasing.

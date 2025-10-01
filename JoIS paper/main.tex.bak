@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,linkcolor=webgreen,filecolor=webbrown,citecolor=webgreen]{hyperref}
+
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+
+% JIS macro for OEIS entries; provide a safe fallback for local builds
+\providecommand{\seqnum}[1]{#1}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\begin{document}
+
+\title{Conjectures About Cyclic Numbers: Resolutions, Counterexamples, and Blockwise Structure}
+\author{Le Duc Hieu \\
+Telecom SudParis \\
+\texttt{duc-hieu.le@telecom-sudparis.eu}}
+\date{}
+\maketitle
+
+\begin{abstract}
+We resolve several conjectures about cyclic numbers (positive integers $n$ with $\gcd(n,\varphi(n))=1$) and settle a related problem about a sequence whose running averages are Fibonacci numbers. Specifically:
+\emph{(i)} we prove an asymptotic for the number of cyclic integers between consecutive squares, including a second-order term;
+\emph{(ii)} we establish a Rosser-type lower bound $c_n>e^{\gamma} n\log_3 n$ for all $n>1$;
+\emph{(iii)} we prove the Ishikawa-type inequality $c_n+c_{n+1}>c_{n+2}$ for all $n>2$ (with equalities at $n=1,2$);
+\emph{(iv)} we disprove a Panaitopol-type inequality by exhibiting $c_{35}=91=c_5c_7$;
+\emph{(v)} we confirm the limits $c_n/G_n\to e$ and $A_n/G_n\to e/2$;
+\emph{(vi)} for the lexicographically least sequence of pairwise distinct positive integers whose initial running averages are Fibonacci numbers, we determine the exact blockwise structure and give closed forms on each block.
+\end{abstract}
+
+\section{Introduction}
+An integer $n\ge1$ is \emph{cyclic} if every group of order $n$ is cyclic. By Szele \cite{Szele1947}, this is equivalent to $\gcd(n,\varphi(n))=1$, where $\varphi$ is Euler's totient function. Let $C$ denote the set of cyclic numbers, let $C(x):=\#\{c\in C: c\le x\}$ be its counting function, and let $(c_n)_{n\ge1}$ be the increasing enumeration of $C$.
+
+\begin{remark}
+Two immediate consequences of Szele's criterion will be used repeatedly: (i) $2$ is the only even cyclic integer (if $n$ is even and $n>2$, then $2\mid n$ and $2\mid \varphi(n)$, so $\gcd(n,\varphi(n))\ge2$); (ii) $1$ is the only square in $C$ (if $n$ is a square $>1$, then $p\mid n$ and $p\mid \varphi(n)$ for some prime $p$, so again $\gcd(n,\varphi(n))>1$). All odd primes are cyclic since $\gcd(p,\varphi(p))=\gcd(p,p-1)=1$.
+\end{remark}
+
+Many conjectures about cyclics proposed by Cohen \cite{Cohen2025} are analogs of well-known results or conjectures for the prime numbers (sequence \seqnum{A000040}), with $C$ playing the role of $\mathbb P$. In this paper we give complete proofs or counterexamples to several of these conjectures, and we give a detailed blockwise analysis of an OEIS problem about running averages equaling Fibonacci numbers (sequence \seqnum{A248982}). Throughout, we emphasize exactly which conjectures are settled and how.
+
+\medskip
+\noindent\textbf{Summary of resolved conjectures.}
+We resolve the following conjectures from \cite{Cohen2025} (numbers as in that paper):
+\begin{itemize}
+  \item Conjecture~9 (cyclics between consecutive squares): proved with a sharpened asymptotic; see Theorem~\ref{thm:squares}.
+  \item Conjecture~52 (Rosser analog): proved; see Theorem~\ref{thm:rosser}.
+  \item Conjecture~54 (Ishikawa analog): proved; see Theorem~\ref{thm:ishikawa}.
+  \item Conjecture~59 (Panaitopol analog): disproved by the equality $c_{35}=c_5c_7=91$; see Theorem~\ref{thm:panaitopol}.
+  \item Conjecture~60 (Vrba analog): proved; see Theorem~\ref{thm:vrba}.
+  \item Conjecture~61 (Hassani analog): proved; see Theorem~\ref{thm:hassani}.
+  \item Fried's A248982 conjecture on closed forms on the blocks where the running average is a Fibonacci number: proved in a blockwise form; see Theorem~\ref{thm:fib-blocks}.
+\end{itemize}
+
+We use the Euler--Mascheroni constant $\gamma$, and write $\log_k x$ for the $k$-fold iterated natural logarithm (so $\log_1 x = \log x$, $\log_2 x = \log\log x$, and $\log_3 x = \log\log\log x$ for $x>e^e$). A key analytic input is the asymptotic for $C(x)$ due to Erd\H{o}s and sharpened by Pollack \cite{Pollack2022}:
+\begin{equation}\label{eq:Pollack}
+ C(x) \sim \frac{e^{-\gamma} x}{\log_3 x} \quad (x\to\infty),\quad C(x) = e^{-\gamma} x\left(\frac{1}{\log_3 x} - \frac{\gamma}{\log_3^2 x} + O\!\left(\frac{1}{\log_3^3 x}\right)\right).
+\end{equation}
+We also use standard facts from regular variation \cite{BGT1989} and asymptotic integration \cite{deBruijn1970} as indicated.
+
+\section{Cyclics between consecutive squares}
+This section \emph{resolves Conjecture~9} of Cohen \cite{Cohen2025}. The precise asymptotic below sharpens the conjectured main term by adding the next-order correction from \eqref{eq:Pollack}.
+
+\input{theorems/thm_squares}
+
+\section{A Rosser-type lower bound for \texorpdfstring{$c_n$}{c\_n}}
+This section \emph{resolves Conjecture~52} of Cohen \cite{Cohen2025} by proving a uniform lower bound for the $n$th cyclic number.
+
+\input{theorems/thm_rosser}
+
+\section{An Ishikawa-type inequality for cyclics}
+This section \emph{resolves Conjecture~54} of Cohen \cite{Cohen2025}.
+\input{theorems/thm_ishikawa}
+
+\section{A Panaitopol-type inequality is false}
+This section \emph{disproves Conjecture~59} of Cohen \cite{Cohen2025}.
+\input{theorems/thm_panaitopol}
+
+\section{Vrba- and Hassani-type limits for cyclics}
+This section \emph{resolves Conjectures~60 and~61} of Cohen \cite{Cohen2025}.
+Define the geometric and arithmetic means of the first $n$ cyclics by
+\[
+ G_n:=\bigg(\prod_{k=1}^n c_k\bigg)^{\!1/n},\qquad A_n:=\frac{1}{n}\sum_{k=1}^n c_k.
+\]
+
+\input{theorems/thm_vrba}
+
+\input{theorems/thm_hassani}
+
+\section{A blockwise result for an OEIS problem on Fibonacci averages}
+Let $(a_n)_{n\ge1}$ be the lexicographically least sequence of pairwise distinct positive integers such that the average of any initial segment is a Fibonacci number. Writing $S_n:=\sum_{i=1}^n a_i$ and $A_n:=S_n/n$, this means that for each $n$, $A_n\in\{F_k:k\ge1\}$, where $F_1=F_2=1$ and $F_{k+2}=F_{k+1}+F_k$. This is sequence \seqnum{A248982}. Fried \cite[§6]{Fried2025} proposed explicit closed-form candidates for $a_n$ on parity-based intervals and noted the remaining obstacle of set disjointness. We settle a blockwise version of this conjecture by proving that, for each Fibonacci level $F_k$, the index set $I_k:=\{n\ge1:A_n=F_k\}$ is an interval of length one or two, and by giving closed forms for $a_n$ on each such block.
+
+For $k\ge3$, define the index set $I_k:=\{n\ge1:A_n=F_k\}$ and $n_k:=\min I_k$.
+
+\input{theorems/thm_fib_blocks}
+
+\section{Acknowledgments}
+I thank the authors cited below for foundational results used in the proofs. The conjectures we resolve or disprove are due to Cohen \cite{Cohen2025}; we also cite the relevant OEIS entries.
+
+\begin{thebibliography}{99}
+
+\bibitem{BGT1989}
+N.~H. Bingham, C.~M. Goldie, and J.~L. Teugels, Regular Variation, Cambridge Univ. Press, 1989.
+
+\bibitem{Cohen2025}
+J.~E. Cohen, Conjectures about primes and cyclic numbers, J. Integer Seq. 28 (2025), Art. 25.4.7. Available at \url{https://cs.uwaterloo.ca/journals/JIS/VOL28/Cohen/cohen41.pdf}.
+
+\bibitem{deBruijn1970}
+N.~G. de Bruijn, Asymptotic Methods in Analysis, 3rd ed., North-Holland, 1970.
+
+\bibitem{Szele1947}
+T. Szele, \emph{\"Uber die endlichen Ordnungszahlen, zu denen nur eine Gruppe geh\"ort}, Comment. Math. Helv. 20 (1947), 265--267.
+
+\bibitem{Nagura1952}
+J. Nagura, On the interval containing at least one prime number, Proc. Japan Acad. 28 (1952), 177--181.
+
+\bibitem{Pollack2022}
+P. Pollack, Numbers which are orders only of cyclic groups, Proc. Amer. Math. Soc. 150 (2022), 515--524.
+
+\bibitem{OEIS-A003277}
+OEIS Foundation, Entry \seqnum{A003277}: Numbers $n$ such that every group of order $n$ is cyclic, \url{https://oeis.org/A003277}.
+
+\bibitem{OEIS-A248982}
+OEIS Foundation, Entry \seqnum{A248982}: Lexicographically earliest sequence of distinct positive integers whose averages are Fibonacci numbers, \url{https://oeis.org/A248982}.
+
+\bibitem{Fried2025}
+S. Fried, Proofs of Several Conjectures From the OEIS, J. Integer Seq. 28 (2025), Article 25.4.3. Available at \url{https://cs.uwaterloo.ca/journals/JIS/VOL28/Fried/fried15.pdf}.
+
+\end{thebibliography}
+
+\end{document}

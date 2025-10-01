@@ -10,6 +10,7 @@ from .solver import Solver
 from .judge import Judge
 from .research import ResearchPipeline, ResearchConfig
 from .result_refiner import ResultRefiner
+from .research_logging import ResearchContinuousPredictionLogger
 from .cli_helpers import _append_correct_result_json, _write_seed_file
 
 
@@ -119,9 +120,9 @@ def run_automate_math_research(
     futures = []
     refiner = ResultRefiner(model=_map_model(model, has_tools=False), reasoning_effort="medium")
 
-    def _prove_stmt(statement: str) -> tuple[bool, str]:
-        local_solver = Solver(model=model)
-        return local_solver.solve(statement, 8, lit)
+    def _prove_stmt(statement: str, adapter=None) -> tuple[bool, str]:
+            local_solver = Solver(model=model, logging_adapter=adapter)
+            return local_solver.solve(statement, 8, lit)
 
     logger.info("[Phase] Proving: begin (candidates=%d)", len(novel_statements))
     with ThreadPoolExecutor(max_workers=12) as ex:
@@ -227,16 +228,81 @@ def run_continuous_math_research(
 
         proved_this_round: list[tuple[str, str]] = []
 
-        def _prove_stmt(statement: str) -> tuple[bool, str]:
-            local_solver = Solver(model=model)
+        def _prove_stmt(statement: str, adapter=None) -> tuple[bool, str]:
+            local_solver = Solver(model=model, logging_adapter=adapter)
             return local_solver.solve(statement, 8, lit)
 
         refiner = ResultRefiner(model=model, reasoning_effort="medium")
 
         with ThreadPoolExecutor(max_workers=12) as ex:
-            future_map = {ex.submit(_prove_stmt, stmt): stmt for stmt in novel_statements}
+
+
+            # Prepare per-prediction log folders and adapters
+
+
+            _base_log_root = None
+
+
+            if seed_file_path:
+
+
+                try:
+
+
+                    _seed_p = Path(seed_file_path).expanduser().resolve()
+
+
+                    _base_log_root = _seed_p.parent / f"{_seed_p.stem}_research_continuous_log"
+
+
+                    _base_log_root.mkdir(parents=True, exist_ok=True)
+
+
+                except Exception:
+
+
+                    _base_log_root = Path.cwd() / "research_continuous_log"
+
+
+                    _base_log_root.mkdir(parents=True, exist_ok=True)
+
+
+            else:
+
+
+                _base_log_root = Path.cwd() / "research_continuous_log"
+
+
+                _base_log_root.mkdir(parents=True, exist_ok=True)
+
+
+            future_map = {};
+
+
+            for _idx, _stmt in enumerate(novel_statements, start=1):
+
+
+                _adapter = ResearchContinuousPredictionLogger(
+
+
+                    _base_log_root,
+
+
+                    iteration_index=iteration,
+
+
+                    prediction_index=_idx,
+
+
+                    statement_text=_stmt,
+
+
+                )
+
+
+                future_map[ex.submit(_prove_stmt, _stmt, _adapter)] = (_stmt, _adapter)
             for fut in as_completed(future_map):
-                stmt = future_map[fut]
+                stmt, _adapter = future_map[fut]
                 try:
                     ok, proof_or_feedback = fut.result()
                 except Exception as e:
@@ -289,7 +355,10 @@ def run_continuous_math_research(
                     logger.info(
                         "[Continuous] Proof accepted; appended to %s", correct_out_path
                     )
-
+                    try:
+                        _adapter.write_final_outputs(chosen_stmt, chosen_proof)
+                    except Exception:
+                        pass
         if not proved_this_round:
             logger.info("[Continuous] Iteration %d: no proofs succeeded; stopping.", iteration)
             break

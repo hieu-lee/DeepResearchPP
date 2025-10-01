@@ -11,7 +11,7 @@ from .logging_hooks import logging_manager
 class Solver:
     """Coordinates a single Prover with two sequential Judges and a feedback loop."""
 
-    def __init__(self, model: str = "gpt-5") -> None:
+    def __init__(self, model: str = "gpt-5", logging_adapter: Optional[object] = None) -> None:
         self.model = model
         # If user selected gpt-oss-120b, use 120b for Prover with no tools; otherwise default behavior
         if model == "gpt-oss-120b":
@@ -19,6 +19,13 @@ class Solver:
         else:
             self.prover = Prover(model=model)
         self.logger = logging.getLogger(self.__class__.__name__)
+        # Select logging manager/adapter (default to global logging_manager)
+        self._log = logging_adapter if logging_adapter is not None else logging_manager
+        # Assign a logging pair index if logging is enabled by the log adapter
+        try:
+            self._pair_index: Optional[int] = self._log.assign_index()
+        except Exception:
+            self._pair_index = None
         # Assign a logging pair index if logging is enabled by CLI
         self._pair_index: Optional[int] = logging_manager.assign_index()
 
@@ -89,8 +96,8 @@ class Solver:
             proof_markdown = proof_resp.proof_markdown
             last_proof = proof_markdown
             try:
-                logging_manager.write_iteration_header(self._pair_index, iter_idx, len(proof_markdown or ""))
-                logging_manager.write_iteration_start(self._pair_index, iter_idx, proof_markdown or "")
+                self._log.write_iteration_header(self._pair_index, iter_idx, len(proof_markdown or ""))
+                self._log.write_iteration_start(self._pair_index, iter_idx, proof_markdown or "")
             except Exception:
                 pass
 
@@ -112,8 +119,8 @@ class Solver:
                 feedback = j1.feedback
                 self.logger.info("Judge #1 found a flaw; looping with feedback")
                 try:
-                    logging_manager.write_judge1(self._pair_index, accepted=False, feedback_len=len(feedback or ""))
-                    logging_manager.append_judge1_detail(self._pair_index, iter_idx, accepted=False, feedback=feedback)
+                    self._log.write_judge1(self._pair_index, accepted=False, feedback_len=len(feedback or ""))
+                    self._log.append_judge1_detail(self._pair_index, iter_idx, accepted=False, feedback=feedback)
                 except Exception:
                     pass
                 continue
@@ -121,8 +128,8 @@ class Solver:
             # Judge #2 assessment only if Judge #1 accepted
             self.logger.info("Judge #1 accepted; submitting to Judge #2")
             try:
-                logging_manager.write_judge1(self._pair_index, accepted=True)
-                logging_manager.append_judge1_detail(self._pair_index, iter_idx, accepted=True, feedback=j1.feedback)
+                self._log.write_judge1(self._pair_index, accepted=True)
+                self._log.append_judge1_detail(self._pair_index, iter_idx, accepted=True, feedback=j1.feedback)
             except Exception:
                 pass
             if cancel_event is not None and cancel_event.is_set():
@@ -140,8 +147,8 @@ class Solver:
             if j2.correctness:
                 self.logger.info("Judge #2 also accepted; returning correct proof")
                 try:
-                    logging_manager.write_judge2(self._pair_index, accepted=True)
-                    logging_manager.append_judge2_detail(self._pair_index, iter_idx, accepted=True, feedback=j2.feedback)
+                    self._log.write_judge2(self._pair_index, accepted=True)
+                    self._log.append_judge2_detail(self._pair_index, iter_idx, accepted=True, feedback=j2.feedback)
                 except Exception:
                     pass
                 return True, proof_markdown
@@ -150,8 +157,8 @@ class Solver:
             feedback = j2.feedback
             self.logger.info("Judge #2 found a flaw; returning incorrect for this round and improving")
             try:
-                logging_manager.write_judge2(self._pair_index, accepted=False, feedback_len=len(feedback or ""))
-                logging_manager.append_judge2_detail(self._pair_index, iter_idx, accepted=False, feedback=feedback)
+                self._log.write_judge2(self._pair_index, accepted=False, feedback_len=len(feedback or ""))
+                self._log.append_judge2_detail(self._pair_index, iter_idx, accepted=False, feedback=feedback)
             except Exception:
                 pass
 

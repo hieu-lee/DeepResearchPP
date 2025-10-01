@@ -1,0 +1,25 @@
+\begin{definition}
+Let $\varphi(n)$ denote Euler's totient function. 
+A positive integer $m$ is called \emph{cyclic} if $\gcd\!\bigl(m,\varphi(m)\bigr)=1$. 
+Let $\mathcal C:=\{m\in\mathbb N:\ \gcd(m,\varphi(m))=1\}$ be the set of cyclic integers, and let $\gamma$ be the Euler--Mascheroni constant. 
+For $n\in\mathbb N$, define the half-square counts
+\[
+N_{\mathcal C}^{-}(n):=\#\{\,c\in\mathcal C:\ n^{2}-n\le c\le n^{2}\,\},\qquad
+N_{\mathcal C}^{+}(n):=\#\{\,c\in\mathcal C:\ n^{2}\le c\le n^{2}+n\,\},
+\]
+and write $\log_3 x:=\log\!\bigl(\log(\log x)\bigr)$ for $x>e^{e}$.
+\end{definition}
+
+\bigskip
+
+\textbf{Conjecture (Oppermann analog for cyclic integers, with counts).}
+For every integer $n>1$, there exist $c,c'\in\mathcal C$ with
+\[
+n^{2}-n<c<n^{2}<c'<n^{2}+n.
+\]
+Moreover, as $n\to\infty$,
+\[
+N_{\mathcal C}^{-}(n)\ \sim\ \frac{n}{e^{\gamma}\,\log_{3} n}\!\left(1-\frac{\gamma}{\log_{3} n}\right),
+\qquad
+N_{\mathcal C}^{+}(n)\ \sim\ \frac{n}{e^{\gamma}\,\log_{3} n}\!\left(1-\frac{\gamma}{\log_{3} n}\right).
+\]

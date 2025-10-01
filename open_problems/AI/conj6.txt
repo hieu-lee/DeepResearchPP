@@ -1,0 +1,8 @@
+\begin{definition}
+Let two trained nets with weights $\theta_a,\theta_b$ share architecture up to permutation symmetry of channels.
+Let $\mathcal G$ be the group of neuron-channel permutations and $(g\!\cdot\!\theta_b)$ the permuted weights.
+A \emph{linear mode-connected path} is the segment $\{\,(1-t)\theta_a+t(g\!\cdot\!\theta_b)\mid t\in[0,1]\,\}$ with low loss throughout.
+\end{definition}
+
+\textbf{Conjecture (Linear Mode Connectivity up to permutation).}
+For modern nets trained on the same task, there exists $g\in\mathcal G$ such that the loss along the straight line between $\theta_a$ and $g\!\cdot\!\theta_b$ is nearly constant (no significant barrier). (Open generally; strong empirical support.)

@@ -1,0 +1,45 @@
+﻿\begin{theorem}[Threshold-mediated effect]\label{thm-threshold-mediated-effect}
+There exists a structural causal model with therapy \(T\in\{D,\mathrm{Dual}\}\), mediator \(M\) with baseline \(M_0\), exposure \(E\), and a threshold \(\tau_M\) such that:
+\begin{enumerate}[label=(i)]
+  \item the natural indirect effect of \(T\) on \(\Delta\) via \(M\) equals the total effect, i.e., \(\mathrm{NIE}_{T\to\Delta\,\mathrm{via}\,M}=\mathrm{TE}\);
+  \item for all \(e_1>e_0\), the stratum-specific within-therapy exposure effect
+  \[
+    \Delta_E(t;m):=\mathbb E[\Delta\mid T{=}t,\mathrm{do}(E{=}e_1),M_0{=}m]-\mathbb E[\Delta\mid T{=}t,\mathrm{do}(E{=}e_0),M_0{=}m]
+  \]
+  satisfies \(\Delta_E(\mathrm{Dual};m)<\Delta_E(D;m)\) whenever \(m\ge\tau_M\), with equality for \(m<\tau_M\).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Define \(T\in\{0,1\}\) (with \(0\equiv D\), \(1\equiv \mathrm{Dual}\)). Fix a threshold \(\tau_M\in\mathbb R\) and baseline mediator \(M_0\in\mathbb R\). Consider the linear SCM (time indices suppressed):
+\[
+\begin{aligned}
+M&=M_0+\big(\beta-\rho\,\mathbf 1_{\{M_0\ge\tau_M\}}\,T\big)\,E\ -\ \alpha\,\mathbf 1_{\{M_0\ge\tau_M\}}\,T\ +U_M,\\
+\Delta&=\gamma_0+c\,E+d\,M+U_\Delta,
+\end{aligned}
+\]
+with exogenous noises \(U_M,U_\Delta\) mean-zero and independent of \((T,M_0,E)\). Choose any parameters \(d>0,\ \beta>0,\ \rho>0\), and \(c,\alpha\in\mathbb R\) arbitrary.
+
+1) Stratum-specific within-therapy exposure effect and its selective reduction at high \(M_0\). Under \(\mathrm{do}(E{=}e)\) and conditioning on \((T{=}t,M_0{=}m)\),
+\[
+\mathbb E[\Delta\mid T{=}t,\mathrm{do}(E{=}e),M_0{=}m]=\gamma_0+c\,e+d\Big(m+\big(\beta-\rho\,\mathbf 1_{\{m\ge\tau_M\}}\,t\big)e-\alpha\,\mathbf 1_{\{m\ge\tau_M\}}\,t\Big),
+\]
+so for \(e_1>e_0\),
+\[
+\Delta_E(t;m)=\big(c+d(\beta-\rho\,\mathbf 1_{\{m\ge\tau_M\}}\,t)\big)\,(e_1-e_0).
+\]
+Therefore, for \(m\ge\tau_M\),
+\[
+\Delta_E(1;m)=\Delta_E(0;m)-d\rho\,(e_1-e_0)<\Delta_E(0;m),
+\]
+since \(d\rho>0\) and \(e_1-e_0>0\). For \(m<\tau_M\) the indicator vanishes, yielding \(\Delta_E(1;m)=\Delta_E(0;m)=(c+d\beta)(e_1-e_0)\).
+
+2) Natural indirect effect equals total effect. The outcome equation for \(\Delta\) contains \(T\) only through \(M\). Writing the structural potential outcome as \(Y_{t,m,e}:=\gamma_0+c\,e+d\,m+U_\Delta\), we have \(Y_{1,m,e}\equiv Y_{0,m,e}\) for all \((m,e)\) (pointwise, for every realization of \(U_\Delta\)). Hence the natural direct effect is
+\[
+\mathrm{NDE}=\mathbb E\big[Y_{1,M_{0,E,M_0},E}-Y_{0,M_{0,E,M_0},E}\big]=0,
+\]
+which implies \(\mathrm{TE}=\mathrm{NIE}\) by the usual decomposition \(\mathrm{TE}=\mathrm{NDE}+\mathrm{NIE}\). Combining (1) and (2) proves the claim, and the properties hold for any choice of parameters with \(d>0,\beta>0,\rho>0\) and arbitrary \(\alpha,c\):
+\[
+\mathrm{TE}=\mathrm{NIE}.\qedhere
+\]
+\end{proof}

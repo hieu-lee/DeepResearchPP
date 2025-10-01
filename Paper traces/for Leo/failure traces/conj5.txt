@@ -1,0 +1,9 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $C$ be the set of cyclics and $C(x):=\#\{\,c\in C:\ c\le x\,\}$. Write $\gamma$ for the Euler–Mascheroni constant and $\log_k$ for the $k$-fold iterated natural log (so $\log_3 x=\log\log\log x$).
+Define $N_C(n):=\#\{\,c\in C:\ n^2<c<(n+1)^2\,\}$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Cyclics between consecutive squares).}\ As $n\to\infty$,
+\[
+N_C(n)\ \sim\ \frac{2n}{e^{\gamma}\,\log_3 n}\!\left(1-\frac{\gamma}{\log_3 n}\right).
+\]

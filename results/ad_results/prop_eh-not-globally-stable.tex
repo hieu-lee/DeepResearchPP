@@ -1,0 +1,28 @@
+﻿\begin{proposition}[Failure of global asymptotic stability of $E_{\mathrm h}$]\label{prop:eh-not-globally-stable}
+Consider the decoupled planar system on $\mathbb{R}_+^2$ with state variables $C$ (commensals) and $S$ (S. aureus)
+\[
+\dot C = f(C) := 3C^2 - C^3 - 2C, \qquad
+\dot S = g(S;\alpha) := S(1-\alpha- S),
+\]
+and let $E_{\mathrm h}:=(2,0)$. Then for every $\alpha\ge 0$, $E_{\mathrm h}$ is not globally asymptotically stable on $\mathbb{R}_+^2$. Consequently, no adjustment of $\alpha$ (e.g., by decreasing pH by any $\delta>0$) can render $E_{\mathrm h}$ globally asymptotically stable; in particular, no function $\delta_{\mathrm{pH}}(u)$ with that property exists.
+\end{proposition}
+
+\begin{proof}
+The nonnegative orthant $\mathbb{R}_+^2$ is forward invariant: on $\{C=0\}$ and $\{S=0\}$ one has $\dot C=f(0)=0$ and $\dot S=g(0;\alpha)=0$, and the dynamics is decoupled.
+
+We show $E_{\mathrm h}=(2,0)$ is not globally asymptotically stable (GAS) for any $\alpha\ge 0$ by exhibiting, for each $\alpha$, initial conditions whose trajectories do not converge to $E_{\mathrm h}$.
+
+Properties of the one-dimensional subsystems:
+\begin{itemize}
+  \item $C$-dynamics: equilibria at $C\in\{0,1,2\}$ with $f'(0)=-2<0$, $f'(1)=1>0$, $f'(2)=-2<0$. Thus $C=0$ and $C=2$ are locally asymptotically stable and $C=1$ is unstable.
+  \item $S$-dynamics: $\dot S=S(1-\alpha-S)$ depends only on $\alpha$.
+\end{itemize}
+
+\emph{Case 1: $\alpha<1$ (including $\alpha=0$).} Then $S^*:=1-\alpha>0$ is an equilibrium with $g'(0;\alpha)=1-\alpha>0$, so $S=0$ is not attractive. For any initial condition with $S(0)>0$, we have $S(t)\to S^*>0$, hence $(C(t),S(t))$ cannot approach $(2,0)$.
+
+\emph{Case 2: $\alpha=1$.} Then $\dot S=-S^2$, so $S(t)=\dfrac{S(0)}{1+S(0)t}\to 0$. On the invariant axis $\{S=0\}$ the $C$-dynamics reduces to $\dot C=f(C)$ with stable equilibria $C=0$ and $C=2$. For any initial condition with $0<C(0)<1$ (and arbitrary $S(0)\ge 0$), one has $C(t)\to 0$, hence $(C(t),S(t))\to (0,0)\ne (2,0)$.
+
+\emph{Case 3: $\alpha>1$.} For all $S>0$, $\dot S=-S(\alpha-1+S)\le-(\alpha-1)S$, whence $S(t)\le S(0) e^{-(\alpha-1)t}\to 0$. As in Case 2, along $\{S=0\}$ the $C$-dynamics has two stable equilibria, so for any initial condition with $0<C(0)<1$ we obtain $(C(t),S(t))\to (0,0)\ne (2,0)$.
+
+In every case, there exist nonnegative initial conditions whose trajectories do not converge to $E_{\mathrm h}$, so $E_{\mathrm h}$ is not GAS for any $\alpha\ge 0$. Therefore, no change of $\alpha$ (e.g., via any pH decrease by $\delta>0$) can render $E_{\mathrm h}$ globally asymptotically stable, and no function $\delta_{\mathrm{pH}}(u)$ achieving this exists.\qedhere
+\end{proof}

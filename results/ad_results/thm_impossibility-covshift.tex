@@ -1,0 +1,23 @@
+﻿\begin{theorem}[Impossibility under covariate shift (tightened)]\label{thm:impossibility-covshift}
+Fix two dosing tiers $d_1$ and $d_2$ and an arbitrary covariate vector $X$ taking values in a measurable space. Keeping the conditional response surfaces $p_d(x)=\mathbb P(E75\mid d, X=x)$ fixed, there do not exist a measurable subset $H$ of the covariate space and $\theta>0$ such that, for every covariate-shifted cohort (i.e., any probability law $\mu$ on $X$ that only changes the marginal of $X$), the inequality
+\[
+\mathbb P_\mu(E75\mid d_2, X\in H)-\mathbb P_\mu(E75\mid d_1, X\in H)\ \ge\ \mathbb P_\mu(E75\mid d_2)-\mathbb P_\mu(E75\mid d_1)+\theta
+\]
+holds.
+\end{theorem}
+
+\begin{proof}
+Proof by contradiction. Fix $d_1,d_2$ and write $p_d(x):=\mathbb P(E75\mid d, X{=}x)$, which are invariant under covariate shift. Let $R(x):=p_{d_2}(x)-p_{d_1}(x)$. Suppose, for contradiction, that there exist a measurable subset $H$ of the covariate space and $\theta>0$ such that for every covariate-shifted cohort (probability law) $\mu$ on $X$ one has
+\begin{equation}\label{eq:key-ineq}
+\mathbb P_\mu(E75\mid d_2, X\in H)-\mathbb P_\mu(E75\mid d_1, X\in H)
+=\mathbb E_\mu\big[R(X)\mid X\in H\big]\ \ge\ \mathbb E_\mu\big[R(X)\big]+\theta.
+\end{equation}
+Now consider a covariate-shifted cohort $\mu_H$ supported entirely on $H$ (i.e., $\mu_H(H)=1$), which changes only the marginal law of $X$. Then
+\[
+\mathbb E_{\mu_H}[R(X)\mid X\in H]=\mathbb E_{\mu_H}[R(X)],
+\]
+so applying \eqref{eq:key-ineq} with $\mu=\mu_H$ gives
+\[
+\mathbb E_{\mu_H}[R(X)]\ \ge\ \mathbb E_{\mu_H}[R(X)]+\theta,\quad\text{which is impossible for any }\theta>0.\ \qedhere
+\]
+\end{proof}

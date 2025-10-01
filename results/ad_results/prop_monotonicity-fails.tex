@@ -1,0 +1,28 @@
+﻿\begin{proposition}[Monotonicity can fail]\label{prop:monotonicity-fails}
+For any threshold $\tau_M\in\mathbb{R}$, there exists a deterministic conditional response model defined on the population $\{M_0\ge \tau_M\}$ such that:
+\begin{itemize}
+  \item the function $M_0\mapsto \mathbb{E}[\Delta\mathrm{EASI}\mid \text{dual(IL-13+IL-22) add-on}, M_0]$ is constant (hence not strictly increasing) over $\{M_0\ge \tau_M\}$; and
+  \item for every $M_0\ge \tau_M$, $\mathbb{P}(\mathrm{EASI}{-}75\mid \text{dual add-on}, M_0)=0$ and $\mathbb{P}(\mathrm{EASI}{-}75\mid \text{switch to IL-13 only}, M_0)=1$.
+\end{itemize}
+Consequently, the claimed monotonicity and any uniform positive probability gap in favor of the dual add-on do not hold in general.
+\end{proposition}
+
+\begin{proof}
+Let $\tau_M\in\mathbb{R}$ be arbitrary and consider the following deterministic conditional response model defined for all $M_0\ge \tau_M$:
+\begin{itemize}
+  \item Switch to IL-13 only: $\Delta_{\mathrm{IL}{-}13}(M_0)\equiv 0.80$.
+  \item Dual(IL-13+IL-22) add-on: $\Delta_{\mathrm{dual}}(M_0)\equiv 0.60$.
+\end{itemize}
+Let $\theta:=0.75$ denote the EASI-75 threshold. Then, for every $M_0\ge \tau_M$,
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid \text{dual add-on}, M_0]=0.60,
+\]
+which is constant in $M_0$ and hence not strictly increasing over $\{M_0\ge \tau_M\}$. Moreover,
+\[
+\mathbb{P}(\mathrm{EASI}{-}75\mid \text{dual add-on}, M_0)=\mathbb{P}(\Delta_{\mathrm{dual}}(M_0)\ge \theta)=\mathbb{P}(0.60\ge 0.75)=0,
+\]
+while
+\[
+\mathbb{P}(\mathrm{EASI}{-}75\mid \text{switch to IL-13 only}, M_0)=\mathbb{P}(\Delta_{\mathrm{IL}{-}13}(M_0)\ge \theta)=\mathbb{P}(0.80\ge 0.75)=1.\qedhere
+\]
+\end{proof}

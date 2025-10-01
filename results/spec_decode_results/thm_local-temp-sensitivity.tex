@@ -1,0 +1,73 @@
+\begin{theorem}[Local temperature-sensitivity law (pointwise, uniform over bounded support)]\label{thm:local-temp-sensitivity}
+Fix $m\in\mathbb{N}$ and any $\rho\in(0,1)$. For each step $n$ and prefix $x_{1:n-1}$, let $q_n(\cdot\mid x_{1:n-1})$ be a distribution supported on a finite set $S(n,x_{1:n-1})$ with $|S(n,x_{1:n-1})|\le m$. For $|\tau-1|\le\rho$, define the temperature-scaled proposal on this support by
+\[
+ p_{\tau,n}(v)=\frac{q_n(v)^{\tau}}{\sum_{u\in S(n,x_{1:n-1})} q_n(u)^{\tau}}\quad (v\in S(n,x_{1:n-1})),\qquad p_{\tau,n}(v)=0\ (v\notin S(n,x_{1:n-1})).
+\]
+Then, uniformly over all $n$ and prefixes,
+\[
+ \operatorname{TV}(p_{\tau,n},q_n)=\tfrac{|\tau-1|}{2}\,\mathbb{E}_{q_n}\big[\,|\log q_n(V)-\mathbb{E}_{q_n}[\log q_n(V)]|\,\big]+O\big((\tau-1)^2\big),
+\]
+where the $O$-constant depends only on $m$ and $\rho$ (and not on $n$, the prefix, or $q_n$). Consequently, averaging over prefixes yields the per-step expected rejection
+\[
+ \tau_n(\tau)=\mathbb{E}_{x_{1:n-1}}\big[\operatorname{TV}(p_{\tau,n},q_n)\big]=\tfrac{|\tau-1|}{2}\,\mathbb{E}_{x_{1:n-1}}\Big[\mathbb{E}_{q_n}\big[\,|\log q_n(V)-\mathbb{E}_{q_n}[\log q_n(V)]|\,\big]\Big]+O\big((\tau-1)^2\big),
+\]
+with the same $O$-constant.
+\end{theorem}
+
+\begin{proof}
+Fix a step $n$ and prefix $x_{1:n-1}$. Write $q\equiv q_n(\cdot\mid x_{1:n-1})$, let $S:=\operatorname{supp}(q)$, and assume $|S|\le m$. Fix any $\rho\in(0,1)$ and restrict to $|\tau-1|\le\rho$ so that $\tau>0$. Define, for $v\in S$,
+\[
+ p_{\tau}(v)=\frac{q(v)^{\tau}}{Z(\tau)},\qquad Z(\tau):=\sum_{u\in S} q(u)^{\tau},\quad\text{and set }p_{\tau}(v)=0\text{ for }v\notin S.
+\]
+Let $\ell(v):=\log q(v)$ for $v\in S$ and $s_{\tau}:=\mathbb{E}_{p_{\tau}}[\ell]$. Then, for $v\in S$,
+\[
+ \frac{\mathrm d}{\mathrm d\tau}\log p_{\tau}(v)=\ell(v)-s_{\tau}=:h_{\tau}(v),\qquad \Rightarrow\qquad \dot{p}_{\tau}(v)=p_{\tau}(v)\,h_{\tau}(v).
+\]
+Differentiating again and using $\dot{s}_{\tau}=\sum_{u\in S}\ell(u)\dot{p}_{\tau}(u)=\operatorname{Var}_{p_{\tau}}(\ell)$ gives, for $v\in S$,
+\begin{equation}\tag{1}
+ \ddot{p}_{\tau}(v)=p_{\tau}(v)\big(h_{\tau}(v)^2-\operatorname{Var}_{p_{\tau}}(\ell)\big).
+\end{equation}
+For $v\notin S$ we have $p_{\tau}(v)\equiv 0$ for $\tau>0$, hence $\dot{p}_{\tau}(v)=\ddot{p}_{\tau}(v)=0$.
+
+Taylor's formula with integral remainder about $\tau=1$ yields, for $\delta:=\tau-1$ and all $v$,
+\[
+ p_{1+\delta}(v)=q(v)+\delta\,\dot{p}_{1}(v)+r_v(\delta),\qquad r_v(\delta)=\int_0^{\delta}(\delta-t)\,\ddot{p}_{1+t}(v)\,\mathrm dt.
+\]
+Summing absolute values and using $\big||a+b|-|a|\big|\le |b|$ gives
+\begin{equation}\tag{2}
+ \Big|\sum_v|p_{1+\delta}(v)-q(v)|-|\delta|\sum_v|\dot{p}_{1}(v)|\Big|\le\sum_v|r_v(\delta)|\le\int_0^{|\delta|}(|\delta|-t)\sum_v|\ddot{p}_{1+t}(v)|\,\mathrm dt.
+\end{equation}
+From (1) on $S$ and zeros off $S$,
+\[
+ \sum_v|\ddot{p}_{\tau}(v)|\le\sum_{v\in S} p_{\tau}(v)\big(h_{\tau}(v)^2+\operatorname{Var}_{p_{\tau}}(\ell)\big)=2\operatorname{Var}_{p_{\tau}}(\ell)\le 2\,\mathbb{E}_{p_{\tau}}[\ell^2].
+\]
+For $|\tau-1|\le\rho<1$, write $a:=\tau\in[1-\rho,1+\rho]$. Then
+\[
+ \mathbb{E}_{p_a}[\ell^2]=\frac{\sum_{v\in S} q(v)^a\,\ell(v)^2}{\sum_{v\in S} q(v)^a}.
+\]
+With $q(v)=e^{-s}$ and $s\ge 0$, we have $q(v)^a\,\ell(v)^2=e^{-a s}s^2\le\max_{s\ge0}s^2e^{-a s}=4/(a^2e^2)\le 4/((1-\rho)^2e^2)$. Hence
+\[
+ \sum_{v\in S} q(v)^a\,\ell(v)^2\le \frac{4|S|}{(1-\rho)^2e^2}.
+\]
+Moreover, for $a\in[1-\rho,1]$ we have $\sum_{v\in S} q(v)^a\ge 1$, and for $a\in[1,1+\rho]$, $\sum_{v\in S} q(v)^a\ge |S|^{1-a}\ge |S|^{-\rho}$. Thus for all $a\in[1-\rho,1+\rho]$,
+\[
+ \sum_{v\in S} q(v)^a\ge |S|^{-\rho}.
+\]
+Therefore,
+\begin{equation}\tag{3}
+ \sup_{|\tau-1|\le\rho}\ \sum_v|\ddot{p}_{\tau}(v)|\ \le\ 2\sup_{|\tau-1|\le\rho}\mathbb{E}_{p_{\tau}}[\ell^2]\ \le\ \frac{8}{e^2}\,\frac{|S|^{1+\rho}}{(1-\rho)^2}\ \le\ \frac{8}{e^2}\,\frac{m^{1+\rho}}{(1-\rho)^2}=:C_{m,\rho}.
+\end{equation}
+Combining (2)--(3) yields $\sum_v|r_v(\delta)|\le (C_{m,\rho}/2)\,\delta^2$ for $|\delta|\le\rho$. At $\tau=1$, $p_1=q$ and, for $v\in S$, $\dot{p}_1(v)=q(v)\big(\ell(v)-\mathbb{E}_q[\ell]\big)$ (while $\dot{p}_1(v)=0$ for $v\notin S$), hence
+\[
+ \sum_v|\dot{p}_1(v)|=\sum_{v\in S} q(v)\,\big|\ell(v)-\mathbb{E}_q[\ell]\big|=\mathbb{E}_q\big[\,|\log q(V)-\mathbb{E}_q[\log q(V)]|\,\big].
+\]
+Using $\operatorname{TV}(p,q)=\tfrac12\sum_v|p-q|$, we have, uniformly for $|\tau-1|\le\rho$,
+\[
+ \operatorname{TV}(p_{\tau},q)=\frac{|\tau-1|}{2}\,\mathbb{E}_q\big[\,|\log q(V)-\mathbb{E}_q[\log q(V)]|\,\big]+O\big((\tau-1)^2\big),
+\]
+where the $O$-constant depends only on $(m,\rho)$ and not on $q$. This establishes the asserted pointwise expansion, uniformly over all $n$ and prefixes with $|\operatorname{supp}(q_n)|\le m$. Averaging over prefixes (by linearity of expectation) yields the stated expansion for the per-step expected rejection with the same $O$-constant:
+\[
+ \tau_n(\tau)=\mathbb{E}_{x_{1:n-1}}\big[\operatorname{TV}(p_{\tau,n},q_n)\big]=\tfrac{|\tau-1|}{2}\,\mathbb{E}_{x_{1:n-1}}\Big[\mathbb{E}_{q_n}\big[\,|\log q_n(V)-\mathbb{E}_{q_n}[\log q_n(V)]|\,\big]\Big]+O\big((\tau-1)^2\big).\qedhere
+\]
+\end{proof}
+

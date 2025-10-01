@@ -1,0 +1,9 @@
+\begin{definition}
+Let $P$ be the set of primes. Define the set
+\[
+L_p:=\Bigl\{k\in\mathbb N:\ \text{for all }j>k,\ \#\bigl\{p\in P:\ j^2<p<(j+1)^2\bigr\}\ge \#\{p\in P:\ k^2<p<(k+1)^2\}\Bigr\}.
+\]
+Let $L_p(n)$ be the $n$th element of $L_p$ in increasing order. A function $f$ is \emph{regularly varying} with index $b$ if $f(x)=x^b\ell(x)$ with $\ell$ slowly varying, i.e., $\lim_{x\to\infty}\ell(\lambda x)/\ell(x)=1$ for each fixed $\lambda>0$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Asymptotic $k$-fold Legendre for primes).}\ As $n\to\infty$, $L_p(n)$ is asymptotic to a regularly varying function with index $b$ satisfying $3/2<b\le 2$.

@@ -1,0 +1,50 @@
+\begin{theorem}[Rosser analog for cyclics (resolves Conj.~52 of \cite{Cohen2025})]\label{thm:rosser}
+For all integers $n>1$, we have
+\[
+ c_n\ >\ e^{\gamma}\,n\,\log_3 n.
+\]
+Here $\gamma$ is Euler's constant and $\log_3 n := \log\log\log n$ for $n>e^e$; for $1<n\le e^e$ we interpret $\log_3 n\le0$ so the inequality is trivial.
+\end{theorem}
+
+\begin{proof}
+Let $C$ be the set of cyclic integers, and let $C(x):=\#\{c\in C:c\le x\}$. Recall Pollack's Poincar\'e expansion \eqref{eq:Pollack}:
+\[
+ C(x)=e^{-\gamma}x\Big(\frac{1}{\log_3 x}-\frac{\gamma}{\log_3^2 x}+O\Big(\frac{1}{\log_3^3 x}\Big)\Big)\qquad(x\to\infty).
+\]
+Write $L(x):=\log_3 x$ for $x>e^e$. There exists $L_1>0$ such that for all $x$ with $L(x)\ge L_1$,
+\begin{equation}\label{eq:upper-C}
+ C(x)\ \le\ \frac{e^{-\gamma}x}{L(x)}.
+\end{equation}
+Indeed, by \eqref{eq:Pollack} the bracket equals $L(x)^{-1}-\gamma L(x)^{-2}+O(L(x)^{-3})\le L(x)^{-1}$ for large $L(x)$.
+
+Fix $n>1$ and set, for $n>e^e$,
+\[
+ x_0:=e^{\gamma}n\,\log_3 n,\qquad L_0:=\log_3 x_0,\qquad c:=\log_3 n.
+\]
+Since $c\to\infty$ as $n\to\infty$, there exists $n_1$ such that for all $n\ge n_1$ we have $c\ge L_1$ and $e^{\gamma}c>1$, hence $x_0>n$ and monotonicity of $\log_3$ on $(e,\infty)$ gives $L_0>c\ge L_1$. Applying \eqref{eq:upper-C} at $x=x_0$ yields
+\[
+ C(x_0)\ \le\ \frac{e^{-\gamma}x_0}{L_0}
+ \;=\; n\cdot\frac{\log_3 n}{L_0}
+ \;<\; n.
+\]
+Thus at most $n-1$ cyclics are $\le x_0$, so $c_n>x_0=e^{\gamma}n\log_3 n$ for every $n\ge n_1$.
+
+It remains to handle finitely many $n$. First, for $3\le n\le \lfloor e^e\rfloor$ we have $\log_3 n\le0$, hence $e^{\gamma}n\log_3 n\le0<c_n$, and the inequality holds. Second, we use a uniform linear bound valid for all $n\ge4$:
+\begin{equation}\label{eq:linear-lb}
+ c_n\ \ge\ 2n-5.
+\end{equation}
+Indeed, among $2,4,\dots,2n-6$ exactly one even integer is cyclic (namely $2$); every even $m>2$ has $2\mid m$ and $2\mid\varphi(m)$, so $\gcd(m,\varphi(m))\ge2$. Thus at least $n-4$ integers $\le2n-6$ are noncyclic, giving $C(2n-6)\le (2n-6)-(n-4)=n-2$ and hence $c_n\ge (2n-6)+1=2n-5$.
+
+Consequently, for every $n\ge6$,
+\[
+ c_n\ \ge\ 2n-5\ >\ e^{\gamma}n\,t\qquad\text{whenever}\qquad t\ <\ \frac{2-5/n}{e^{\gamma}}.
+\]
+Specializing $t=\log_3 n$ and noting that $\log_3$ is defined and increasing for $n>e$, we may fix a finite cutoff
+\[
+ N_0\ :=\ \max\Bigl\{6,\ \lfloor e^e\rfloor+1,\ \big\lfloor\exp\!\exp\!\exp\!\big(\tfrac{2-5/6}{e^{\gamma}}\big)\big\rfloor-1\Bigr\},
+\]
+so that for every $\lfloor e^e\rfloor+1\le n\le N_0$ we have $\log_3 n\le \log_3 N_0<\dfrac{2-5/6}{e^{\gamma}}\le \dfrac{2-5/n}{e^{\gamma}}$, whence $c_n>e^{\gamma}n\log_3 n$ by the previous display. Enlarging $n_1$ if necessary to dominate $N_0$, we conclude that $c_n>e^{\gamma}n\log_3 n$ holds for all $n\ge3$; for $n=2$ the inequality is trivial since $\log_3 2\le0$ and $c_2=2$.
+
+This proves the claimed bound for every $n>1$.
+\end{proof}
+

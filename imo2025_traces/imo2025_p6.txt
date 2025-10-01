@@ -1,0 +1,3 @@
+Consider a 2025 x 2025 grid of unit squares. Matlida wishes to place on the grid some rectangular tiles, possibly of different sizes, such that each side of every tile lies on a grid line and every unit square is covered by at most one tile.
+
+Determine the minimum number of tiles Matlida needs to place so that each row and each column of the grid has exactly one unit square that is not covered by any tile.

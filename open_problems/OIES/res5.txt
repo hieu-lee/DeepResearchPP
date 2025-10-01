@@ -1,0 +1,29 @@
+\begin{definition}
+A positive integer $n$ is called \emph{cyclic} if 
+\[
+\gcd\bigl(n,\varphi(n)\bigr)=1,
+\]
+where $\varphi(n)$ is Euler’s totient function.  Equivalently, every group of order $n$ is cyclic.
+
+Define
+\[
+C(x)\;:=\;\#\{c\le x:\;c\text{ is cyclic}\}.
+\]
+Moreover, let
+\[
+\log_k x
+\]
+denote the $k$-fold iterated natural logarithm, e.g.\ 
+\(\log_2 x = \log(\log x)\), 
+\(\log_3 x = \log(\log(\log x))\), etc.
+\end{definition}
+
+\bigskip
+
+\textbf{Conjecture 9.}  As \(n\to\infty\),
+\[
+C((n+1)^2)\;-\;C(n^2)
+\;\sim\;
+\frac{2n}{e^\gamma\,\log_3 n}
+\;\Bigl(1 - \frac{\gamma}{\log_3 n}\Bigr).
+\]

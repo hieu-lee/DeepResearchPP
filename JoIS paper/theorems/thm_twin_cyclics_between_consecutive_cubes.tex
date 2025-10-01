@@ -1,0 +1,69 @@
+\begin{theorem}[Twin cyclics between consecutive cubes (resolves Conj.~32 of \cite{Cohen2025})]\label{thm:twin_cyclics_between_consecutive_cubes}
+At least two twin cyclic pairs between \(n^3\) and \((n+1)^3\); more generally, at least k beyond a threshold.
+\end{theorem}
+
+\begin{proof}
+For an integer $m$, write $m\in\mathcal C$ if and only if $\gcd(m,\varphi(m))=1$ (Szele \cite{Szele1947}). Since $\varphi$ is multiplicative and $\varphi(p)=p-1$, we have:
+- If $p^2\mid m$ then $p\mid\varphi(m)$, hence every cyclic $m$ is squarefree.
+- Aside from $m=2$, any even $m$ satisfies $2\mid\varphi(m)$, so the only even cyclic integer is $2$.
+- If $m$ is odd and squarefree with prime factorization $m=\prod_{i=1}^r p_i$, then $\varphi(m)=\prod_{i=1}^r (p_i-1)$ and
+  $$\gcd(m,\varphi(m))=1\iff \forall i\ne j:\ p_i\nmid (p_j-1).\tag{1}$$
+
+Fix large $n$ and set
+$$X:=n^3,\qquad H:=(n+1)^3-n^3=3n^2+3n+1\asymp X^{2/3},\qquad H':=H-2.$$
+We will produce many $m\in J:=(X,X+H']$ such that $m$ and $m+2$ are odd, squarefree, and each satisfies (1). For such an $m$, both $m$ and $m+2$ lie in $I_n=(X,X+H]$, and since $m+1$ is even $>2$, it is not cyclic; hence $(m,m+2)$ is a twin cyclic pair, and these two cyclics are consecutive.
+
+1) Sieve for twin $z$-rough integers in $J$. For $z\ge 3$ let
+$$\mathcal{S}_0:=\{m\in J : (m,P(z))=(m+2,P(z))=1\},\qquad P(z):=\prod_{p\le z}p.$$
+This is the sifted set for the two linear forms $n$ and $n+2$, with local sieve weights $w(2)=1$ and $w(p)=2$ for $p\ge 3$ (the number of forbidden residues mod $p$ coming from $p\mid n$ or $p\mid n+2$). For squarefree $d\mid P(z)$ put $w(d):=\prod_{p\mid d}w(p)$. By the Chinese remainder theorem the number of excluded residue classes modulo $d$ equals $w(d)$. Hence, for each such $d$,
+$$A_d:=\#\{m\in J: m\equiv a\ (\bmod d)\text{ for some excluded }a\}\;=\;\frac{H'\,w(d)}{d}+r_d,\quad |r_d|\le w(d).\tag{2}$$
+Applying the lower-bound $\beta$-sieve (fundamental lemma of sieve theory for dimension $2$; see \cite{Greaves2001,IK2004}) with level $D\le z^u$ ($u\ge 2$) and using (2), we obtain
+$$\#\mathcal{S}_0\;\ge\;H'\,V(z)\Bigl(1-O\bigl(e^{-u/2}\bigr)\Bigr)-\sum_{\substack{d\le D\ d\,\text{sqfree},\ d\mid P(z)}}|r_d|,\qquad V(z):=\prod_{p\le z}\Bigl(1-\frac{w(p)}{p}\Bigr).\tag{3}$$
+Using $|r_d|\le w(d)$ and $\sum_{d\le D}2^{\omega(d)}\ll D\log D$, we have
+$$\sum_{\substack{d\le D\ d\,\text{sqfree},\ d\mid P(z)}}|r_d|\;\le\;\sum_{d\le D}w(d)\;\ll\;D\log D.\tag{4}$$
+Moreover,
+$$V(z)=\Bigl(1-\tfrac12\Bigr)\prod_{3\le p\le z}\Bigl(1-\frac{2}{p}\Bigr)\asymp \frac{1}{(\log z)^2}$$
+by Mertens-type estimates \cite{Apostol1976} and the identity $(1-2/p)=(1-1/p)^2(1+O(1/p^2))$.
+Choose $D:=(H')^{1/2}$ and $z:=(\log X)^A$ with a fixed admissible $A$. Then
+\[
+ u\ :=\ \frac{\log D}{\log z}\ =\ \frac{\tfrac12\log H'}{A\log\log X}\ \asymp\ \frac{\log X}{A\log\log X}\ \longrightarrow\ \infty,
+\]
+so $e^{-u/2}=o(1)$. Moreover,
+$$H'\,V(z)\asymp \frac{H'}{(\log z)^2}\asymp \frac{H'}{(\log\log X)^2},\qquad D\log D\ll (H')^{1/2}\log X=o\!\left(\frac{H'}{(\log\log X)^2}\right).$$
+Therefore, for all sufficiently large $X$,
+$$\#\mathcal{S}_0\gg \frac{H'}{(\log\log X)^2}.\tag{5}$$
+
+2) Forcing squarefreeness. Let
+$$\mathcal{S}_1:=\{m\in\mathcal{S}_0: \mu^2(m)=\mu^2(m+2)=1\}.$$
+The number of $m\in J$ for which $p^2\mid m$ for some $p>z$ is $\ll\sum_{p>z} H'/p^2\ll H'/z$, and the same bound holds for $m+2$. Thus
+$$\#(\mathcal{S}_0\setminus\mathcal{S}_1)\ll \frac{H'}{z},\qquad \#\mathcal{S}_1\gg \frac{H'}{(\log\log X)^2}-\frac{H'}{z}.\tag{6}$$
+
+3) Eliminating cyclic obstructions. For odd squarefree $m$, condition (1) is equivalent to $m\in\mathcal C$. If $m\in\mathcal{S}_1$, all prime factors of $m$ and $m+2$ exceed $z$, so the only obstruction to (1) for $m$ (respectively for $m+2$) is the existence of primes $z<p<q$ with $p,q\mid m$ (respectively $p,q\mid m+2$) and $q\equiv 1\pmod p$. Define
+$$B(X,H';z):=\#\Bigl\{m\in J:\ \exists\ z<p<q,\ p,q\mid m,\ q\equiv 1\ (\bmod p)\Bigr\}.$$
+Bounding $\mathbf{1}_{\exists(p,q)}\le\sum_{p,q}\mathbf{1}_{pq\mid m}$ and summing over $m$, we get
+\begin{align*}
+B(X,H';z)
+&\le \sum_{z<p}\ \sum_{\substack{z<q\ q\equiv 1\ (\bmod p)}}\Bigl\lfloor \frac{H'}{pq}\Bigr\rfloor
+\ll H'\sum_{p>z}\frac{1}{p}\sum_{\substack{q\le X+H\ q\equiv 1\ (\bmod p)}}\frac{1}{q}.
+\end{align*}
+\begin{flushleft}
+By the Brun--Titchmarsh inequality and partial summation (e.g., \cite{MV2007,IK2004}), uniformly for $p\le X$, one has $\sum_{q\le X,\ q\equiv 1\ (\bmod p)}\!\frac{1}{q}\ll \frac{\log\log X}{\varphi(p)}=\frac{\log\log X}{p-1}$.
+$$B(X,H';z)\ll H'(\log\log X)\sum_{p>z}\frac{1}{p(p-1)}\ll \frac{H'\,\log\log X}{z}.\tag{7}$$
+\end{flushleft}
+The same bound holds for the set of $m\in J$ for which $m+2$ has such a pair of prime factors. Therefore the number of $m\in\mathcal{S}_1$ for which either $m$ or $m+2$ fails (1) is $\ll H'(\log\log X)/z$.
+
+4) Conclusion. Let $\mathcal{G}$ be the set of $m\in J$ such that: (a) $(m,P(z))=(m+2,P(z))=1$; (b) $\mu^2(m)=\mu^2(m+2)=1$; (c) both $m$ and $m+2$ satisfy (1). Then, by (5)-(7),
+$$\#\mathcal{G}\ge \#\mathcal{S}_1-2B(X,H';z)\gg \frac{H'}{(\log\log X)^2}-\frac{H'}{z}-\frac{H'\,\log\log X}{z}.$$
+To dominate the error terms in (6) and (7) by the main term in (5) with a single explicit choice of $A$, observe that
+\[
+ \frac{H'}{z}\ \le\ \frac{H'}{(\log X)^A}\ \le\ \frac{1}{2}\cdot\frac{H'}{(\log\log X)^2},\qquad
+ \frac{H'\,\log\log X}{z}\ \le\ \frac{1}{2}\cdot\frac{H'}{(\log\log X)^2},
+\]
+provided $(\log X)^A\ge 2(\log\log X)^2$ and $(\log X)^A\ge 2(\log\log X)^3$. Both hold for all large $X$ once $A\ge4$. We therefore fix the admissible choice
+\[
+ z\ :=\ (\log X)^4.
+\]
+With this choice the two subtracted families are $o\!\bigl(H'/(\log\log X)^2\bigr)$, while the main term is $\asymp H'/(\log\log X)^2$. Hence, for all sufficiently large $X$ (equivalently, large $n$),
+$$\#\mathcal{G}\gg \frac{H'}{(\log\log X)^2}\to\infty\quad(n\to\infty).$$
+For each $m\in\mathcal{G}$, both $m$ and $m+2$ lie in $I_n$ and are odd, squarefree, and satisfy (1), hence both are cyclic. Since the only integer strictly between them is $m+1$, which is even $>2$ and therefore not cyclic, $(m,m+2)$ is a twin cyclic pair and these cyclics are consecutive. Consequently the number of twin cyclic pairs in $I_n$ tends to $\infty$ as $n\to\infty$. In particular, for any fixed $k\in\mathbb N$ there exists $n_0(k)$ such that for all $n\ge n_0(k)$, the interval $I_n$ contains at least $k$ twin cyclic pairs. $\square$
+\end{proof}

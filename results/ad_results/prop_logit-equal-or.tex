@@ -1,0 +1,31 @@
+﻿\begin{proposition}[Equal adjusted PM$_{2.5}$ odds ratios across endotypes in a no-interaction logistic model]\label{prop:logit-equal-or}
+Fix a therapy status $T$. In any logistic model with no exposure-by-endotype interaction,
+\[
+\operatorname{logit}\,\mathbb{P}(F{=}1\mid P,H,X,T)=\alpha+\eta H+\beta P+\gamma^{\top}X,
+\]
+where $F\in\{0,1\}$ (flare), $P\in\mathbb{R}$ (PM$_{2.5}$ exposure), $H\in\{0,1\}$ (EosLow/EosHigh), and $X$ denotes arbitrary adjustment covariates, the per-10 $\mu\mathrm{g}/\mathrm{m}^3$ PM$_{2.5}$ odds ratio adjusted for $X$ is identical across endotypes:
+\[
+\mathrm{OR}_{10}(H{=}0;X,T)=\mathrm{OR}_{10}(H{=}1;X,T)=e^{10\beta}.
+\]
+Consequently, the EosLow-to-EosHigh odds-ratio ratio equals $1$, so a universal strict inequality $\mathrm{OR}(F\mid \text{EosLow},T)<\mathrm{OR}(F\mid \text{EosHigh},T)$ cannot hold within this model class.
+\end{proposition}
+
+\begin{proof}
+Fix $T$. Let $F\in\{0,1\}$ denote a flare, $P\in\mathbb{R}$ PM$_{2.5}$ exposure, $H\in\{0,1\}$ the endotype ($0$:\ EosLow; $1$:\ EosHigh), and $X$ any adjustment covariates. Assume
+\[
+\operatorname{logit}\,\mathbb{P}(F{=}1\mid P,H,X,T)=\alpha+\eta H+\beta P+\gamma^{\top}X,
+\]
+with arbitrary real parameters $\alpha,\eta,\beta$ and vector $\gamma$. For any increment $\delta>0$, define the $X$-adjusted per-$\delta$ odds ratio within endotype $H$ by
+\[
+\mathrm{OR}_\delta(H;X,T)
+:=\frac{\dfrac{\mathbb{P}(F{=}1\mid P{+}\delta,H,X,T)}{1-\mathbb{P}(F{=}1\mid P{+}\delta,H,X,T)}}{\dfrac{\mathbb{P}(F{=}1\mid P,H,X,T)}{1-\mathbb{P}(F{=}1\mid P,H,X,T)}}.
+\]
+By logit additivity, the odds at exposure $P$ equal $\exp(\alpha+\eta H+\beta P+\gamma^{\top}X)$, hence
+\[
+\mathrm{OR}_\delta(H;X,T)=\exp\big((\alpha+\eta H+\beta(P{+}\delta)+\gamma^{\top}X)-(\alpha+\eta H+\beta P+\gamma^{\top}X)\big)=e^{\beta\delta},
+\]
+which is independent of $H$, $X$, $P$, and $T$. Taking $\delta=10$ yields
+\[
+\mathrm{OR}_{10}(H{=}0;X,T)=\mathrm{OR}_{10}(H{=}1;X,T)=e^{10\beta}.\qedhere
+\]
+\end{proof}

@@ -1,0 +1,7 @@
+\begin{definition}
+For a depth-$L$ network, let $Z\in\mathbb R^{n\times d}$ be the learned feature matrix on $n$ samples at some layer.
+The \emph{effective rank} is $r_{\mathrm{eff}}(Z):=\frac{\|Z\|_*^2}{\|Z\|_F^2}$ (nuclear/Frobenius), a scale-invariant proxy for low-rank structure.
+\end{definition}
+
+\textbf{Conjecture (Low-Rank Simplicity Bias).}
+For overparameterized deep nets trained with gradient-based methods from small random init, the implicit bias favors solutions whose intermediate representations have \emph{low effective rank}, with $r_{\mathrm{eff}}$ decreasing with depth; this bias explains part of generalization. (Open in general.)

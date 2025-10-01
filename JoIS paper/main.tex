@@ -1,0 +1,288 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+% Allow TeX to stretch lines a bit to avoid overfull hboxes in long inline math/text
+\emergencystretch=3em
+% Enable UTF-8 input so that Unicode symbols (e.g., QED symbol) in imported proofs compile
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+% Silence accidental uses of \tag in non-numbered displays
+\makeatletter
+\renewcommand{\tag}[1]{}
+\makeatother
+\usepackage{amsthm}
+\usepackage{newunicodechar}
+\usepackage[usenames]{color}
+\usepackage[colorlinks=true,linkcolor=webgreen,filecolor=webbrown,citecolor=webgreen]{hyperref}
+
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+
+% JIS macro for OEIS entries; provide a safe fallback for local builds
+\providecommand{\seqnum}[1]{#1}
+
+ \newtheorem{theorem}{Theorem}
+% Sub-lemmas tied to the current theorem: Lemma 3a, 3b, ...
+\newtheorem{lemma}{Lemma}[theorem]
+\renewcommand{\thelemma}{\thetheorem\alph{lemma}}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\begin{document}
+
+% Be generous with line-breaking to avoid overfull boxes in inline math/text
+\sloppy
+
+\title{Conjectures About Cyclic Numbers: Resolutions and Counterexamples}
+\author{Hieu Le Duc \\
+Telecom SudParis \\
+\texttt{duc-hieu.le@telecom-sudparis.eu}}
+\date{}
+\maketitle
+
+\begin{abstract}
+We settle 22 conjectures of Cohen about cyclic numbers (positive integers $n$ with $\gcd(n,\varphi(n))=1$), proving 16 and disproving 6, and we completely resolve a related OEIS problem about sequences whose running averages are Fibonacci numbers. Highlights include: asymptotics for cyclics between consecutive squares with a second-order term (Conj.~9), Legendre- and $k$-fold Oppermann-type results in short quadratic intervals (Conj.~6, Conj.~20, and twin cyclics between cubes, Conj.~32), gap and growth analogs (Visser, Rosser, Ishikawa, and a sum-3-versus-sum-2 inequality; Conj.~47,~52,~54,~56), limiting ratios (Vrba and Hassani; Conj.~60,~61), and structure results for Sophie Germain cyclics (Conj.~36,~37). We also resolve two Firoozbakht-type conjectures for cyclics (Conj.~41--42). On the negative side we exhibit counterexamples to the Panaitopol, Dusart, and Carneiro analogs (Conj.~59,~53,~50--51). Finally, for the lexicographically least sequence of pairwise distinct positive integers whose running averages are Fibonacci numbers (\seqnum{A248982}), we give explicit closed forms for all $n$ and prove Fried's Conjecture~2 asserting the disjointness of the parity-defined value sets (equivalently, $F_{n+2}+2nF_{n+1}$ is never a Fibonacci number).
+\end{abstract}
+
+\section{Introduction}
+An integer $n\ge1$ is \emph{cyclic} if every group of order $n$ is cyclic. By Szele \cite{Szele1947}, this is equivalent to $\gcd(n,\varphi(n))=1$, where $\varphi$ is Euler's totient function. Let $C$ denote the set of cyclic numbers, let $C(x):=\#\{c\in C: c\le x\}$ be its counting function, and let $(c_n)_{n\ge1}$ be the increasing enumeration of $C$.
+
+\begin{remark}
+Two immediate consequences of Szele's criterion will be used repeatedly: (i) $2$ is the only even cyclic integer (if $n$ is even and $n>2$, then $2\mid n$ and $2\mid \varphi(n)$, so $\gcd(n,\varphi(n))\ge2$); (ii) $1$ is the only square in $C$ (if $n$ is a square $>1$, then $p\mid n$ and $p\mid \varphi(n)$ for some prime $p$, so again $\gcd(n,\varphi(n))>1$). All odd primes are cyclic since $\gcd(p,\varphi(p))=\gcd(p,p-1)=1$.
+\end{remark}
+
+Many conjectures about cyclics proposed by Cohen \cite{Cohen2025} are analogs of well-known results or conjectures for the prime numbers (sequence \seqnum{A000040}), with $C$ playing the role of $\mathbb P$. In this paper we give complete proofs or counterexamples to several of these conjectures, and we give a full resolution of an OEIS problem about running averages equaling Fibonacci numbers (sequence \seqnum{A248982}). Throughout, we emphasize exactly which conjectures are settled and how.
+
+\subsection*{Notation}
+We write $\mathcal P$ for the set of primes. For $z\ge2$ let
+\[
+ P(z):=\prod_{p\le z}p,\qquad P^-(n):=\min\{p\in\mathcal P: p\mid n\},\quad P^-(1):=\infty.
+\]
+For primes $p\le q$ we use the arrow notation $p\to q$ to mean $q\equiv1\pmod p$. We also use $\log_1 x:=\log x$, $\log_2 x:=\log\log x$, and $\log_3 x:=\log\log\log x$ when needed.
+
+\subsection*{Uniform tools and ranges}
+We record the uniform forms used repeatedly in the proofs; precise references are indicated.
+\begin{itemize}
+  \item Linear Selberg sieve (dimension 1; consecutive integers). For $x\ge2$, $H\ge1$, $z\ge2$, letting $S((x,x+H);z):=\#\{m\in(x,x+H)\cap\mathbb N: P^-(m)\ge z\}$, one has uniformly
+  \[
+    S((x,x+H);z)\ge H\prod_{p<z}\Bigl(1-\frac1p\Bigr)\ -\ C\,z^2,
+  \]
+  for an absolute constant $C>0$; see, e.g., Halberstam--Richert \cite[Th.~2.3, Th.~2.4]{HalRich1974} or Iwaniec--Kowalski \cite[\S11.1]{IK2004}. In particular, with $z=x^{\delta}(\log x)^{-B}$ and $H\asymp x^{1/2}$ the remainder is $o(\sqrt x/\log x)$.
+  \item $\beta$-sieve, dimension 2 (fundamental lemma). For two linear forms and level $D\le z^u$ ($u\ge2$), the fundamental lemma gives a main term $\asymp H\prod_{p\le z}(1-\nu(p)/p)$ with remainder $\ll D\log D$, uniformly for intervals of length $H$; see Greaves \cite[Th.~5.7]{Greaves2001} or Iwaniec--Kowalski \cite[Th.~11.13]{IK2004}.
+  \item Brun--Titchmarsh in AP (weighted and counting forms). Uniformly for $p\ge2$ and $Y\ge2$,
+  \[
+    \sum_{\substack{q\le Y\\ q\equiv1\ (\bmod p)}}\frac1q\ \ll\ \frac{\log\log Y}{\varphi(p)}\ \ll\ \frac{\log\log Y}{p},
+  \]
+  by partial summation from the Brun--Titchmarsh inequality (see Montgomery--Vaughan \cite[Th.~6.6]{MV2007} or Iwaniec--Kowalski \cite[Th.~18.11]{IK2004}). Moreover, for any finite union $U$ of disjoint intervals and $z\ge2$,
+  \[
+    \sum_{\substack{q\in\mathcal P\cap U\\ q\equiv1\ (\bmod p)}}\log q\ \le\ \frac{2\,\operatorname{mes}(U)}{\varphi(p)},\qquad
+    \#\{q\in\mathcal P\cap U: q\equiv1\ (\bmod p)\}\ \le\ \frac{2\,\operatorname{mes}(U)}{\varphi(p)\,\log z},
+  \]
+  uniformly for $U\subset[z,\infty)$; this is the weighted Montgomery--Vaughan form \cite[Th.~6.7]{MV2007}, applied piecewise and summed over the union. We only use the case $p\le X$ and $z\asymp (\log X)^A$ for fixed $A>0$.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Summary of resolved conjectures.}
+We settle 22 conjectures from \cite{Cohen2025} (numbers as in that paper). Below we group the main outcomes and point to the relevant statements.
+\begin{itemize}
+  \item Distribution in quadratic ranges: Legendre analog (Conj.~6; Theorem~\ref{thm:legendre_cyclics}); cyclics between consecutive squares with a second-order term (Conj.~9; Theorem~\ref{thm:squares}); near-square values (Conj.~14; Theorem~\ref{thm:near_square_cyclics}); $k$-fold Oppermann for cyclics (Conj.~20; Theorem~\ref{thm:k_fold_oppermann_for_cyclics}) and for primes (Conj.~17; Theorem~\ref{thm:k_fold_oppermann_for_primes}); twin cyclics between consecutive cubes (Conj.~32; Theorem~\ref{thm:twin_cyclics_between_consecutive_cubes}).
+  \item Sophie Germain cyclics: infinitely many SG cyclics (Conj.~36; Theorem~\ref{thm:infinitely_many_sg_cyclics}); equidistribution mod $3$ (Conj.~37; Theorem~\ref{thm:sg_cyclics_modulo_3}).
+  \item Gaps, growth, and inequalities: Rosser lower bound (Conj.~52; Theorem~\ref{thm:rosser}); Ishikawa inequality (Conj.~54; Theorem~\ref{thm:ishikawa}); Visser-type gap decay (Conj.~47; Theorem~\ref{thm:visser_cyclics}); sum-3-versus-sum-2 (Conj.~56; Theorem~\ref{thm:sum_3_versus_sum_2_cyclics}); twin cyclics (Conj.~3; Theorem~\ref{thm:twin_cyclics}).
+  \item Limits: Vrba (Conj.~60; Theorem~\ref{thm:vrba}) and Hassani (Conj.~61; Theorem~\ref{thm:hassani}).
+  \item Firoozbakht-type behavior: two proven forms (Conj.~41; Theorem~\ref{thm:firoozbakht_cyclics_3} and Conj.~42; Theorem~\ref{thm:firoozbakht_cyclics_4}).
+  \item Counterexamples: Panaitopol (Conj.~59; Theorem~\ref{thm:panaitopol}), Dusart (Conj.~53; Theorem~\ref{thm:dusart_cyclics}), Carneiro analogs for cyclics and SG cyclics (Conj.~50,~51; Theorems~\ref{thm:carneiro_cyclics},~\ref{thm:carneiro_sg_cyclics}), and a disproof of an asserted asymptotic for $k$-fold paired cyclics between cubes (Conj.~35; Theorem~\ref{thm:asymptotic_k_fold_cyclics_between_cubes}).
+  \item Fibonacci averages (\seqnum{A248982}): complete closed forms (Theorem~\ref{thm:fib-full}) and disjointness of the parity-defined value sets (Fried's Conj.~2; Proposition~\ref{prop:disjointness}).
+\end{itemize}
+
+In connection with the Fibonacci averages problem (\seqnum{A248982}), it is natural to split the values produced by the greedy construction according to parity. Writing
+\[
+ S_{\mathrm{even}}:=\bigl\{\,nF_{\,\frac{n}{2}+3}-(n-1)F_{\,\frac{n}{2}+2}:\ n\ \text{even}\,\bigr\},\qquad
+ S_{\mathrm{odd}}:=\bigl\{\,F_{\,\frac{n+1}{2}+2}:\ n\ \text{odd}\,\bigr\},
+\]
+Fried conjectured that these two sets are disjoint. Equivalently, defining $T(n):=F_{n+2}+2nF_{n+1}$, the claim is that $T(n)$ is never a Fibonacci number. We prove this disjointness in Proposition~\ref{prop:disjointness}. This removes the final obstacle identified in \cite{Fried2025} and dovetails with our complete closed forms for the sequence terms.
+
+We use the Euler--Mascheroni constant $\gamma$, and write $\log_k x$ for the $k$-fold iterated natural logarithm (so $\log_1 x = \log x$, $\log_2 x = \log\log x$, and $\log_3 x = \log\log\log x$ for $x>e^e$). A key analytic input is the asymptotic for $C(x)$ due to Erd\H{o}s and sharpened by Pollack \cite{Pollack2022}:
+\begin{equation}\label{eq:Pollack}
+ C(x) \sim \frac{e^{-\gamma} x}{\log_3 x} \quad (x\to\infty),\quad C(x) = e^{-\gamma} x\left(\frac{1}{\log_3 x} - \frac{\gamma}{\log_3^2 x} + O\!\left(\frac{1}{\log_3^3 x}\right)\right).
+\end{equation}
+We also use standard facts from regular variation \cite{BGT1989} and asymptotic integration \cite{deBruijn1970} as indicated.
+
+\subsection*{Motivation and related work}
+Many of the statements we settle are cyclic-number analogs of classical results and conjectures for the primes. The cyclic set $\mathcal C$ behaves "prime-like" because Szele's criterion reduces $\gcd(n,\varphi(n))=1$ to local congruence obstructions among the prime factors of $n$. This leads naturally to sieve methods (Selberg, $\beta$-sieve) to enforce roughness and squarefreeness, and to use Brun--Titchmarsh in arithmetic progressions to prune the internal divisibility events $p\mid(q-1)$. On the analytic side, Pollack's refinement of Erd\H{o}s's asymptotic for $C(x)$ interacts cleanly with regular-variation tools (de Haan's $\Pi$-variation) to obtain uniform local increment asymptotics needed for short quadratic intervals. We point to specific theorem-level references in the Uniform tools above to aid verification.
+
+\subsection*{Result map}
+For quick reference, Table~\ref{tab:result-map} maps Cohen's conjecture numbers to our results.
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Conj. & Result & Status \\
+\hline
+3 & Thm.~\ref{thm:twin_cyclics} & proved \\
+6 & Thm.~\ref{thm:legendre_cyclics} & proved \\
+9 & Thm.~\ref{thm:squares} & proved \\
+14 & Thm.~\ref{thm:near_square_cyclics} & proved \\
+17 & Thm.~\ref{thm:k_fold_oppermann_for_primes} & proved \\
+20 & Thm.~\ref{thm:k_fold_oppermann_for_cyclics} & proved \\
+32 & Thm.~\ref{thm:twin_cyclics_between_consecutive_cubes} & proved \\
+36 & Thm.~\ref{thm:infinitely_many_sg_cyclics} & proved \\
+37 & Thm.~\ref{thm:sg_cyclics_modulo_3} & proved \\
+41 & Thm.~\ref{thm:firoozbakht_cyclics_3} & proved \\
+42 & Thm.~\ref{thm:firoozbakht_cyclics_4} & proved \\
+47 & Thm.~\ref{thm:visser_cyclics} & proved \\
+52 & Thm.~\ref{thm:rosser} & proved \\
+54 & Thm.~\ref{thm:ishikawa} & proved \\
+56 & Thm.~\ref{thm:sum_3_versus_sum_2_cyclics} & proved \\
+60 & Thm.~\ref{thm:vrba} & proved \\
+61 & Thm.~\ref{thm:hassani} & proved \\
+35 & Thm.~\ref{thm:asymptotic_k_fold_cyclics_between_cubes} & disproved \\
+50 & Thm.~\ref{thm:carneiro_cyclics} & disproved \\
+51 & Thm.~\ref{thm:carneiro_sg_cyclics} & disproved \\
+53 & Thm.~\ref{thm:dusart_cyclics} & disproved \\
+59 & Thm.~\ref{thm:panaitopol} & disproved \\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:result-map}
+
+
+\section{Cohen's Conjectures}
+
+\subsection{Proofs}
+
+\subsubsection{Conjecture 3 (Twin cyclics)}
+\input{theorems/thm_twin_cyclics}
+
+\subsubsection{Conjecture 6 (Legendre analog)}
+\input{theorems/thm_legendre_cyclics}
+
+\subsubsection{Conjecture 9 (Cyclics between consecutive squares)}
+\input{theorems/thm_squares}
+
+\subsubsection{Conjecture 14 (Near-square analog)}
+\input{theorems/thm_near_square_cyclics}
+
+\subsubsection{Conjecture 17 (Primes: k-fold Oppermann)}
+\input{theorems/thm_k_fold_oppermann_for_primes}
+
+\subsubsection{Conjecture 20 (k-fold Oppermann for cyclics)}
+\input{theorems/thm_k_fold_oppermann_for_cyclics}
+
+\subsubsection{Conjecture 32 (Twin cyclics between consecutive cubes)}
+\input{theorems/thm_twin_cyclics_between_consecutive_cubes}
+
+\subsubsection{Conjecture 36 (Infinitely many SG cyclics)}
+\input{theorems/thm_infinitely_many_sg_cyclics}
+
+\subsubsection{Conjecture 37 (SG cyclics modulo 3)}
+\input{theorems/thm_sg_cyclics_modulo_3}
+
+\subsubsection{Conjecture 41 (Firoozbakht analog 3)}
+\input{theorems/thm_firoozbakht_cyclics_3}
+
+\subsubsection{Conjecture 42 (Firoozbakht analog 4)}
+\input{theorems/thm_firoozbakht_cyclics_4}
+
+\subsubsection{Conjecture 47 (Visser analog)}
+\input{theorems/thm_visser_cyclics}
+
+\subsubsection{Conjecture 52 (Rosser analog)}
+\input{theorems/thm_rosser}
+
+\subsubsection{Conjecture 54 (Ishikawa analog)}
+\input{theorems/thm_ishikawa}
+
+\subsubsection{Conjecture 56 (Sum-3 versus sum-2)}
+\input{theorems/thm_sum_3_versus_sum_2_cyclics}
+
+\subsubsection{Conjecture 60 (Vrba analog)}
+\input{theorems/thm_vrba}
+
+\subsubsection{Conjecture 61 (Hassani analog)}
+\input{theorems/thm_hassani}
+
+\subsection{Disproofs}
+
+\subsubsection{Conjecture 35 (k-fold paired cyclics between cubes)}
+\input{theorems/thm_asymptotic_k_fold_cyclics_between_cubes}
+
+
+
+\subsubsection{Conjecture 50 (Carneiro analog for cyclics)}
+\input{theorems/thm_carneiro_cyclics}
+
+\subsubsection{Conjecture 51 (Carneiro analog for SG cyclics)}
+\input{theorems/thm_carneiro_sg_cyclics}
+
+\subsubsection{Conjecture 53 (Dusart analog)}
+\input{theorems/thm_dusart_cyclics}
+
+\subsubsection{Conjecture 59 (Panaitopol analog)}
+\input{theorems/thm_panaitopol}
+
+
+\section{Fried's Conjectures}
+
+In this section we treat the OEIS problem \seqnum{A248982}: the lexicographically least sequence of pairwise distinct positive integers whose running averages are Fibonacci numbers. We first present complete closed forms for all indices, then prove the disjointness of the even- and odd-index value sets (Fried's Conjecture~2). For convenience we recall the parity split
+\[
+ S_{\mathrm{even}}:=\bigl\{\,nF_{\,\frac{n}{2}+3}-(n-1)F_{\,\frac{n}{2}+2}:\ n\text{ even}\,\bigr\},\qquad
+ S_{\mathrm{odd}}:=\bigl\{\,F_{\,\frac{n+1}{2}+2}:\ n\text{ odd}\,\bigr\},
+\]
+and reduce the disjointness to showing that $T(n):=F_{n+2}+2nF_{n+1}$ is never a Fibonacci number.
+
+\subsubsection{A248982: Fibonacci running averages (closed forms)}
+\input{theorems/thm_fib_full}
+
+\subsubsection{A248982: Disjointness of even/odd value sets}
+\begin{proposition}[Disjointness of even/odd value sets (resolves Fried's Conj.~2)]\label{prop:disjointness}
+With Fibonacci numbers defined by $F_0=0$, $F_1=1$, $F_{n+2}=F_{n+1}+F_n$, let
+\[
+ S_{\mathrm{even}}:=\bigl\{\,nF_{\,\frac{n}{2}+3}-(n-1)F_{\,\frac{n}{2}+2}:\ n\text{ even}\,\bigr\},\qquad
+ S_{\mathrm{odd}}:=\bigl\{\,F_{\,\frac{n+1}{2}+2}:\ n\text{ odd}\,\bigr\}.
+\]
+Then $S_{\mathrm{even}}\cap S_{\mathrm{odd}}=\varnothing$. Equivalently, for every integer $n\ge1$,
+\[
+ T(n):=F_{n+2}+2nF_{n+1}
+\]
+is not a Fibonacci number.
+\end{proposition}
+
+\begin{proof}
+First, for $n=1,2,3$ we have $T(1)=4$, $T(2)=11$, $T(3)=23$, none of which is Fibonacci. Hence assume $n\ge4$ and suppose, for a contradiction, that $T(n)=F_m$ for some index $m$.
+
+1) Bounding the index $m$. Using the doubling identity $F_{2n+2}=F_{n+1}^2+2F_nF_{n+1}$ and Cassini's identity $F_{n+1}^2-F_nF_{n+2}=(-1)^n$, we get
+\[
+\begin{aligned}
+F_{2n+2}-T(n)
+&=(F_{n+1}^2+2F_nF_{n+1})-(F_n+(2n+1)F_{n+1})\\
+&=(F_nF_{n+2}+(-1)^n+2F_nF_{n+1})-(F_n+(2n+1)F_{n+1})\\
+&=F_n^2 - F_n + \bigl(3F_n-(2n+1)\bigr)F_{n+1} + (-1)^n.
+\end{aligned}
+\]
+For $n=4$ this equals $7>0$. For $n\ge5$, since $F_n\ge n$ (easy induction), we have $3F_n-(2n+1)\ge n-1\ge4$ and $F_n^2-F_n\ge20$, so the sum is positive. Thus $F_{2n+2}>T(n)=F_m$, hence $m\le 2n+1$.
+
+2) A divisibility constraint. Write $m=n+k$ with $1\le k\le n+1$. By the addition formula $F_{n+k}=F_{n+1}F_k+F_nF_{k-1}$,
+\[
+0=F_{n+k}-T(n)=F_{n+1}\bigl(F_k-(2n+1)\bigr)+F_n\bigl(F_{k-1}-1\bigr).
+\]
+Since $\gcd(F_n,F_{n+1})=1$, it follows that
+\[
+F_{n+1}\mid(F_{k-1}-1)\quad\text{and}\quad F_n\mid\bigl(F_k-(2n+1)\bigr).
+\]
+Because $1\le k\le n+1$, we have $0\le k-1\le n$ and so $0\le F_{k-1}\le F_n<F_{n+1}$. The only multiple of $F_{n+1}$ with absolute value $<F_{n+1}$ is $0$, hence $F_{k-1}-1=0$ and thus $F_{k-1}=1$, so $k\in\{2,3\}$. Substituting back gives $F_k=2n+1$, but for $k\in\{2,3\}$ one has $F_k\in\{1,2\}$, contradicting $2n+1\ge3$. This contradiction shows that no such $m$ exists, i.e., $T(n)$ is not a Fibonacci number for any $n\ge4$. Together with the checked cases $n=1,2,3$, this holds for all $n\ge1$.
+
+Finally, for even indices $N=2n$,
+\[
+2nF_{n+3}-(2n-1)F_{n+2}=2n(F_{n+2}+F_{n+1})-(2n-1)F_{n+2}=F_{n+2}+2nF_{n+1}=T(n),
+\]
+so $S_{\mathrm{even}}=\{T(n):n\ge1\}$, while for odd indices $S_{\mathrm{odd}}=\{F_{t+2}:t\ge1\}$ is precisely the set of Fibonacci numbers $\{F_r:r\ge3\}$. Since $T(n)$ is never Fibonacci, $S_{\mathrm{even}}\cap S_{\mathrm{odd}}=\varnothing$.
+\end{proof}
+
+\section{Acknowledgments}
+I thank the authors cited below for foundational results used in the proofs. The conjectures we resolve or disprove are due to Cohen \cite{Cohen2025}; we also cite the relevant OEIS entries.
+
+\input{bib.tex}
+
+\end{document}

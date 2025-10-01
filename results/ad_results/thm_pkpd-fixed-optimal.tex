@@ -1,0 +1,52 @@
+﻿\begin{theorem}\label{thm:pkpd-fixed-optimal}
+There exists a feasible PK--PD instance (one-compartment linear PK with elimination rate $k>0$; admissible dosing sequences with $0\le m_i\le m_{\max}$ and inter-dose intervals $\ge \tau_{\min}$; terminal utility $J_{\lambda}$ with $J_0(\cdot)=\Phi(\operatorname{AUC}(T))$ for some nondecreasing $\Phi$) such that, at $\lambda=0$, the fixed regimen $d_{\max}:=(m_{\max},\tau_{\min})$ maximizes $J_0$ among all admissible dosing policies (adaptive or not). Consequently,
+\[
+\sup_{\pi} J_0(\pi)=\sup_{d\in\mathcal D} J_0(d)=J_0(d_{\max}),
+\]
+and therefore there is no dosing policy $\pi^*$ and $\lambda_0>0$ for which
+$J_{\lambda}(\pi^*)>\sup_{d\in\mathcal D}J_{\lambda}(d)$ holds for all $\lambda\in[0,\lambda_0]$.
+\end{theorem}
+
+\begin{proof}
+Fix a finite horizon $[0,T]$. An admissible dosing policy $\pi$ (adaptive or not) produces a sequence $\{(t_i,m_i)\}_{i=1}^n$ with $0\le t_1\le\cdots\le t_n\le T$, spacings $t_{i+1}-t_i\ge \tau_{\min}$, and amplitudes $0\le m_i\le m_{\max}$. Let fixed (non-adaptive) regimens be pairs $d=(m,\tau)$ with constant dose $m\in[0,m_{\max}]$ and constant inter-dose interval $\tau\in[\tau_{\min},\infty)$; denote by $\mathcal D$ the set of such regimens.
+
+Adopt one-compartment linear PK with first-order elimination rate $k>0$. The concentration from any schedule is
+\[
+C(t)=\sum_{i=1}^n m_i\,e^{-k(t-t_i)}\,\mathbf{1}_{\{t\ge t_i\}}.
+\]
+Define the terminal utility at $\lambda=0$ by a nondecreasing mapping of AUC:
+\[
+J_0(\cdot)=\Phi\big(\operatorname{AUC}(T)\big),\qquad \operatorname{AUC}(T):=\int_0^T C(t)\,dt,
+\]
+where $\Phi:\mathbb R_{\ge0}\to\mathbb R$ is nondecreasing.
+
+Consider the fixed regimen $d_{\max}:=(m_{\max},\tau_{\min})$, administered at times $s_j=(j-1)\tau_{\min}$, $j=1,\dots, N_\ast$, where $N_\ast:=1+\lfloor T/\tau_{\min}\rfloor$.
+
+Claim: Among all admissible policies (including adaptive ones), $d_{\max}$ maximizes $\operatorname{AUC}(T)$, hence maximizes $J_0$.
+
+Indeed, for any admissible schedule $\{(t_i,m_i)\}_{i=1}^n$,
+\[
+\operatorname{AUC}(T)=\sum_{i=1}^n m_i\int_{t_i}^T e^{-k(t-t_i)}\,dt=\sum_{i=1}^n m_i\,\alpha(t_i),\quad \alpha(u):=\frac{1-e^{-k(T-u)}}{k}.
+\]
+Since $\alpha'(u)=-e^{-k(T-u)}<0$, earlier doses contribute more to AUC. The spacing and horizon constraints imply, by induction, $t_i\ge (i-1)\,\tau_{\min}=s_i$, while feasibility gives $m_i\le m_{\max}$ and $n\le N_\ast$. Therefore
+\[
+\operatorname{AUC}(T)=\sum_{i=1}^n m_i\,\alpha(t_i)\le\sum_{i=1}^n m_i\,\alpha(s_i)\le\sum_{i=1}^n m_{\max}\,\alpha(s_i)\le\sum_{i=1}^{N_\ast} m_{\max}\,\alpha(s_i)=\operatorname{AUC}_{d_{\max}}(T).
+\]
+Applying the nondecreasing $\Phi$ yields, for every admissible policy $\pi$,
+\[
+J_0(\pi)=\Phi\big(\operatorname{AUC}_\pi(T)\big)\le \Phi\big(\operatorname{AUC}_{d_{\max}}(T)\big)=J_0(d_{\max}).
+\]
+Because $d_{\max}$ is itself admissible, we conclude
+\[
+\sup_{\pi} J_0(\pi)=J_0(d_{\max})=\sup_{d\in\mathcal D} J_0(d).
+\]
+
+Now suppose, toward a contradiction, that there exist an admissible dosing policy $\pi^*$ and $\lambda_0>0$ such that for all $\lambda\in[0,\lambda_0]$,
+\[
+J_\lambda(\pi^*)>\sup_{d\in\mathcal D} J_\lambda(d).
+\]
+Evaluating at $\lambda=0$ gives $J_0(\pi^*)>\sup_{d\in\mathcal D} J_0(d)=J_0(d_{\max})$, contradicting the maximality of $d_{\max}$ established above. Hence no such $\pi^*$ and $\lambda_0$ exist for this instance. Therefore, at $\lambda=0$ the fixed regimen $d_{\max}$ maximizes utility among all admissible policies, and in particular
+\[
+\sup_{\pi} J_0(\pi)=\sup_{d\in\mathcal D} J_0(d)=J_0(d_{\max}).\qedhere
+\]
+\end{proof}

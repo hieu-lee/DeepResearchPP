@@ -1,0 +1,20 @@
+\begin{theorem}[Longest-prefix domination]\label{thm:longest-prefix-domination}\sloppy
+Fix a block size $K$ and proposal conditionals $(p_{n:n+K-1})$. Among all unbiased $K$-block draft--verify schemes, the longest-prefix (LP) verifier stochastically dominates any other valid scheme in the first-order sense: for all $j\in\{0,\dots,K\}$,
+\[
+\mathbb{P}_{\mathrm{LP}}\big[A^{(K)}\ge j\big]\;\ge\; \mathbb{P}_{\mathrm{any\ valid}}\big[A^{(K)}\ge j\big].
+\]
+In particular, LP maximizes $\mathbb{E}[A^{(K)}]$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Condition on a realized history $h$ and view any valid scheme as a coupling $\Gamma_h$ of the length-$K$ path laws $(P_p^{(K)}(\cdot\mid h),P_q^{(K)}(\cdot\mid h))$, with accepted-prefix length $A^{(K)}$ no larger than the first-agreement-run length $L^{(K)}:=\min\{K,\sigma-1\}$, where $\sigma=\inf\{j\ge1:X_j\ne Y_j\}$. Thus
+\[
+\begin{aligned}
+\mathbb P(A^{(K)}\ge j\mid h)
+&\le \Gamma_h(X_{1:j}=Y_{1:j})\\
+&\le 1-\operatorname{TV}\Big(P_p^{(j)}(\cdot\mid h),\,P_q^{(j)}(\cdot\mid h)\Big).
+\end{aligned}
+\]
+Averaging over $h\sim q$ gives upper bounds $S_j$ for each $j$. For LP, these bounds are tight simultaneously and sum to the exact value of $\mathbb E[A^{(K)}]$ via the standard block-verification formula; hence every slack must be zero, yielding $\mathbb P_{\mathrm{LP}}(A^{(K)}\ge j)=S_j\ge \mathbb P_{\mathrm{any\ valid}}(A^{(K)}\ge j)$ for all $j$. This is first-order stochastic dominance, which implies mean optimality and more generally dominance for all increasing functionals.\qedhere
+\end{proof}
+

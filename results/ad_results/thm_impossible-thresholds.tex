@@ -1,0 +1,27 @@
+﻿\begin{theorem}\label{thm:impossible-thresholds}
+There do not exist thresholds \(\tau_M,\tau_L\) such that simultaneously
+\[
+\mathbb{P}\bigl(E75(24)\mid T=\mathrm{Anti22},\,L_0=\tau_L,\,M_0=\tau_M\bigr)
+> \mathbb{P}\bigl(E75(24)\mid T=D,\,L_0=\tau_L,\,M_0=\tau_M\bigr)
+\]
+and
+\[
+\mathbb{P}\bigl(E75(24)\mid T=D,\,L_0=\tau_L,\,M_0=\tau_M\bigr)
+\ge \mathbb{P}\bigl(E75(24)\mid T=\mathrm{Anti22},\,L_0=\tau_L,\,M_0=\tau_M\bigr).
+\]
+\end{theorem}
+\begin{proof}
+Assume for contradiction that such thresholds \(\tau_M,\tau_L\) exist. Define
+\[
+\begin{aligned}
+ p_A(L,M) &\equiv \mathbb{P}\bigl(E75(24)\mid T=\mathrm{Anti22},\,L_0=L,\\[-2pt]
+ &\qquad M_0=M\bigr),\\
+ p_D(L,M) &\equiv \mathbb{P}\bigl(E75(24)\mid T=D,\,L_0=L,\\[-2pt]
+ &\qquad M_0=M\bigr).
+\end{aligned}
+\]
+By the assumed two inequalities at the single point \((\tau_L,\tau_M)\), we have
+\[
+ p_A(\tau_L,\tau_M) > p_D(\tau_L,\tau_M) \ge p_A(\tau_L,\tau_M),\quad \text{a contradiction.}\;\qedhere
+\]
+\end{proof}

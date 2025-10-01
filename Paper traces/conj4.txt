@@ -1,0 +1,8 @@
+\begin{definition}
+Let $P$ be the set of primes and $NP(n):=\#\{\,p\in P:\ n^2<p<(n+1)^2\,\}$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Deligne: primes between consecutive squares).}\ As $n\to\infty$,
+\[
+NP(n)\sim \frac{n}{\log n}.
+\]

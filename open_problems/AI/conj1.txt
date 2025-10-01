@@ -1,0 +1,10 @@
+\begin{definition}
+Let $f_{\theta}:\mathcal X\!\to\!\mathcal Y$ be a dense network with parameters $\theta\in\mathbb R^P$ initialized at $\theta_0$.
+A \emph{mask} is $m\in\{0,1\}^P$; the corresponding subnetwork is $f_{\theta\odot m}$.
+Fix a training algorithm $\mathcal A$ (optimizer, schedule, data order), dataset $\mathcal D$, and training budget $T$ steps.
+We say $m$ is a \emph{winning ticket} for $(\mathcal A,\mathcal D,T)$ if training only the subnetwork from its \emph{inherited} initialization,
+$\theta_0\odot m$, for $T$ steps attains test accuracy at least that of training $f_{\theta}$ from $\theta_0$ for $T$ steps.
+\end{definition}
+
+\textbf{Conjecture (Lottery Ticket Hypothesis; general form).}
+With high probability over initialization $\theta_0$, there exists a sparse mask $m$ with $\|m\|_0=o(P)$ that is a winning ticket for $(\mathcal A,\mathcal D,T)$ on standard vision/NLP tasks. (Open in full generality across architectures/datasets.)

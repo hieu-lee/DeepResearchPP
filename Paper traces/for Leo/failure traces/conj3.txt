@@ -1,0 +1,8 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. $C$ denotes the set of cyclic numbers. For $n\in\mathbb N$, define the interval $I_n:=(n^2,(n+1)^2)$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Desboves analog for cyclics).}\ For every $n\in\mathbb N$, there exist \emph{two} cyclics $c,c'\in C$ with
+\[
+n^2<c<c'<(n+1)^2.
+\]

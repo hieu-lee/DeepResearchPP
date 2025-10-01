@@ -1,0 +1,8 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $(c_n)_{n\ge1}$ be the increasing sequence of cyclics. For $x>0$ and integer $k\ge1$, write $x^{1/k}$ for the $k$th root.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Firoozbakht analog for cyclics 1).}\ For every $n\in\mathbb N$ except $n\in\{1,2,3,5\}$,
+\[
+c_n^{\,1/n}\ >\ c_{n+1}^{\,1/(n+1)}.
+\]

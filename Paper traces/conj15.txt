@@ -1,0 +1,8 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $(c_n)_{n\ge1}$ be the increasing sequence of cyclics.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Firoozbakht analog for cyclics 2).}\ For every integer $n>1$,
+\[
+c_n^{\,1/(n-1)}\ >\ c_{n+1}^{\,1/n}.
+\]

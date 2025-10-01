@@ -1,0 +1,59 @@
+\begin{theorem}[sum-3-versus-sum-2 analog for cyclics (resolves Conj.~56 of \cite{Cohen2025})]\label{thm:sum_3_versus_sum_2_cyclics}
+For all $n>9$, $c_n+c_{n+1}+c_{n+2}>c_{n+3}+c_{n+4}$.
+\end{theorem}
+
+\begin{proof}
+Let $\mathcal C=\{m\in\mathbb N: \gcd(m,\varphi(m))=1\}$ and let $c_1<c_2<\cdots$ be its increasing enumeration. Define the gaps $d_k:=c_{k+1}-c_k>0$.
+
+Set
+$$
+\Delta_n:=(c_n+c_{n+1}+c_{n+2})-(c_{n+3}+c_{n+4}).
+$$
+Using $c_{n+1}=c_n+d_n$, $c_{n+2}=c_n+d_n+d_{n+1}$, $c_{n+3}=c_n+d_n+d_{n+1}+d_{n+2}$, and $c_{n+4}=c_n+d_n+d_{n+1}+d_{n+2}+d_{n+3}$, we compute
+\[
+\begin{aligned}
+\Delta_n&=\bigl(3c_n+2d_n+d_{n+1}\bigr)-\bigl(2c_n+2d_n+2d_{n+1}+2d_{n+2}+d_{n+3}\bigr)\\
+&=c_n-d_{n+1}-2d_{n+2}-d_{n+3}.
+\end{aligned}
+\]
+We will show $\Delta_n>0$ for all $n>9$.
+
+Key lemma (Nagura \cite{Nagura1952}). Let $\lambda=\tfrac65$. For every real $x\ge25$, there exists a prime $p$ with $x<p\le\lambda x$.
+
+Since every prime lies in $\mathcal C$, the lemma implies: for each $m\in\mathcal C$ with $m\ge25$ there exists $c'\in\mathcal C$ such that $m<c'\le\lambda m$. Consequently, whenever $c_k\ge25$ we have successively
+$$
+ c_{k+1}\le\lambda c_k,\qquad c_{k+2}\le\lambda c_{k+1}\le\lambda^2 c_k,\qquad c_{k+3}\le\lambda c_{k+2}\le\lambda^3 c_k.
+$$
+It follows that the gaps satisfy
+\[
+\begin{aligned}
+ d_{k+1} &= c_{k+1}-c_k \le (\lambda-1)c_k,\\
+ d_{k+2} &\le (\lambda-1)c_{k+1} \le (\lambda-1)\lambda c_k,\\
+ d_{k+3} &\le (\lambda-1)c_{k+2} \le (\lambda-1)\lambda^2 c_k.
+\end{aligned}
+\]
+Therefore, for every $n$ with $c_n\ge25$,
+$$
+ d_{n+1}+2d_{n+2}+d_{n+3}\le(\lambda-1)(1+2\lambda+\lambda^2)\,c_n.
+$$
+With $\lambda=\tfrac65$, one has $(\lambda-1)(1+2\lambda+\lambda^2)=\tfrac{1}{5}\cdot\tfrac{121}{25}=\tfrac{121}{125}<1$. Hence, for all $n$ with $c_n\ge25$,
+$$
+\Delta_n\ge\Bigl(1-\frac{121}{125}\Bigr)c_n=\frac{4}{125}\,c_n>0.
+$$
+From the initial segment of $\mathcal C$,
+$$
+(c_k)_{k\le 18}=1,2,3,5,7,11,13,15,17,19,23,29,31,33,35,37,41,43,
+$$
+we have $c_{12}=29\ge25$, so $\Delta_n>0$ for all $n\ge12$.
+
+For the remaining cases $n=10,11$, direct calculation gives
+$$
+\Delta_{10}=19+23+29-31-33=7>0,\qquad \Delta_{11}=23+29+31-33-35=15>0.
+$$
+Thus $\Delta_n>0$ for every $n>9$, i.e.
+$$
+ c_n+c_{n+1}+c_{n+2}>c_{n+3}+c_{n+4}\qquad(n>9).
+$$
+
+\end{proof}
+

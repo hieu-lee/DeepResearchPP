@@ -1,0 +1,32 @@
+﻿\begin{theorem}[No ranking gain in a degenerate library]\label{thm-no-ranking-gain}
+There exists a library of candidate bispecifics and associated mappings $F,\,\kappa,\,Q,$ and $J$, with a monthly dosing set $D$, such that for every $d\in D$ one has
+\[
+\rho_s\bigl(\kappa(F(\mathrm{complex})),\, Q(d)\bigr)=0;
+\]
+moreover, for any fixed fraction $q\in(0,1]$, selecting the top-$q$ fraction by $\kappa$ yields the same $\mathbb{E}[J(d)]$ as random selection of equal size (in particular, not strictly higher).
+\end{theorem}
+
+\begin{proof}
+Assume, toward a contradiction, that for every library of candidate bispecifics with mappings $F,\,\kappa,\,Q,$ and $J$ and monthly dosing set $D$ satisfying the setup, there exists a monthly regimen $d\in D$ for which $\rho_s\bigl(\kappa(F(\mathrm{complex})),Q(d)\bigr)>0$, and that selecting the top-$q$ fraction by $\kappa$ yields strictly higher $\mathbb{E}[J(d)]$ than random selection of equal size.
+
+Construct the following library and mappings, which satisfy the setup:
+\begin{itemize}
+  \item The library consists of $N\ge 2$ clones of a single bispecific molecule. For each candidate $C$, the predicted complex $F(\mathrm{complex}(C))$ is the same object; hence the epitope-coverage score $K:=\kappa(F(\mathrm{complex}(C)))$ is constant across the library: $K\equiv k_0$.
+  \item For any monthly regimen $d\in D$, because the candidates are identical, the QSP efficacy readout is also constant across candidates: $Q(d)\equiv q_d$.
+\end{itemize}
+
+Spearman's $\rho_s$ for possibly discrete variables is defined via the distributional transform: for any real $X$ with CDF $F_X$, set
+\[
+T_X:=F_X(X-) + W\bigl(F_X(X)-F_X(X-)\bigr),\qquad W\sim\operatorname{Unif}(0,1)\text{ independent of }X,
+\]
+then $\rho_s(X,Y):=\operatorname{corr}(T_X,T_Y)$ using independent tie-breakers. If $X$ is almost surely constant, then $T_X\sim\operatorname{Unif}(0,1)$ and is independent of any $T_Y$ constructed with an independent tie-breaker, so $\rho_s(X,Y)=0$.
+
+Applying this to the constructed library, for every monthly regimen $d$, both $K$ and $Q(d)$ are constant across candidates; hence $\rho_s\bigl(K,Q(d)\bigr)=0$. This contradicts the assumed existence, for every such library, of a regimen $d$ with $\rho_s\bigl(\kappa(F(\mathrm{complex})),Q(d)\bigr)>0$.
+
+For the selection claim, fix any monthly regimen $d$. Because $K$ is constant, any top-$q$ selection by $\kappa$ is an arbitrary size-$qN$ subset (ties everywhere). Since all candidates are identical, $J(d)$ is the same for every candidate; thus the mean $J(d)$ over any size-$qN$ subset equals the population mean. Consequently, the top-$q$ selection does not yield strictly higher $\mathbb{E}[J(d)]$ than random selection of equal size, contradicting the assumption.
+
+Both contradictions show that there exists a library and mappings satisfying the setup for which, for every monthly regimen $d$, $\rho_s\bigl(\kappa(F(\mathrm{complex})), Q(d)\bigr)=0$ and the top-$q$ selection by $\kappa$ does not strictly improve $\mathbb{E}[J(d)]$ over random. In fact, the expectations are equal; summarizing,
+\[
+\forall d\in D:\quad \rho_s\bigl(K,Q(d)\bigr)=0\quad\text{and}\quad \mathbb{E}[J(d)\mid \text{top-}q\text{ by }\kappa]=\mathbb{E}[J(d)\mid \text{random, size }qN].\qedhere
+\]
+\end{proof}

@@ -1,0 +1,34 @@
+﻿\begin{theorem}[Logit-cutoff invariance under TARC sublevel restriction]\label{thm:logit-cutoff-invariance}
+For every logistic-link model with additive logit and nonnegative T-coefficient and positive L-coefficient, i.e., for every model with
+\[
+\operatorname{logit}\,p(L,T)=\beta_0+\beta_L L+\beta_T T \quad\text{with}\quad \beta_L>0,\ \beta_T\ge 0\ \ (\text{so }\beta_{LT}=0),
+\]
+and for every target probability level $q\in(0,1)$, the minimal uniform $L$-cutoff is invariant under any TARC sublevel restriction: for all $\tau_{\mathrm{TARC}}\ge0$ and $A'=[0,\tau_{\mathrm{TARC}}]$,
+\[
+\tau_L(A')=\tau_L(\mathbb{R}_+).
+\]
+In particular, no such sublevel restriction yields a strictly smaller cutoff.
+\end{theorem}
+
+\begin{proof}
+Fix such a model and let $q\in(0,1)$ with $\gamma:=\operatorname{logit}(q)$. Because the logit map is strictly increasing, the $q$-superlevel set is the halfspace
+\[
+S_q=\{(L,T)\in\mathbb{R}_+^2:\ p(L,T)\ge q\}
+ = \{(L,T):\ \beta_L L+\beta_T T\ge \gamma-\beta_0\}.
+\]
+For any measurable $A\subseteq\mathbb{R}_+$, the minimal uniform $L$-cutoff
+\[
+\tau_L(A):=\inf\{\tau\ge0:\ [\tau,\infty)\times A\subseteq S_q\}
+\]
+satisfies
+\[
+\tau_L(A)=\max\Bigl\{\sup_{T\in A}\frac{\gamma-\beta_0-\beta_T T}{\beta_L},\ 0\Bigr\},
+\]
+because for each fixed $T$ the section $\{L:\ (L,T)\in S_q\}$ equals $[((\gamma-\beta_0-\beta_T T)/\beta_L),\ \infty)$ and is monotone in $L$ since $\beta_L>0$.
+
+Apply this formula with $A=\mathbb{R}_+$ and with any TARC sublevel set $A'=[0,\tau_{\mathrm{TARC}}]$. As $\beta_T\ge0$, the map $T\mapsto (\gamma-\beta_0-\beta_T T)/\beta_L$ is nonincreasing on $\mathbb{R}_+$, so in both cases the supremum over $T\in A$ is attained at $T=0$. Therefore,
+\[
+\tau_L(\mathbb{R}_+)=\max\Bigl\{\frac{\gamma-\beta_0}{\beta_L},\ 0\Bigr\}
+=\tau_L(A'), \qquad \text{for all }\tau_{\mathrm{TARC}}\ge0.\qedhere
+\]
+\end{proof}

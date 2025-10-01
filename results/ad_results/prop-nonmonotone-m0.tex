@@ -1,0 +1,35 @@
+﻿\begin{proposition}\label{prop-nonmonotone-m0}
+For $T=\mathrm{L13}$, the assertion that the incremental benefit of q2w over q4w maintenance on achieving $\mathrm{E75}(24)$, namely
+\[
+\Delta P(L_0,M_0) := P(\mathrm{E75}(24)\mid \text{q2w}) - P(\mathrm{E75}(24)\mid \text{q4w}),
+\]
+is decreasing in $M_0$ is false in general. Even when q2w yields higher exposure than q4w, there exist parameter values for which $\partial\Delta P/\partial M_0>0$ on a nonempty open set of baselines $(L_0,M_0)$; moreover, in the same construction, $\Delta P(L_0,M_0)\to 0$ as $L_0\to 0$ for every fixed $M_0$.
+\end{proposition}
+
+\begin{proof}
+Construct a model consistent with an IL-13--only mechanism in which q2w has higher exposure than q4w. Encode maintenance regimens $r\in\{\text{q4w},\text{q2w}\}$ by positive exposure levels $e_r$ with $e_{\text{q2w}}>e_{\text{q4w}}$. Define the 24-week EASI-75 probability under $T=\mathrm{L13}$ by
+\[
+P(r,L_0,M_0) := \sigma\big(\alpha + \beta L_0 e_r - \gamma M_0\big), \qquad \sigma(x) := \frac{1}{1+e^{-x}},
+\]
+with parameters $\alpha\in\mathbb{R}$ and $\beta,\gamma>0$. Then
+\[
+\Delta P(L_0,M_0)=\sigma\big(\alpha+\beta L_0 e_{\text{q2w}}-\gamma M_0\big)-\sigma\big(\alpha+\beta L_0 e_{\text{q4w}}-\gamma M_0\big).
+\]
+Write $b:=\alpha+\beta L_0 e_{\text{q4w}}-\gamma M_0$ and $\delta:=\beta L_0\big(e_{\text{q2w}}-e_{\text{q4w}}\big)>0$ for any $L_0>0$. Then
+\[
+\Delta P(L_0,M_0)=\sigma(b+\delta)-\sigma(b), \qquad \frac{\partial\Delta P}{\partial M_0}(L_0,M_0)=-\gamma\big(\sigma'(b+\delta)-\sigma'(b)\big),
+\]
+with $\sigma'(x)=\sigma(x)\big(1-\sigma(x)\big)$. Since $\sigma'$ is strictly decreasing on $[0,\infty)$, whenever $b>0$ we have $\sigma'(b+\delta)<\sigma'(b)$ and hence $\partial\Delta P/\partial M_0>0$.
+
+Thus, for any fixed parameters with $\beta,\gamma>0$ and $e_{\text{q2w}}>e_{\text{q4w}}>0$, the set
+\[
+\mathcal{U}:=\{(L_0,M_0): L_0>0,\ b(L_0,M_0)>0\}
+\]
+is a nonempty open set of baselines on which $\partial\Delta P/\partial M_0>0$. For example, taking $\alpha=0$, $\beta=1$, $\gamma=\tfrac{1}{10}$, $e_{\text{q2w}}=2$, $e_{\text{q4w}}=1$, we have $b=L_0-\tfrac{1}{10}M_0$, so $\mathcal{U}=\{(L_0,M_0): L_0>0,\ M_0<10L_0\}$, and hence $\partial\Delta P/\partial M_0>0$ throughout $\mathcal{U}$.
+
+Finally, for any fixed $M_0$, we have $\delta\to 0$ as $L_0\to 0$, so by continuity of $\sigma$,
+\[
+\Delta P(L_0,M_0)=\sigma(b+\delta)-\sigma(b)\longrightarrow 0 \quad \text{as } L_0\to 0,\quad \text{for each fixed } M_0,\, \qedhere
+\]
+which furnishes a counterexample to monotone decrease in $M_0$ even when q2w yields higher exposure than q4w, while also showing $\Delta P(L_0,M_0)\to 0$ as $L_0\to 0$ for every fixed $M_0$.
+\end{proof}

@@ -1,0 +1,9 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $(\sigma_n)_{n\ge1}$ enumerate the SG cyclics increasingly.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Dusart–Mandl analog for SG cyclics).}\ For all $n>5$,
+\[
+\frac{\sigma_1+\cdots+\sigma_n}{n}\ <\ \frac{\sigma_n}{2},
+\]
+and the reverse strict inequality holds for $n=1,2,3,4,5$.

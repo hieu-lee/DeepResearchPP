@@ -1,0 +1,1 @@
+(Monotone improvement of quadratic upper bounds.) For convex L-smooth f and any \eta\in(0,\tfrac{2}{L}], define the classical quadratic upper model Q_n(y):=f_n+\langle g_n,y-x_n\rangle+\tfrac{1}{2\eta}\|y-x_n\|^2. Then the model gap \delta_n:=Q_n(x_{n+1})-f_{n+1} satisfies \delta_{n+1}\le\delta_n and the sequence n\mapsto\delta_n is convex for all \eta\le\tfrac{7}{4L}.

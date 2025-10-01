@@ -1,0 +1,317 @@
+[
+  {
+    "num": 2,
+    "title": "Goldbach analog for cyclics",
+    "stmt": "Every even n ∈ N greater than 2 is a sum of two cyclics."
+  },
+  {
+    "num": 3,
+    "title": "twin cyclics analog",
+    "stmt": "There are infinitely many cyclics c ∈ C such that c + 2 is also cyclic."
+  },
+  {
+    "num": 4,
+    "title": "cyclic triplets",
+    "stmt": "There are infinitely many composite cyclics c ∈ C such that c, c + 2, c + 4 are all composite cyclic."
+  },
+  {
+    "num": 5,
+    "title": "cyclic quintuplets",
+    "stmt": "There are infinitely many cyclics c ∈ C such that c, c + 2, c + 4, c + 6, c + 8 are all cyclic."
+  },
+  {
+    "num": 6,
+    "title": "Legendre analog for cyclics",
+    "stmt": "For every n ∈ N, there exists a cyclic c ∈ C such that n2 < c < (n + 1)2."
+  },
+  {
+    "num": 7,
+    "title": "Desboves analog for cyclics",
+    "stmt": "For every n ∈ N, there exist two cyclics c, c′ ∈ C such that n2 < c < c′ < (n + 1)2."
+  },
+  {
+    "num": 8,
+    "title": "Deligne’s conjecture: primes in intervals between successive squares",
+    "stmt": "As n → ∞, the number NP(n) of primes in the interval (n2, (n + 1)2) satisfies NP(n) ∼ n/ log n."
+  },
+  {
+    "num": 9,
+    "title": "cyclics in intervals between successive squares",
+    "stmt": "As n → ∞, the number Nc(n) := #{c ∈ C | c ∈ (n2, (n + 1)2)} of cyclics in the interval (n2, (n + 1)2) is asymptotic to (10)."
+  },
+  {
+    "num": 10,
+    "title": "k-fold Legendre for primes",
+    "stmt": "For primes, Lp = {1, 7, 11, 17, 18, 26, 27, 32, 46, 50, 56, 58, 85, 88, 92, 137, 143, 145, . . .}."
+  },
+  {
+    "num": 11,
+    "title": "asymptotic k-fold Legendre for primes",
+    "stmt": "As n → ∞, Lp(n) is asymptotic to a regularly varying function with index b that satisfies 3/2 < b ≤ 2."
+  },
+  {
+    "num": 12,
+    "title": "k-fold Legendre for cyclics",
+    "stmt": "For cyclics, Lc = (1, 3, 5, 8, 11, 14, 15, 16, 19, 21, 27, 29, 33, 38, 39, 46, 47, 51, 58, 61, 62, 66, 82, 86, 90, 104, 105, 108, 110, 118, 126, 127, 129, 131, 138, 141, 149, 152, 159, 161, 167, 170, 172, 174, 180, 182, 185, 187, . . .)."
+  },
+  {
+    "num": 13,
+    "title": "asymptotic k-fold Legendre for cyclics",
+    "stmt": "As n → ∞, Lc(n) is asymptotic to a regularly varying function with index that satisfies 1 ≤ b ≤ 2."
+  },
+  {
+    "num": 14,
+    "title": "near-square analog for cyclics",
+    "stmt": "Infinitely many cyclics c ∈ C satisfy c = n2 + 1 for some n ∈ N."
+  },
+  {
+    "num": 15,
+    "title": "near-square analog of Golubew for cyclics",
+    "stmt": "For every m ∈ N, the interval (m3, (m + 1)3) contains at least one near-square cyclic c = n2 + 1 for some n ∈ N. For every"
+  },
+  {
+    "num": 16,
+    "title": "counting Oppermann primes",
+    "stmt": "As n → ∞, the number of primes in [n2 − n, n2] is asymptotic to n/(2 log n) and the number of primes in [n2, n2 + n] is also asymptotic to n/(2 log n)."
+  },
+  {
+    "num": 17,
+    "title": "k-fold Oppermann conjecture for primes",
+    "stmt": "For every k ∈ N, there exists N (k) ∈ N such that for all n > N (k), there exist at least k primes in [n2−n, n2] and another at least k primes in [n2, n2 + n]. In particular, N (2) = 16, N (3) = 36, N (4) = 46, N (5) = 76, N (6) = N (7) = 79, N (8) = 85, N (9) = 118, N (10) = 136, N (11) = N (12) = 155, N (13) = 188."
+  },
+  {
+    "num": 19,
+    "title": "Oppermann analog for cyclics",
+    "stmt": "For every n > 1, there exist c, c′ ∈ C such that n2 − n < c < n2 < c′ < n2 + n. The number of cyclics in [n2 − n, n2] is asymptotic to"
+  },
+  {
+    "num": 20,
+    "title": "k-fold Oppermann conjecture for cyclics",
+    "stmt": "For every k ∈ N, there exists N (k) ∈ N such that for all n > N (k), there exist at least k cyclic numbers in the interval [n2 − n, n2] and another at least k prime numbers in the interval [n2, n2 + n]. In particular, N (2) = 4, N (3) = 7, N (4) = 13, N (5) = 16, N (6) = 18, N (7) = 21, N (8) = 25, N (9) = 31, N (10) = N (11) = 32, N (12) = 40, N (13) = 44."
+  },
+  {
+    "num": 22,
+    "title": "k-fold Brocard for primes",
+    "stmt": "Let B(4) = 2, B(5) = 2, B(6) = 3, B(7) = B(8) = B(9) = 5, B(10) = B(11) = 7, B(12) = B(13) = B(14) = B(15) = B(16) = 10, B(17) = B(18) = B(19) = B(20) = 13. Then for k = 4, . . . , 20 and for every n ∈ N such that n ≥ B(k), there exist at least k primes between p2 n+1. More generally, for every k ∈ N, there exists B(k) ∈ N such that for every n ∈ N with n ≥ B(k), there exist at least k primes between n2 and (n + 1)2."
+  },
+  {
+    "num": 23,
+    "title": "Brocard analog for cyclics",
+    "stmt": "For every n > 2, there exist at least six cyclics c ∈ C such that c2"
+  },
+  {
+    "num": 24,
+    "title": "k-fold Brocard analog for cyclics",
+    "stmt": "For every k ∈ N, there exists C(k) ∈ N such that for every n ∈ N with n ≥ C(k), there exist at least k cyclic numbers c such that c2 n < c < c2"
+  },
+  {
+    "num": 25,
+    "title": "Schinzel Conjecture P1 analog for cyclics",
+    "stmt": "For every n ∈ N,"
+  },
+  {
+    "num": 26,
+    "title": "Schinzel conjecture for log2 analog for cyclics",
+    "stmt": "For every n ∈ N,"
+  },
+  {
+    "num": 27,
+    "title": "Schinzel-type conjecture for 2 × log analog for cyclics",
+    "stmt": "For every n ∈ N,"
+  },
+  {
+    "num": 28,
+    "title": "number of twin primes between consecutive cubes",
+    "stmt": "For every n ∈ N, the number of pairs of twin primes between n3 and (n + 1)3 is never less than two. More generally, for every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs of twin primes between n3 and (n + 1)3. Specifically, N (1) = N (2) = 1, N (3) = 3, N (4) = 5, N (5) = 8, N (6) = N (7) = N (8) = N (9) = 10, N (10) = 11, N (11) = 13, N (12) = N (13) = N (14) = N (15) = N (16) = 15, and N (17) = 20."
+  },
+  {
+    "num": 29,
+    "title": "number of cousin primes between consecutive cubes",
+    "stmt": "For n ∈ N with n > 1, the number of pairs of cousin primes between n3 and (n + 1)3 is never less than two. More generally, for every k ∈ N, there exists N (k) ∈ N such that, for all n ≥ N (k), there are at least k pairs of cousin primes between n3 and (n + 1)3. Specifically, N (1) = N (2) = 2, N (3) = 8, N (4) = N (5) = N (6) = N (7) = 9, N (8) = N (9) = N (10) = 12."
+  },
+  {
+    "num": 30,
+    "title": "number of sexy primes between consecutive cubes",
+    "stmt": "For n ∈ N with n > 2, the number of pairs of sexy primes between n3 and (n + 1)3 is never less than two. (While 3 pairs of sexy primes occur between 33 and 43, only 2 pairs of sexy primes occur between 43 and 53.) More generally, for every k ∈ N, there exists N (k) ∈ N such that, for all n ≥ N (k), there are at least k pairs of sexy primes between n3 and (n + 1)3. Specifically, N (1) = N (2) = 3, N (3) = N (4) = N (5) = 5, N (6) = 6, N (7) = 7, N (8) = N (9) = N (10) = N (11) = 11."
+  },
+  {
+    "num": 31,
+    "title": "asymptotic k-fold primes between consecutive cubes",
+    "stmt": "As n → ∞, the numbers of pairs of twin primes, cousin primes, and sexy primes between consecutive cubes n3 and (n + 1)3 are asymptotic to regularly varying functions of n with indices between 3/2 and 2, and the indices for twin primes and cousin primes are identical."
+  },
+  {
+    "num": 32,
+    "title": "number of twin cyclics between consecutive cubes",
+    "stmt": "For every n ∈ N, the number of pairs of twin cyclics between n3 and (n + 1)3 is never less than two. For every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs of twin cyclics between n3 and (n + 1)3. Specifically, N (1) = N (2) = 1, N (3) = N (4) = 2, N (4) = N (5) = N (6) = N (7) = 3, N (8) = N (9) = N (10) = N (11) = N (12) = N (13) = 4."
+  },
+  {
+    "num": 33,
+    "title": "number of cousin cyclics between consecutive cubes",
+    "stmt": "For n ∈ N with n > 1, the number of pairs of cousin cyclics between n3 and (n + 1)3 is never less than one. For every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs of cousin cyclics between n3 and (n + 1)3. Specifically, N (1) = 2, N (2) = N (3) = 3, N (4) = N (5) = N (6) = N (7) = N (8) = 4, N (9) = N (10) = N (11) = N (12) = N (13) = N (14) = 6."
+  },
+  {
+    "num": 34,
+    "title": "number of sexy cyclics between consecutive cubes",
+    "stmt": "For n ∈ N with n ≥ 5, the number of pairs of sexy cyclics between n3 and (n + 1)3 is never less than two. For every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs of sexy cyclics between n3 and (n + 1)3. Specifically, N (1) = N (2) = 5, N (3) = N (4) = 6, N (5) = N (6) = N (7) = 7, N (8) = 10, N (9) = N (10) = N (11) = N (12) = N (13) = 11."
+  },
+  {
+    "num": 35,
+    "title": "asymptotic k-fold cyclics between consecutive cubes",
+    "stmt": "As n → ∞, the numbers of twin cyclics, cousin cyclics, and sexy cyclics between consecutive cubes n3 and (n + 1)3 are asymptotic to regularly varying functions of n with indices between 1 and 5/2."
+  },
+  {
+    "num": 36,
+    "title": "infinitely many SG cyclics",
+    "stmt": "There are infinitely many Sophie Germain cyclics."
+  },
+  {
+    "num": 37,
+    "title": "SG cyclics mod 3",
+    "stmt": "As the number of SG cyclics grows without limit, the number of SG cyclics congruent to j mod 3, j = 1, 2, 3, grows without limit, and the limiting fraction of SG cyclics congruent to 1 mod 3 equals the limiting fraction of SG cyclics congruent to 3 mod 3."
+  },
+  {
+    "num": 38,
+    "title": "Desboves analog for SG cyclics",
+    "stmt": "For every n ∈ N, there exists at least two SG cyclics in (n2, (n + 1)2)."
+  },
+  {
+    "num": 39,
+    "title": "Firoozbakht analog for cyclics 1",
+    "stmt": "For every positive integer n excluding n = 1, 2, 3 and 5, we have"
+  },
+  {
+    "num": 40,
+    "title": "Firoozbakht analog for cyclics 2",
+    "stmt": "For every positive integer n > 1, we have"
+  },
+  {
+    "num": 41,
+    "title": "Firoozbakht analog for cyclics 3",
+    "stmt": "For every k∈ N, there exists a least m∈ N, call it N (k), such that, for all n > N (k), we have"
+  },
+  {
+    "num": 42,
+    "title": "Firoozbakht analog for cyclics 4",
+    "stmt": "For every k∈ {0} ∪ N, define"
+  },
+  {
+    "num": 43,
+    "title": "Firoozbakht analog for SG cyclics",
+    "stmt": "For every n ∈ N excluding n = 1, 2, 3 and 5, we have"
+  },
+  {
+    "num": 44,
+    "title": "Andrica analog for cyclics",
+    "stmt": "For all n ∈ N, ∆"
+  },
+  {
+    "num": 45,
+    "title": "generalized analog for primes",
+    "stmt": "For real t ∈ (0, 1/2], we have"
+  },
+  {
+    "num": 46,
+    "title": "generalized analog for cyclics",
+    "stmt": "For real t ∈ (0, 1/2], we have"
+  },
+  {
+    "num": 47,
+    "title": "Visser analog for cyclics",
+    "stmt": "For a fraction ϵ ∈ (0, 1/2), there exists N (ϵ) ∈ N such that, for all n > N (ϵ), we have"
+  },
+  {
+    "num": 48,
+    "title": "generalized KMSZ for primes",
+    "stmt": "For finite positive or negative integer k, there exists N (k) ∈ N such that, for all n > N (k) (strict inequality), we have"
+  },
+  {
+    "num": 49,
+    "title": "generalized KMSZ for cyclics",
+    "stmt": "For finite positive or negative integer k, there exists N (k) ∈ N such that, for all n > N (k) (strict inequality), we have"
+  },
+  {
+    "num": 50,
+    "title": "Carneiro analog for cyclics",
+    "stmt": "For every cn > 3, we have"
+  },
+  {
+    "num": 51,
+    "title": "Carneiro analog for SG cyclics",
+    "stmt": "For every SG cyclic σn > 3, we have"
+  },
+  {
+    "num": 52,
+    "title": "Rosser analog for cyclics",
+    "stmt": "For all n > 1,"
+  },
+  {
+    "num": 53,
+    "title": "Dusart analog for cyclics",
+    "stmt": "For all n > 1,"
+  },
+  {
+    "num": 54,
+    "title": "Ishikawa analog for cyclics",
+    "stmt": "For all n > 2,"
+  },
+  {
+    "num": 55,
+    "title": "Ishikawa analog for SG cyclics",
+    "stmt": "For all n > 2,"
+  },
+  {
+    "num": 56,
+    "title": "sum-3-versus-sum-2 analog for cyclics",
+    "stmt": "For all n > 9,"
+  },
+  {
+    "num": 57,
+    "title": "Dusart-Mandl analog for cyclics",
+    "stmt": "For all n > 5,"
+  },
+  {
+    "num": 58,
+    "title": "Dusart-Mandl analog for SG cyclics",
+    "stmt": "For all n > 5,"
+  },
+  {
+    "num": 59,
+    "title": "Panaitopol analog for cyclics",
+    "stmt": "If m ∈ N, n ∈ N, and 3 ≤ m ≤ n, then cm·n < cmcn unless (m, n) = (3, 3) or (m, n) = (5, h) for h = 5, 6, 7, 8, 9, 10, in which cases the reverse strict inequality holds."
+  },
+  {
+    "num": 60,
+    "title": "Vrba analog for cyclics",
+    "stmt": ""
+  },
+  {
+    "num": 61,
+    "title": "Hassani analog for cyclics",
+    "stmt": ""
+  },
+  {
+    "num": 62,
+    "title": "Proth-Gilbreath analog for cyclics",
+    "stmt": "A SADS starting from the cyclic num- bers C after omitting c1 = 1 has 1 as the first element of every successor sequence."
+  },
+  {
+    "num": 63,
+    "title": "Proth-Gilbreath analog for SG cyclics",
+    "stmt": "A SADS starting from the SG cyclics after omitting σ1 = 1 has 1 as the first element of every successor sequence."
+  },
+  {
+    "num": 64,
+    "title": "Hardy and Littlewood analog for SG primes",
+    "stmt": "The counting function of SG primes obeys πSG(m + n) ≤ πSG(m) + πSG(n) for all 2 ≤ m ≤ n."
+  },
+  {
+    "num": 65,
+    "title": "Hardy and Littlewood analog for cyclics",
+    "stmt": "For all integers 1 ≤ m ≤ n, C(m + n) ≤ C(m) + C(n)."
+  },
+  {
+    "num": 66,
+    "title": "Hardy and Littlewood analog for Sophie Germain cyclics",
+    "stmt": "For all integers 1 ≤ m ≤ n, Cσ(m + n) ≤ Cσ(m) + Cσ(n)."
+  }
+]

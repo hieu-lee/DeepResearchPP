@@ -1,0 +1,8 @@
+\begin{definition}
+\emph{Grokking} is a training trajectory where test error remains high well after train error is near zero, followed by a sudden test-accuracy jump.
+Let $E$ be the embedding matrix and $\mathcal D$ the data distribution.
+Define \emph{embedding uniformity} $\mathsf U(E)$ (e.g., via pairwise cosine dispersion) and a data heterogeneity functional $\mathsf H(\mathcal D)$ capturing token/structure frequency spread.
+\end{definition}
+
+\textbf{Conjecture (Embedding-Uniformity Grokking Mechanism).}
+Grokking onset is governed by a joint threshold in $(\mathsf U(E),\mathsf H(\mathcal D))$: sufficient embedding uniformity together with suitable data distribution induces a delayed transition to the generalizing solution in Transformers on algorithmic tasks. (Open; partial evidence.)

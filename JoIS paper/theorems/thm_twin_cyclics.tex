@@ -1,0 +1,81 @@
+\begin{theorem}[Twin cyclics analog (resolves Conj.~3 of \cite{Cohen2025})]\label{thm:twin_cyclics}
+There exist infinitely many cyclic integers \(c\in\mathcal{C}\) such that \(c+2\in\mathcal{C}\).
+\end{theorem}
+
+\begin{proof}
+An integer $n$ is cyclic if and only if $\gcd(n,\varphi(n))=1$ (Szele's criterion; see \cite{Szele1947}). Equivalently (and necessarily), $n$ is squarefree and for any distinct primes $p,q\mid n$ one has $p\nmid(q-1)$. Indeed, if $n$ is squarefree then $\varphi(n)=\prod_{q\mid n}(q-1)$, so $\gcd(n,\varphi(n))=1$ holds precisely when no prime divisor $p$ of $n$ divides any $q-1$ with $q\mid n$ and $q\ne p$.
+
+Fix a large $x$ and set $z=x^{\delta}$ with a small fixed $\delta\in(0,1/10]$. Let $\mathcal P(z)=\prod_{p\le z}p$, and consider the sifted set
+$$
+\mathcal S_0(x,z):=\{1\le n\le x:\ (n(n+2),\mathcal P(z))=1\}.
+$$
+For each prime $p$ define the forbidden residue classes
+$$
+\Omega_p:=\{a\pmod p:\ p\mid a\text{ or }p\mid a+2\},
+$$
+so $|\Omega_2|=1$ and $|\Omega_p|=2$ for $p\ge3$. For a squarefree $d$, let $\rho(d)$ be the number of residue classes $a\pmod d$ such that $a\bmod p\in\Omega_p$ for all $p\mid d$. By the Chinese Remainder Theorem, $\rho$ is multiplicative and $\rho(p)=|\Omega_p|$. Moreover, for squarefree $d$ we have
+$$
+\#\{n\le x: d\mid n(n+2)\}=\frac{\rho(d)}{d}\,x+O(2^{\omega(d)}).
+$$
+Since $\sum_{p\le y}\rho(p)\frac{\log p}{p}=2\log y+O(1)$, the sieve has dimension $\kappa=2$.
+
+By the fundamental lemma of the combinatorial (Brun-$\beta$) sieve in dimension $\kappa=2$ \cite{Greaves2001,IK2004}, for $z\le x^{1/10}$ there exists an absolute constant $c_0>0$ such that
+$$
+\#\mathcal S_0(x,z)\ \ge\ c_0\,x\prod_{p\le z}\Bigl(1-\frac{\rho(p)}{p}\Bigr)
+\ =\ c_0\,x\Bigl(1-\tfrac12\Bigr)\prod_{3\le p\le z}\Bigl(1-\frac{2}{p}\Bigr).
+$$
+Using Mertens' formulas \cite{Apostol1976} and $(1-2/p)=(1-1/p)^2\bigl(1+O(1/p^2)\bigr)$, we obtain
+$$
+\prod_{3\le p\le z}\Bigl(1-\frac{2}{p}\Bigr)\asymp \frac{1}{(\log z)^2},
+$$
+so
+$$
+\#\mathcal S_0(x,z)\ \gg\ \frac{x}{(\log z)^2}.
+$$
+
+Next, remove $n\le x$ for which $p^2\mid n$ or $p^2\mid n+2$ for some $p>z$. The number of such $n$ is
+$$
+\ll \sum_{p>z}\Bigl(\Big\lfloor\frac{x}{p^2}\Big\rfloor+\Big\lfloor\frac{x}{p^2}\Big\rfloor\Bigr)\ \ll\ \frac{x}{z}.
+$$
+Call the removed set $\mathcal E(x,z)$.
+
+We must also forbid, among prime divisors of $n$ (and separately of $n+2$), any pair $p\ne q$ with $q\equiv1\pmod p$. Let $\mathcal B_1(x,z)$ count $n\le x$ for which there exist primes $p,q\ge z$ with $pq\mid n$ and $q\equiv1\ (\bmod p)$. A union bound gives
+$$
+\#\mathcal B_1(x,z)\ \le\ \sum_{p\ge z}\ \sum_{\substack{q\ge z\ q\equiv1\ (\bmod p)}}\Big\lfloor\frac{x}{pq}\Big\rfloor
+\ \ll\ x\sum_{p\ge z}\frac{1}{p}\sum_{\substack{q\le x/p\ q\equiv1\ (\bmod p)}}\frac{1}{q}.
+$$
+By the Brun--Titchmarsh inequality and partial summation (e.g., \cite{MV2007,IK2004}), uniformly for $p<x$,
+$$
+\sum_{\substack{q\le y\ q\equiv1\ (\bmod p)}}\frac{1}{q}\ \ll\ \frac{\log\log y}{\varphi(p)}\ =\ \frac{\log\log y}{p-1}.
+$$
+Therefore
+$$
+\#\mathcal B_1(x,z)\ \ll\ x\sum_{p\ge z}\frac{1}{p}\cdot\frac{\log\log x}{p-1}
+\ \ll\ x\,\frac{\log\log x}{z}.
+$$
+An identical argument for prime divisors of $n+2$ shows
+$$
+\#\mathcal B_2(x,z)\ \ll\ x\,\frac{\log\log x}{z}.
+$$
+
+Define the good set
+$$
+\mathcal G(x,z):=\mathcal S_0(x,z)\setminus\bigl(\mathcal E(x,z)\cup\mathcal B_1(x,z)\cup\mathcal B_2(x,z)\bigr).
+$$
+Combining the bounds above yields
+$$
+\#\mathcal G(x,z)\ \gg\ \frac{x}{(\log z)^2}\ -\ O\!\left(\frac{x}{z}\right)\ -\ O\!\left(x\,\frac{\log\log x}{z}\right).
+$$
+With $z=x^{\delta}$ and fixed $\delta\in(0,1/10]$, we have $(\log z)^2\asymp(\log x)^2$ while $x/z$ and $x(\log\log x)/z$ are $o\bigl(x/(\log z)^2\bigr)$. Hence, for all sufficiently large $x$,
+$$
+\#\mathcal G(x,z)\ \gg\ \frac{x}{(\log x)^2}.
+$$
+
+For any $n\in\mathcal G(x,z)$ we have:
+- $n$ and $n+2$ are coprime to all primes $\le z$ and thus all their prime factors exceed $z$;
+- neither $n$ nor $n+2$ is divisible by $p^2$ for any $p>z$; hence $\mu^2(n)=\mu^2(n+2)=1$;
+- by construction of $\mathcal B_1,\mathcal B_2$, among the prime divisors of $n$ (respectively $n+2$) there is no pair $p\ne q$ with $q\equiv1\pmod p$.
+By the characterization at the start, this implies $n\in\mathcal C$ and $n+2\in\mathcal C$.
+
+Since $\#\mathcal G(x,z)\to\infty$ with $x$, there are infinitely many such $n$. 
+\end{proof}

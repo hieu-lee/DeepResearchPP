@@ -1,0 +1,62 @@
+﻿\begin{theorem}[Stronger impossibility: the constant baseline uniquely maximizes the fixed-AE-budget utility]\label{thm:constant-unique-max}
+Let \(J_\lambda(d):=\mathbb{E}[\Delta\mathrm{EASI}_T\mid d]-\lambda\,\mathbb{E}[\mathrm{AEs}\mid d]\) with a fixed \(\lambda>0\) and a baseline fixed regimen \(d_0\) that administers a constant dose \(u_0\in(0,U_{\max})\). There exist admissible instances (including perfect forecasts and with arbitrarily small convex AE penalties) such that \(d_0\) uniquely maximizes \(J_\lambda\) over all regimens \(d\) with doses in \([0,U_{\max}]\). Consequently, for every nonconstant adaptive regimen \(d\)---in particular, for every piecewise-constant threshold regimen that increases dose when the forecast exceeds a threshold and decreases otherwise---one has \(J_\lambda(d)<J_\lambda(d_0)\), regardless of the forecast law (including perfect forecasts). In particular, no such regimen can simultaneously reduce flare probability and satisfy \(J_\lambda(d)\ge J_\lambda(d_0)\).
+\end{theorem}
+
+\begin{proof}
+Fix a finite horizon partitioned into bins \(i=1,\dots,n\). Let the per--bin dose be \(u_i\in[0,U_{\max}]\), the realized pollutant be \(E_i\), and a forecast \(\widehat E_i\). Let the baseline fixed regimen \(d_0\) be constant: \(u_i(d_0)\equiv u_0\in(0,U_{\max})\).
+
+Model the per--bin flare probability by
+\[
+\phi(E,u):=\tfrac12+r(E)+s(u),
+\]
+where \(\mathbb{E}[|r(E_i)|]<\infty\) and \(s:[0,U_{\max}]\to\mathbb{R}\) is strictly decreasing (no convexity of \(s\) is needed). Choose parameters so that \(\phi\in(0,1)\). The expected time--averaged flare probability under regimen \(d\) is
+\[
+\Pi(d):=\frac1n\sum_{i=1}^n\mathbb{E}[\phi(E_i,u_i(d))].
+\]
+Link clinical improvement to flare burden via
+\[
+\mathbb{E}[\Delta\mathrm{EASI}_T\mid d] = -C\,\Pi(d),\qquad C>0.
+\]
+Model adverse events (AEs) by an additive per--bin convex penalty \(\psi:[0,U_{\max}]\to\mathbb{R}\) and let
+\[
+\mathbb{E}[\mathrm{AEs}\mid d]=\frac1n\sum_{i=1}^n\mathbb{E}[\psi(u_i(d))].
+\]
+The utility is
+\[
+J_\lambda(d):=-C\,\Pi(d)-\lambda\,\mathbb{E}[\mathrm{AEs}\mid d].
+\]
+Since \(\mathbb{E}[r(E_i)]\) is independent of \(d\), write
+\[
+J_\lambda(d)=K-\frac1n\sum_{i=1}^n\mathbb{E}[g(u_i(d))],\qquad g(u):=C\,s(u)+\lambda\,\psi(u),\quad K:=-C\Big(\tfrac12+\mathbb{E}[r(E)]\Big).
+\]
+
+Construct an admissible instance as follows. Fix \(\beta,\varepsilon>0\) (as small as desired) and set
+\[
+ s(u):=s_0-\beta\,(u-u_0) \quad\text{(strictly decreasing, linear)}
+\]
+with \(s_0\) chosen so that \(\phi\in(0,1)\). Define a strictly convex AE penalty
+\[
+ \psi(u):=\psi_0+\kappa\,(u-u_0)+\tfrac{\varepsilon}{2}(u-u_0)^2,
+\]
+with \(\psi_0\) large enough so that \(\psi\ge0\) on \([0,U_{\max}]\). Choose
+\[
+ \kappa:=\frac{C\,\beta}{\lambda}>0.
+\]
+Then, for \(g(u)=C s(u)+\lambda \psi(u)\),
+\[
+ g'(u)=C s'(u)+\lambda \psi'(u)=(-C\beta)+\lambda\,(\kappa+\varepsilon(u-u_0))=\lambda\varepsilon\,(u-u_0),\qquad g''(u)=\lambda\varepsilon>0.
+\]
+Thus \(g\) is strictly convex with unique global minimizer at \(u_0\).
+
+Now let \(d\) be any regimen (any mapping from the information available---forecasts, outcomes, etc.---to doses in \([0,U_{\max}]\)). For each bin \(i\),
+\[
+ \mathbb{E}[g(u_i(d))]\ge g(u_0),
+\]
+with strict inequality whenever \(\mathbb{P}(u_i(d)\ne u_0)>0\) (by strict convexity of \(g\) and the fact that \(u_0\) is the unique minimizer). Therefore
+\[
+ J_\lambda(d)=K-\frac1n\sum_{i=1}^n\mathbb{E}[g(u_i(d))]\le K-\frac1n\sum_{i=1}^n g(u_0)=J_\lambda(d_0).\qedhere
+\]
+This conclusion is independent of the joint law of \((E,\widehat E)\); in particular it holds under perfect forecasts \(\widehat E\equiv E\).
+
+Hence, in this admissible instance, the baseline constant regimen \(d_0\) uniquely maximizes \(J_\lambda\) over all regimens. As a corollary, every nonconstant adaptive regimen---including any piecewise-constant threshold regimen that increases dose when the forecast exceeds a threshold and decreases otherwise---satisfies \(J_\lambda(d)<J_\lambda(d_0)\). Consequently, no such regimen can simultaneously reduce flare probability and maintain \(J_\lambda(d)\ge J_\lambda(d_0)\).
+\end{proof}

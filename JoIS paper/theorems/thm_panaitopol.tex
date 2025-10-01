@@ -1,0 +1,22 @@
+\begin{theorem}[Counterexample to a Panaitopol analog (disproves Conj.~59 of \cite{Cohen2025})]\label{thm:panaitopol}
+The inequality $c_{mn}<c_m c_n$ for all integers $3\le m\le n$ is false. In fact, $c_{35}=91=c_5\,c_7$.
+\end{theorem}
+
+\begin{proof}
+Recall that $n$ is cyclic iff $n$ is squarefree and, writing $n=\prod p_i$, no prime divisor $p_i$ divides $p_j-1$ for any $i\ne j$. Also, $1$ is cyclic, all primes are cyclic, and the only even cyclic is $2$. The increasing enumeration begins $c_1=1$, $c_2=2$, $c_3=3$, $c_4=5$, $c_5=7$, $c_6=11$, $c_7=13$, so $c_5c_7=91$.
+
+We show $c_{35}=91$. Since $3\cdot5\cdot7=105>91$, every odd composite $\le91$ that is squarefree is a product $pq$ of two odd primes with $pq\le91$. By the characterization above, such $pq$ is cyclic iff $p\nmid(q-1)$ and $q\nmid(p-1)$. A complete check of possibilities gives the odd composite cyclic numbers $\le91$ to be exactly
+\[
+\begin{gathered}
+15,33,35,51,65,69,77,85,87,91.
+\end{gathered}
+\]
+Including $1$, $2$, and the odd primes up to $91$ namely
+\[
+\begin{gathered}
+3,5,7,11,13,17,19,23,29,31,37,41,43,47,\\
+53,59,61,67,71,73,79,83,89,
+\end{gathered}
+\]
+the set of cyclic integers $\le91$ has cardinality $2+23+10=35$. Therefore $c_{35}=91$, proving the claim.
+\end{proof}

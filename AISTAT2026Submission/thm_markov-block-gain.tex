@@ -1,0 +1,24 @@
+\begin{theorem}[Markov-block gain]\label{thm:markov-block-gain}\sloppy
+Let $(q_n)_{n\ge1}$ be conditional distributions such that, for some $\gamma\in[0,1)$ and all prefixes $x_{1:n},x'_{1:n}$,
+\[
+\operatorname{TV}\big(q_{n+1}(\cdot\mid x_{1:n}),\,q_{n+1}(\cdot\mid x'_{1:n})\big)\le \gamma\,\mathbf{1}\{x_n\ne x'_n\}.
+\]
+Consider a Markovian maximal coupling across a block of length $K$, and let $A^{(K)}$ denote the number of accepted tokens in this block. Then
+\[
+\mathbb{E}[A^{(K)}]\ \ge\ \sum_{j=0}^{K-1}\prod_{i=0}^{j}\Big(1-\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})]-\gamma\Big).
+\]
+In particular, if $\gamma<\min_i\big(1-\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})]\big)$ then every factor is strictly positive and the bound improves on tokenwise worst-case guarantees.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Work on the Markov chain of prefixes $(W_i)$ within the block and define $U_i(w)=1-\operatorname{TV}(p_{n+i}(\cdot\mid w),q_{n+i}(\cdot\mid w))$. Under the assumption, the Dobrushin coefficient of the time-$i$ transition satisfies $\delta(\mathsf Q_i)\le\gamma$, which yields a one-step decoupling inequality
+\[
+\mathbb E[Z\,f(W_i)]\ge \mathbb E[Z]\,(\mathbb E[f(W_i)]-\gamma)
+\]
+for $Z\in[0,1]$ measurable w.r.t. the past and $f\in[0,1]$. With $T_i=\prod_{t=0}^i B_t$ the indicator of $i{+}1$ consecutive in-block matches, the recursion $\mathbb E[T_i]=\mathbb E[T_{i-1}U_i(W_i)]$ and the decoupling bound give
+\[
+\mathbb E[T_i]\ge \mathbb E[T_{i-1}]\,(\mathbb E[U_i(W_i)]-\gamma),\qquad i\ge0.
+\]
+Iterating and using $\mathbb E[U_i(W_i)]=1-\mathbb E[\operatorname{TV}(p_{n+i},q_{n+i})]$ yields the claim since $\mathbb P\{A^{(K)}\ge j{+}1\}=\mathbb E[T_j]$ and $\mathbb E[A^{(K)}]=\sum_{j\ge0}\mathbb P\{A^{(K)}\ge j{+}1\}$.\qedhere
+\end{proof}
+

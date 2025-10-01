@@ -1,0 +1,18 @@
+\begin{algorithm}[t]
+\caption{Block--Markov Maximal Coupling Across a $K$-Block}
+\label{alg:block-markov-max-coupling}
+\begin{algorithmic}[1]
+\Require Initial prefix $W_0=X_{1:n-1}$, block length $K$, conditionals $\{(p_{n+i},q_{n+i})\}_{i=0}^{K-1}$
+\State $L\gets 0$ \Comment accepted-prefix length within the block
+\For{$i=0$ to $K-1$}
+  \State Draw $(X_{n+i},\,Y_{n+i})$ by a \emph{maximal-agreement coupling} of $q_{n+i}(\cdot\mid W_i)$ and $p_{n+i}(\cdot\mid W_i)$
+  \If{$X_{n+i}=Y_{n+i}$}
+     \State $L\gets L+1$; \hspace{0.5em} $W_{i+1}\gets (W_i, X_{n+i})$ \Comment propagate target state
+  \Else
+     \State \textbf{break}
+  \EndIf
+\EndFor
+\State \textbf{Return} $L$ (number of accepted tokens). Commit $Y_{1:L}$ and, if $L<K$, continue exact sampling under $q$ beyond position $n+L$.
+\end{algorithmic}
+\end{algorithm}
+

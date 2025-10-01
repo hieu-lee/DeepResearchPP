@@ -1,0 +1,105 @@
+﻿\begin{theorem}\label{thm:bayes-rect-gap}
+There exist outcome maps $\mu_{\mathrm D},\,\mu_{\mathrm{L13}},\,\mu_{\mathrm{Dual}}:[0,1]^3\to[0,1]$ that are $2$-Lipschitz in $(L_0,M_0,T)$, such that the function $(L_0,M_0)\mapsto \mu_{\mathrm{Dual}}(L_0,M_0,T)-\max\{\mu_{\mathrm D}(L_0,M_0,T),\mu_{\mathrm{L13}}(L_0,M_0,T)\}$ has increasing differences in $(L_0,M_0)$, and such that $\operatorname{meas}(\{(L_0,M_0):\ \mu_{\mathrm{Dual}}\ge \max(\mu_{\mathrm D},\mu_{\mathrm{L13}})\})=9/32$. Moreover, for this instance the Bayes rule $T^{*}$ exceeds the value of every rectangular policy $\pi_{\mathrm{rect}}(\theta,\mathcal A)$ by exactly $1/128$ in expected $\Delta\mathrm{EASI}$; in particular, for every $\eta_0\in(0,1/128)$ no choice of thresholds $\theta=(\ell,m)$ and TARC band $\mathcal A$ achieves $\mathbb{E}[\Delta\mathrm{EASI}\mid \pi_{\mathrm{rect}}]\ge \mathbb{E}[\Delta\mathrm{EASI}\mid T^{*}]-\eta_0$.
+\end{theorem}
+
+\begin{proof}
+Let $(L_0,M_0,T)$ be independent and uniform on $[0,1]^3$, and define
+\[
+\begin{aligned}
+\mu_{\mathrm D}(L_0,M_0,T) &\equiv d,\quad d\in(0,1),\\
+\mu_{\mathrm{L13}}(L_0,M_0,T) &\equiv 0,\\
+\mu_{\mathrm{Dual}}(L_0,M_0,T) &\equiv (L_0+M_0-1)_+.
+\end{aligned}
+\]
+Then $\mu_{\mathrm D}$ and $\mu_{\mathrm{L13}}$ are $0$-Lipschitz. For $x=(L,M,T)$ and $y=(L',M',T')$,
+\[
+\bigl|\mu_{\mathrm{Dual}}(x)-\mu_{\mathrm{Dual}}(y)\bigr|\le |(L+M)-(L'+M')|\le 2\,\lVert x-y\rVert_\infty,
+\]
+so each $\mu_T$ is $L$-Lipschitz with $L=2$.
+
+Write $\Delta(L,M):=\mu_{\mathrm{Dual}}-\max(\mu_{\mathrm D},\mu_{\mathrm{L13}})=(L+M-1)_+-d=f(L+M)$, where $f(s)=(s-1)_+-d$ is convex. For $h\ge0$, the forward difference $u\mapsto f(u+h)-f(u)$ is nondecreasing, hence $\Delta$ has increasing differences in $(L,M)$.
+
+The Bayes rule $T^{*}$ chooses $\mathrm{Dual}$ iff $(L_0+M_0-1)_+\ge d$, i.e., iff $L_0+M_0\ge c$ with $c:=1+d\in(1,2)$; otherwise it chooses $\mathrm D$. Denoting $U_c:=\{(L,M)\in[0,1]^2:\ L+M\ge c\}$, the optimal value is
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid T^{*}]
+= d + \iint_{U_c} (L+M-c)\,dL\,dM 
+= d + F(c),
+\]
+where, using the triangular density of $L+M$ on $[1,2]$, one computes
+\[
+F(c)=\int_c^2 (s-c)(2-s)\,ds=\frac{4}{3}-2c+c^2-\frac{c^3}{6}.\tag{1}
+\]
+
+Consider any rectangular policy $\pi_{\mathrm{rect}}(\ell,m,\mathcal A)$ that prescribes $\mathrm{Dual}$ on $R:=[\ell,1]\times[m,1]$ when $T\in\mathcal A$ and $\mathrm D$ otherwise. Since the outcome maps do not depend on $T$ and $T$ is independent of $(L_0,M_0)$,
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid \pi_{\mathrm{rect}}]=d+\lambda(\mathcal A)\,I(\ell,m),\qquad I(\ell,m):=\iint_{R}\bigl((L+M-1)_+-d\bigr)\,dL\,dM.
+\]
+As $I(\tfrac12,\tfrac12)=\tfrac1{16}>0$, the maximizing choice is $\mathcal A=[0,1]$; also, since $\mu_{\mathrm D}\ge\mu_{\mathrm{L13}}$ everywhere, it is optimal to assign $\mathrm D$ off $R$.
+
+Let $\alpha:=1-\ell$, $\beta:=1-m$ and $H:=\{L+M\ge 1\}$. Then
+\[
+I(\ell,m)=-d\,\alpha\beta+\iint_{R\cap H}(L+M-1)\,dL\,dM.
+\]
+A direct geometric integration yields the piecewise closed form
+\[
+I(\ell,m)=\begin{cases}
+\alpha\beta\Big(\tfrac{\ell+m}{2}-d\Big), & \ell+m\ge 1,\\[3pt]
+-d\,\alpha\beta + \dfrac{(1-m)^3-\ell^3}{6}+\dfrac{m(1-m)}{2}, & \ell+m<1.
+\end{cases}\tag{2}
+\]
+
+We henceforth fix $d=\tfrac14$ (so $c=\tfrac54$) and compute $\sup_{\ell,m\in[0,1]} I(\ell,m)$.
+
+\textit{Case A ($\ell+m\ge1$).} For fixed $s:=\ell+m\in[1,2]$, $\alpha\beta=(1-\ell)(1-m)\le(1-\tfrac{s}{2})^2$ with equality at $\ell=m=\tfrac{s}{2}$. Thus by (2),
+\[
+I\le (1-\tfrac{s}{2})^2\Big(\tfrac{s}{2}-\tfrac14\Big)=:g(s),
+\]
+with $g'(s)=(1-\tfrac{s}{2})\tfrac{3}{4}(1-s)\le0$ on $[1,2]$, so $g$ is maximized at $s=1$. Therefore
+\[
+\sup_{\ell+m\ge1} I(\ell,m)=g(1)=(1-\tfrac12)^2\Big(\tfrac12-\tfrac14\Big)=\frac{1}{16}.\tag{3}
+\]
+
+\textit{Case B ($\ell+m<1$).} Work on the closed triangle $\mathcal{D}:=\{(\ell,m)\in[0,1]^2:\ \ell+m\le1\}$; continuity of $I$ implies $\sup_{\ell+m<1}I=\max_{\mathcal{D}}I$. Differentiating the second line of (2) gives
+\[
+\partial_\ell I=\tfrac14(1-m)-\tfrac12\ell^2,\qquad \partial_m I=\tfrac14(1-\ell)-\tfrac12 m^2.
+\]
+An interior maximizer must solve
+\[
+\ell^2=\tfrac12(1-m),\qquad m^2=\tfrac12(1-\ell).
+\]
+Subtracting yields $(\ell-m)(\ell+m-\tfrac12)=0$. On $\ell=m$, the first equation gives $2\ell^2+\ell-1=0$, whose solution in $[0,1]$ is $\ell=m=\tfrac12$, which lies on the boundary $\ell+m=1$ and is not interior. On $\ell+m=\tfrac12$, substituting $m=\tfrac12-\ell$ into $\ell^2=\tfrac12(1-m)$ yields $\ell^2-\tfrac12\ell-\tfrac14=0$, whose solutions $\ell=\tfrac{1\pm\sqrt5}{4}$ are infeasible interior points. Thus there is no interior maximizer on $\mathcal{D}$; any maximizer lies on $\partial\mathcal{D}$.
+
+We examine the three boundary pieces:
+\begin{itemize}
+\item On $\ell+m=1$, the first line of (2) applies:
+\[
+I(\ell,1-\ell)=\alpha\beta\Big(\tfrac{1}{2}-\tfrac14\Big)=\tfrac14\,\ell(1-\ell),
+\]
+maximized at $\ell=\tfrac12$ with value $\tfrac{1}{16}$.
+\item On $\ell=0$ with $m\in[0,1]$, the second line of (2) gives
+\[
+I(0,m)=-\tfrac14(1-m)+\frac{(1-m)^3}{6}+\frac{m(1-m)}{2}.
+\]
+Let $t:=1-m\in[0,1]$ and define $h(t):=I(0,1-t)=\tfrac{t^3}{6}-\tfrac{t^2}{2}+\tfrac{t}{4}$. Then $h''(t)=t-1<0$ on $[0,1)$, so $h$ is strictly concave there, with unique maximizer at $t=1-1/\sqrt2$. At this point $h(t)<\tfrac{1}{16}$.
+\item On $m=0$ with $\ell\in[0,1]$, by symmetry $\max_{\ell\in[0,1]} I(\ell,0)<\tfrac{1}{16}$.
+\end{itemize}
+Therefore $\max_{\mathcal{D}} I=\tfrac{1}{16}$, attained on the edge $\ell+m=1$ at $(\ell,m)=(\tfrac12,\tfrac12)$. Consequently,
+\[
+\sup_{\ell+m<1} I(\ell,m)=\frac{1}{16}.\tag{4}
+\]
+
+Combining (3)--(4), $\sup_{\ell,m} I(\ell,m)=\tfrac{1}{16}$. Hence the best rectangular policy achieves
+\[
+\sup_{\pi_{\mathrm{rect}}}\ \mathbb{E}[\Delta\mathrm{EASI}\mid \pi_{\mathrm{rect}}]= d+\sup_{\ell,m}I(\ell,m)=\frac14+\frac{1}{16}=\frac{5}{16}.
+\]
+For the Bayes rule, (1) at $c=\tfrac54$ gives
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid T^{*}]= d+F\Big(\tfrac54\Big)=\frac14+\Big(\frac{4}{3}-\frac{5}{2}+\frac{25}{16}-\frac{125}{384}\Big)=\frac{1}{4}+\frac{9}{128}=\frac{41}{128}.
+\]
+Thus the regret of any rectangular policy equals
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid T^{*}]-\sup_{\pi_{\mathrm{rect}}}\mathbb{E}[\Delta\mathrm{EASI}\mid \pi_{\mathrm{rect}}]
+=\frac{41}{128}-\frac{40}{128}=\frac{1}{128}.
+\]
+Finally, $\operatorname{meas}(U_c)=\tfrac12(2-c)^2=\tfrac12(\tfrac34)^2=\tfrac{9}{32}$, so $\{(L_0,M_0): \mu_{\mathrm{Dual}}\ge\max(\mu_{\mathrm D},\mu_{\mathrm{L13}})\}$ has measure $9/32$, as claimed.\qedhere
+\end{proof}

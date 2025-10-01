@@ -1,0 +1,43 @@
+\begin{theorem}[Two-sided second-order temperature law with a single explicit constant]\label{thm:second-order-temp-law}\sloppy
+Let $m\in\mathbb{N}$ and $\rho\in(0,1)$. If each conditional $q_n(\cdot\mid x_{1:n-1})$ has support size at most $m$ and $|\tau-1|\le \rho$, then uniformly over steps $n$ and prefixes $x_{1:n-1}$,
+\[
+\begin{aligned}
+&\big\|\operatorname{TV}(p_{\tau,n},q_n)
+-\tfrac{|\tau-1|}{2}\,\MAD{q_n}{\log q_n(V)}\big\|\\
+&\qquad\le C(m,\rho)\,(\tau-1)^2,
+\end{aligned}
+\]
+where one may take
+\[
+\begin{aligned}
+C(m,\rho)
+&=(1+\rho\log m)\,m^{\rho}\\
+&\quad\times\Big(m\,\tfrac{4}{e^2(1-\rho)^2}+ (\log m)^2 m^{\rho}\Big).
+\end{aligned}
+\]
+Consequently, the sum of expected rejections over steps has matching linear terms in $|\tau-1|$ with a quadratic remainder bounded by $C(m,\rho)$ per step.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Let $t=\tau-1$, $V\sim q$, $X=\log q(V)$, $\mu=\mathbb E[X]$, and $X_c=X-\mu$. Then $p_t/q=\exp(tX_c)/Z_t$ with $Z_t=\mathbb E[\exp(tX_c)]$. Write
+\[
+\operatorname{TV}(p_t,q)=\tfrac12\,\mathbb E\big[\,|tX_c+R_t|\,\big],\quad R_t:=\tfrac{e^{tX_c}}{Z_t}-1-tX_c.
+\]
+Using the reverse triangle inequality and bounding $\mathbb E[|R_t|]$ via Taylor's integral remainder with $u\in[0,|t|]$ shows
+\[
+\begin{aligned}
+\Big|\operatorname{TV}(p_t,q)-\tfrac{|t|}{2}\,\mathbb E[|X_c|]\Big|
+&\le \tfrac12\,|t|^2\sup_{0\le u\le |t|}\mathbb E\big[X_c^2 e^{u\,\mathrm{sgn}(t)\, X_c}\big]\\
+&\quad\times\big(1+O(|t|\,\mathbb E[|X_c|])\big).
+\end{aligned}
+\]
+Under $|t|\le\rho$ and $|\operatorname{supp}(q)|\le m$, one controls the moment generating term uniformly by
+\[
+\begin{aligned}
+\mathbb E\big[X_c^2 e^{u\varepsilon X_c}\big]
+&\le 2 m^{\rho}\Big(m\,\tfrac{4}{e^2(1-\rho)^2}+(\log m)^2 m^{\rho}\Big),
+\end{aligned}
+\]
+for $0\le u\le\rho$ and $\varepsilon\in\{-1,1\}$, and $\mathbb E[|X_c|]\le 2\log m$. Collecting constants yields the stated $C(m,\rho)$ and the two-sided bound. Uniformity over steps follows from the shared $(m,\rho)$ constraints.\qedhere
+\end{proof}
+

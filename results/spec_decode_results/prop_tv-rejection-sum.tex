@@ -1,0 +1,55 @@
+\begin{proposition}[Rejection--correction with approximate coupling]\label{prop:tv-rejection-sum}
+Suppose at each step the verifier uses a coupling whose agreement probability is $1-\operatorname{TV}(p_n,q_n)-\epsilon_n$ with $\epsilon_n\in[0,1-\operatorname{TV}(p_n,q_n)]$, and employs a single-step rejection--correction that, upon spurious rejection, resamples from a calibrated correction kernel preserving the marginal $q_n$. Then the overall joint law remains exact, and the expected extra rejections incurred over SD satisfy
+\[
+\mathbb E[\Delta N_{\mathrm{rej}}]=\sum_{n=1}^T\mathbb E[\epsilon_n].
+\]
+\end{proposition}
+
+\begin{proof}
+Let $T<\infty$ and, for each step $n$ and prefix $x_{1:n-1}$, let $p_n(\cdot\mid x_{1:n-1})$ and $q_n(\cdot\mid x_{1:n-1})$ be distributions on a common measurable space. Suppose the verifier uses a coupling at step $n$ whose agreement probability equals $1-\operatorname{TV}(p_n,q_n)-\epsilon_n$ with $\epsilon_n\in[0,1-\operatorname{TV}(p_n,q_n)]$, and upon a spurious rejection performs a single-step rejection--correction that resamples from a calibrated kernel preserving the marginal $q_n(\cdot\mid x_{1:n-1})$.
+
+Fix a step $n$ and a prefix $x\equiv x_{1:n-1}$. For brevity write $p:=p_n(\cdot\mid x)$ and $q:=q_n(\cdot\mid x)$, and set $t:=\operatorname{TV}(p,q)$. Let
+\[
+\begin{aligned}
+&c \equiv p\wedge q,\qquad r \equiv [q-p]_+,\qquad s \equiv [p-q]_+,\\
+&\|c\|_1=1-t,\quad \|r\|_1=\|s\|_1=t,\quad q=c+r,\quad p=c+s.
+\end{aligned}
+\]
+By assumption, the verifier employs a coupling $\pi$ of $(p,q)$ whose on-diagonal mass is $\mathbb P_{\pi}\{Y=Z\}=1-t-\epsilon$ for some $\epsilon\in[0,1-t]$. Let the on-diagonal measure be
+\[
+\alpha(v)\equiv \pi\{Y=Z=v\},\qquad v\in\mathcal V.
+\]
+Then $0\le \alpha\le c$ (as measures) and $\|\alpha\|_1=1-t-\epsilon$. Define the spurious shortfall measure $\sigma:=c-\alpha\ge 0$, so $\|\sigma\|_1=\epsilon$.
+
+Single-step rejection--correction. Condition on the coupling's outcome:
+\begin{itemize}
+  \item Accept if $Y=Z$, and set $X_n:=Y$; the unconditional contribution to $\mathcal L(X_n\mid x)$ is the measure $\alpha$.
+  \item Otherwise, a rejection occurs. We distinguish (measurably within the coupling) between (i) true mismatches of total mass $t$, and (ii) spurious rejections of total mass $\epsilon$ (the withheld common mass $\sigma$). On rejection we resample $X_n$ from the calibrated kernel that draws
+  \[
+  \begin{aligned}
+  X_n &\sim r/t \quad \text{for true mismatches (when } t>0 \text{)},\\
+  X_n &\sim \sigma/\epsilon \quad \text{for spurious rejections (when } \epsilon>0 \text{)}.
+  \end{aligned}
+  \]
+\end{itemize}
+Thus the unconditional contribution from all rejections to $\mathcal L(X_n\mid x)$ is
+\[
+ t\cdot \frac{r}{t} + \epsilon\cdot \frac{\sigma}{\epsilon} = r+\sigma.
+\]
+Hence the final conditional law at step $n$ is
+\[
+\mathcal L(X_n\mid x)\ =\ \alpha + (r+\sigma)\ =\ (\alpha+\sigma)+r\ =\ c+r\ =\ q.
+\]
+Since this holds for every prefix $x$, we have for all $x_{1:T}$ by the chain rule
+\[
+\mathbb P\{X_{1:T}=x_{1:T}\}\ =\ \prod_{n=1}^T q_n(x_n\mid x_{1:n-1})\ =\ q(x_{1:T}),
+\]
+so the joint law is exact.
+
+Extra rejections. In standard SD (maximal agreement), the rejection probability at step $n$ given $x$ equals $t=\operatorname{TV}(p,q)$. Under the approximate coupling it is $t+\epsilon$. Therefore the per-step excess rejection probability equals $\epsilon$, and summing over steps and averaging over random prefixes yields
+\[
+\mathbb E[\Delta N_{\mathrm{rej}}]\ =\ \sum_{n=1}^T \mathbb E[\epsilon_n].\qedhere
+\]
+This also covers the boundary cases: if $1-t=0$ then necessarily $\epsilon=0$; if $t=0$ (resp. $\epsilon=0$) the corresponding rejection branch is vacuous.
+\end{proof}
+

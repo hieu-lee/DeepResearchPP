@@ -1,0 +1,30 @@
+﻿\begin{proposition}[Monotonicity of minimal uniform IL-13 cutoff]\label{prop:il13-cutoff-monotone}
+Let \(f(L,T):=\mathbb{P}(\mathrm{EASI}{-}75\mid \text{dupilumab},L,T)\) and, for any \(p\in\mathbb{R}\), define
+\[
+S_p := \{ (L,T) \in \mathbb{R}_+^2 : f(L,T) \ge p \}.
+\]
+For any subset \(A\subseteq \mathbb{R}_+\), define the minimal uniform IL-13 cutoff over \(A\) by
+\[
+\tau_L(A) := \inf\{ \,\tau \ge 0 : [\tau,\infty) \times A \subseteq S_p \,\}\quad (\inf\emptyset := +\infty).
+\]
+Then for all \(A',A \subseteq \mathbb{R}_+\) with \(A'\subseteq A\), one has \(\tau_L(A') \le \tau_L(A)\). In particular, for any \(\tau_{\mathrm{TARC}} \ge 0\), conditioning on \(\mathrm{TARC} \ge \tau_{\mathrm{TARC}}\) cannot increase the minimal uniform IL-13 cutoff guaranteeing response at level \(p\).
+\end{proposition}
+
+\begin{proof}
+Fix \(p\in\mathbb{R}\) and set
+\[
+S_p:=\{(L,T)\in\mathbb{R}_+^2: f(L,T)\ge p\},\qquad f(L,T):=\mathbb{P}(\mathrm{EASI}{-}75\mid \text{dupilumab},L,T).
+\]
+For any set \(A\subseteq\mathbb{R}_+\), let
+\[
+G(A):=\{\tau\in[0,\infty):\ [\tau,\infty)\times A\subseteq S_p\},\qquad \tau_L(A):=\inf G(A)\in[0,\infty] \ (\inf\emptyset:=+\infty).
+\]
+If \(A'\subseteq A\), then for every \(\tau\ge0\) we have \([\tau,\infty)\times A'\subseteq[\tau,\infty)\times A\), hence \(G(A)\subseteq G(A')\). Taking infima yields
+\[
+\tau_L(A')\le \tau_L(A).
+\]
+This proves antitonicity of \(A\mapsto \tau_L(A)\) under set inclusion. In particular, with \(A=[0,\infty)\) and \(A'=[\tau_{\mathrm{TARC}},\infty)\) for any \(\tau_{\mathrm{TARC}}\ge0\), we obtain
+\[
+\tau_L([\tau_{\mathrm{TARC}},\infty))\le \tau_L([0,\infty)).\qedhere
+\]
+\end{proof}

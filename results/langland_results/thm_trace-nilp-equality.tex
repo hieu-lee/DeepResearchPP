@@ -1,0 +1,19 @@
+\begin{theorem}[Trace comparison under nilpotent support]\label{thm:trace-nilp-equality}
+Let $k=\mathbb F_q$ and let $i:Y'\hookrightarrow \LS^{\restr}_{\breve G}$ be a closed union of connected components. Then the inclusion
+\[
+\IndCoh_{\Nilp}(Y')\longrightarrow \IndCoh(Y')
+\]
+induces an isomorphism on categorical Frobenius traces. Consequently, for any compact $\cF\in\Shv_{\Nilp}(\Bun_G)$ one has
+\[
+\mathrm{Tr}\big(\mathrm{Frob},\,\mathsf L^{\restr}_{G,\coarse}(\cF)\big)
+\;=\;\mathrm{Tr}\big(\mathrm{Frob},\,\mathsf L^{\restr}_G(\cF)\big),
+\]
+in the sense of Grothendieck--Lefschetz on stacks.
+\end{theorem}
+
+\begin{proof}
+Write $Y:=\LS^{\restr}_{\breve G}$ and note that any closed union of connected components $i:Y'\hookrightarrow Y$ is open-and-closed. Categorical Frobenius traces are additive with respect to direct-sum decompositions of DG categories. Using additivity together with the known trace isomorphism for the inclusion $\IndCoh_{\Nilp}(Y)\hookrightarrow\IndCoh(Y)$, one deduces the same statement for $Y'$.
+
+For the second assertion, combine the Whittaker normalization for the coarse functor with the compatibility of the refined functor $\mathsf L^{\restr}_G$ with the $\QCoh(Y)$-action to identify global sections of the coarse image with those of $\Psi\big(\mathsf L^{\restr}_G(\cF)\big)$, functorially and Frobenius-equivariantly. Taking alternating traces of Frobenius on both sides gives the stated equality.
+\end{proof}
+

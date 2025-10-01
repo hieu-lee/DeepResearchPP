@@ -1,0 +1,1 @@
+(Discrete convexity of gradient norms under conservative steps.) Let f be convex and L-smooth. For GD with any \eta\in\big(0,\tfrac{3}{2L}\big], the sequence n\mapsto\|g_n\| is convex in the discrete sense: \|g_n\|-\|g_{n+1}\|\ge \|g_{n+1}\|-\|g_{n+2}\|\ge 0 for all n.

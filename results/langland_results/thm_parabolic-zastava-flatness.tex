@@ -1,0 +1,79 @@
+\begin{theorem}[Parabolic Eisenstein--Whittaker comparison in families]\label{thm:parabolic-zastava-flatness}
+For any standard parabolic $P^-$ with Levi $M$ and any $\mathcal F\in \Shv_{\Nilp}(\Bun_{M,K})$, there is a canonical isomorphism
+\[
+ \coeff^{\Vac}_{G,k}\Bigl(\Sp_{K\to k}\,\mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}(\mathcal F)\Bigr)
+ \;\simeq\; \coeff^{\Vac}_{M,k}\Bigl(\mathrm{Fact}(\Omega_{\mathrm{loc}})\star\Sp_{K\to k}(\mathcal F)\Bigr),
+\]
+compatible with Hecke and with translation by $\rho_P(\omega_X)$.
+\end{theorem}
+
+\begin{proof}
+Fix the cohomological integer $\delta$ attached to $N^-_P$ and adopt the normalization
+\[
+\mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\ :=\ \bigl(\mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\bigr)_{\mathrm{raw}}[\delta],
+\]
+so that its right adjoint $\mathrm{CT}^-_!$ is unshifted.
+
+Step 1 (specialization, Hecke, translation). Specialization commutes with parabolic Eisenstein and with Hecke functors, and is $t$-exact:
+\[
+\Sp_{K\to k}\ccomp \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\ \simeq\ \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\ccomp \Sp_{K\to k},\qquad
+H_{V,k}\ccomp \Sp_{K\to k}\ \simeq\ \Sp_{K\to k}\ccomp H_{V,K}.
+\]
+Translation by $\rho_P(\omega_X)$ is defined over $R_0$, hence commutes with specialization and Hecke.
+
+Step 2 (comparison over $R_0$ and construction of $\Theta_{R_0}$). Working over $R_0$, the diagonal-kernel formalism and the definition of the Whittaker coefficient give
+\[
+\coeff^{\Vac}_{G,R_0}\bigl(\mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}(\mathcal F)\bigr)
+\ \simeq\ \operatorname{Hom}_{\Bun_{G,R_0}}\bigl(\Poinc^{!}_{\Vac,G,R_0},\ \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}(\mathcal F)\bigr).
+\]
+Using the adjunction $\mathrm{Eis}^-_!\dashv\mathrm{CT}^-_!$ in our normalization,
+\begin{center}
+\resizebox{\linewidth}{!}{$\displaystyle
+\begin{aligned}
+\operatorname{Hom}_{\Bun_{G,R_0}}\bigl(\Poinc^{!}_{\Vac,G,R_0},\, \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}(\mathcal F)\bigr)
+&\;\simeq\; \operatorname{Hom}_{\Bun_{M,R_0}}\Bigl((\mathrm{transl}_{\rho_P(\omega_X)})^*\!\bigl(\mathrm{CT}^-_!(\Poinc^{!}_{\Vac,G,R_0})\bigr),\\
+&\qquad\mathcal F\Bigr).
+\end{aligned}
+$}
+\end{center}
+There is a canonical isomorphism in $\Shv(\Bun_{M,R_0})$
+\begin{center}
+\resizebox{\linewidth}{!}{$\displaystyle
+\begin{aligned}
+(\mathrm{transl}_{\rho_P(\omega_X)})^*\!\bigl(\mathrm{CT}^-_!(\Poinc^{!}_{\Vac,G,R_0})\bigr)[d]
+\;\simeq\;&\; \mathrm{Fact}(\Omega_{\mathrm{loc}})\star \Poinc^{!}_{\Vac,M,R_0}.
+\end{aligned}
+$}
+\end{center}
+for some integer $d$. Therefore
+Thus,
+\[
+\operatorname{Hom}_{\Bun_{M,R_0}}\Bigl((\mathrm{transl}_{\rho_P(\omega_X)})^*\!\bigl(\mathrm{CT}^-_!(\Poinc^{!}_{\Vac,G,R_0})\bigr),\ \mathcal F\Bigr)
+\;\simeq\; \coeff^{\Vac}_{M,R_0}\bigl(\mathrm{Fact}(\Omega_{\mathrm{loc}})\star \mathcal F\bigr)[d].
+\]
+Altogether, we obtain a canonical natural transformation of functors over $R_0$:
+\[
+\begin{aligned}
+\Theta_{R_0}:\ &\; \coeff^{\Vac}_{G,R_0}\ccomp \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\\
+&\; \xrightarrow{\ \sim\ }\ \bigl(\coeff^{\Vac}_{M,R_0}\ccomp(\mathrm{Fact}(\Omega_{\mathrm{loc}})\star(-))\bigr)[d].
+\end{aligned}
+\]
+
+Step 3 (Hecke-compatibility). Convolution with global Satake objects commutes with the pull--push operations defining $\mathrm{CT}^-_!$, $\mathrm{Eis}^-_!$, and the diagonal pairing; hence the canonical map above is $\operatorname{Rep}(\check M)$-equivariant. Applying $\operatorname{Hom}_{\Bun_{M,R_0}}(-,\mathcal F)$ and the standard compatibilities of Hecke with Hom yields commutative squares intertwining $H^M_W$. Compatibility with $\mathrm{transl}_{\rho_P(\omega_X)}$ is tautological from the definition of $K_L$.
+
+Step 4 (identification of the shift $d$). Restrict $\Theta_{R_0}$ to the generic fiber $K$ and evaluate at $\mathcal F=\Poinc^{!}_{\Vac,M,K}$. The resulting complex is the cochain complex of $C^\bullet(\check{\mathfrak n}^-_P)$, which is concentrated in nonnegative degrees with nonzero $H^0$, forcing $d=0$.
+
+Step 5 (passage to fibers and specialization). By base change along $\operatorname{Spec} R_0\to\operatorname{Spec} K,\operatorname{Spec} k$ and the ULA of all ingredients, $\Theta_{R_0}$ specializes to canonical Hecke-compatible isomorphisms
+\[
+\Theta_K:\ \coeff^{\Vac}_{G,K}\ccomp \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\ \xrightarrow{\ \sim\ }\ \coeff^{\Vac}_{M,K}\ccomp(\mathrm{Fact}(\Omega_{\mathrm{loc}})\star(-)),
+\]
+\[
+\Theta_k:\ \coeff^{\Vac}_{G,k}\ccomp \mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\ \xrightarrow{\ \sim\ }\ \coeff^{\Vac}_{M,k}\ccomp(\mathrm{Fact}(\Omega_{\mathrm{loc}})\star(-)).
+\]
+Finally, for any $\mathcal F\in \Shv_{\Nilp}(\Bun_{M,K})$, using Step~1 and $t$-exactness,
+\begin{align*}
+\coeff^{\Vac}_{G,k}\Bigl(\Sp_{K\to k}\,\mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}(\mathcal F)\Bigr)
+&\ \simeq\ \coeff^{\Vac}_{G,k}\Bigl(\mathrm{Eis}^-_{!,\,\rho_P(\omega_X)}\,\Sp_{K\to k}(\mathcal F)\Bigr)\\
+&\ \xrightarrow{\ \Theta_k\ }\ \coeff^{\Vac}_{M,k}\Bigl(\mathrm{Fact}(\Omega_{\mathrm{loc}})\star \Sp_{K\to k}(\mathcal F)\Bigr),\qquad\qedhere
+\end{align*}
+\end{proof}

@@ -1,0 +1,8 @@
+there's a latex paper in D:\DeepResearchPP\results\ad_results
+
+Debug it for me until there's no more error in the compiler.
+You should:
+- comment all "\input{{...}}" lines first, compile, ignore all \ref to unknown label messages, fix the other errors
+- then one line at a time, uncomment "\input{{...}}", compile, and fix the errors (still ignore all \ref to unknown label messages)
+- after fixing all errors, check for unidentified references (\ref to unknown label) then fix them
+- tidy all overfull and underfull \hbox

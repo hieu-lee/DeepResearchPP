@@ -1,0 +1,52 @@
+﻿\begin{theorem}[Trough nonidentifiability]\label{thm:trough-nonidentifiability}
+Among Dual regimens with equal total weekly dose, for any $\varepsilon>0$ and for strictly increasing outcome maps of the weekly pharmacodynamic functional, there exist two regimens with trough misalignment $\sup_{t\in\text{dosing interval}}\big|\log C_{\mathrm{trough},13}(t)-\log C_{\mathrm{trough},22}(t)\big|\le\varepsilon$ for which $\mathbb P(\mathrm{E75})$ is strictly larger for one regimen than for the other.
+\end{theorem}
+
+\begin{proof}[Proof (by contradiction)]
+Assume that among Dual regimens with equal total weekly dose, every regimen whose troughs satisfy $\sup_{t\in\text{dosing interval}}\big|\log C_{\mathrm{trough},13}(t)-\log C_{\mathrm{trough},22}(t)\big|\le\varepsilon$ attains the maximal $\mathbb P(\mathrm{E75})$, under strictly increasing outcome maps of the weekly pharmacodynamic functional.
+
+We exhibit two such regimens with unequal outcomes, contradicting the assumption.
+
+Fix a one-compartment linear PK with identical elimination rates $\lambda>0$ and unit volumes for IL-13 and IL-22. Let the instantaneous PD map be
+$$\mathcal H(C_{13},C_{22})=u(C_{13})+v(C_{22})+\alpha\,u(C_{13})v(C_{22}),\qquad \alpha>0,$$
+with $u,v\in C^2((0,\infty))$ strictly increasing and strictly concave; take for concreteness $u=v=\log(1+x)$. All constants below are computed on compact concentration ranges and are finite and positive where stated. Fix equal weekly doses $(Q_{13},Q_{22})$ and denote the steady-state weekly mean concentrations by $m_{13},m_{22}>0$ (in linear PK, $m_k$ depends only on $Q_k$ and clearance). Choose a dose ratio so that $m_{22}/m_{13}=\gamma$ with $|\log\gamma|\le\varepsilon$ (e.g., $\gamma=1$).
+
+Construct two admissible, co-administered weekly regimens with the same total weekly doses for both drugs (normalize the week to $t\in[0,1)$):
+\begin{itemize}
+  \item Pulse regimen $d^{\mathrm{pulse}}$: a single bolus at the start of each week for both drugs. The steady-state profiles have common shape $X_{1}(t)=K e^{-\lambda t}$ on $t\in[0,1)$ (scaled so that $\mathbb E[X_1]=m_{13}$), hence $C_{13}^{\mathrm{pulse}}(t)=X_1(t)$ and $C_{22}^{\mathrm{pulse}}(t)=\gamma X_1(t)$. The troughs before the weekly bolus satisfy $\log C_{\mathrm{trough},22}(t)-\log C_{\mathrm{trough},13}(t)\equiv\log\gamma$, so the misalignment is $|\log\gamma|\le\varepsilon$.
+  \item Spread regimen $d^{\mathrm{spread}}$: split each weekly dose into $N$ equal boluses at spacing $1/N$ within the week (co-administered), with $N$ large. Then $C_{13}^{\mathrm{spread}}(t)=X_N(t)$ and $C_{22}^{\mathrm{spread}}(t)=\gamma X_N(t)$ with a common shape $X_N$ satisfying $\mathbb E[X_N]=m_{13}$ and $\operatorname{Var}(X_N)\downarrow0$ as $N\to\infty$ (approaching constant infusion). Again $\log C_{\mathrm{trough},22}(t)-\log C_{\mathrm{trough},13}(t)\equiv\log\gamma$, so the misalignment is $|\log\gamma|\le\varepsilon$.
+\end{itemize}
+
+Let $\Phi(d)$ be the weekly average of $\mathcal H$ under regimen $d$. Fix a compact interval $[a,b]\subset(0,\infty)$ containing the ranges of $X_1$ and $X_N$ (for $N$ large). On $[a,b]$ set
+$$\kappa_u:=\min_{x\in[a,b]}(-u''(x))>0,\quad \kappa_v:=\min_{y\in[\gamma a,\gamma b]}(-v''(y))>0,$$
+$$K_u:=\max_{x\in[a,b]}(-u''(x)),\quad K_v:=\max_{y\in[\gamma a,\gamma b]}(-v''(y)),$$
+$$L:=\max_{x\in[a,b]}\Big|\tfrac{d^2}{dx^2}\big(u(x)\,v(\gamma x)\big)\Big|<\infty.$$
+By a second-order Taylor expansion at the mean (quantitative Jensen bounds), for any square-integrable $X\in[a,b]$:
+\begin{itemize}
+  \item $u(m_{13})-\tfrac{K_u}{2}\operatorname{Var}(X)\le\mathbb E[u(X)]\le u(m_{13})-\tfrac{\kappa_u}{2}\operatorname{Var}(X)$,
+  \item $v(\gamma m_{13})-\tfrac{\gamma^2 K_v}{2}\operatorname{Var}(X)\le\mathbb E[v(\gamma X)]\le v(\gamma m_{13})-\tfrac{\gamma^2\kappa_v}{2}\operatorname{Var}(X)$,
+  \item with $f(x):=u(x)v(\gamma x)$, $\big|\mathbb E[f(X)]-f(m_{13})\big|\le\tfrac{L}{2}\operatorname{Var}(X)$.
+\end{itemize}
+
+Write the baseline value at the common means as
+$$B:=u(m_{13})+v(\gamma m_{13})+\alpha\,u(m_{13})v(\gamma m_{13}).$$
+Then
+\begin{align*}
+\Phi(d^{\mathrm{pulse}})
+&=\mathbb E[u(X_1)]+\mathbb E[v(\gamma X_1)]+\alpha\,\mathbb E[f(X_1)]\\
+&\le B+\Big(\alpha\tfrac{L}{2}-\tfrac{\kappa_u+\gamma^2\kappa_v}{2}\Big)\operatorname{Var}(X_1),
+\end{align*}
+while
+\begin{align*}
+\Phi(d^{\mathrm{spread}})
+&=\mathbb E[u(X_N)]+\mathbb E[v(\gamma X_N)]+\alpha\,\mathbb E[f(X_N)]\\
+&\ge B-\Big(\tfrac{K_u+\gamma^2K_v}{2}+\alpha\tfrac{L}{2}\Big)\operatorname{Var}(X_N).
+\end{align*}
+Choose $\alpha\in\big(0,\tfrac{\kappa_u+\gamma^2\kappa_v}{L}\big)$ so the coefficient $\alpha\tfrac{L}{2}-\tfrac{\kappa_u+\gamma^2\kappa_v}{2}$ is negative. Since $\operatorname{Var}(X_1)>0$, there is $\Delta>0$ (depending on $X_1$ and $\alpha$) with $\Phi(d^{\mathrm{pulse}})\le B-\Delta$. Because $\operatorname{Var}(X_N)\downarrow0$ as $N\to\infty$, pick $N$ large so that $\big(\tfrac{K_u+\gamma^2K_v}{2}+\alpha\tfrac{L}{2}\big)\operatorname{Var}(X_N)<\tfrac{\Delta}{2}$. Then
+$$\Phi(d^{\mathrm{spread}})\ge B-\tfrac{\Delta}{2}>B-\Delta\ge\Phi(d^{\mathrm{pulse}}).$$
+Thus both regimens have trough misalignment $\le\varepsilon$ and equal weekly doses, yet $\Phi(d^{\mathrm{spread}})>\Phi(d^{\mathrm{pulse}})$. Because the clinical outcome maps are strictly increasing in $\Phi$, we obtain the strict probability ordering
+\[
+\mathbb P(\mathrm{E75}\mid d^{\mathrm{spread}})>\mathbb P(\mathrm{E75}\mid d^{\mathrm{pulse}}).\qedhere
+\]
+This contradicts the assumption that every regimen with misalignment $\le\varepsilon$ attains the maximal $\mathbb P(\mathrm{E75})$. Therefore, there exist two equal-weekly-dose regimens with trough misalignment $\le\varepsilon$ for which $\mathbb P(\mathrm{E75})$ differs, with one strictly larger than the other, as claimed.
+\end{proof}

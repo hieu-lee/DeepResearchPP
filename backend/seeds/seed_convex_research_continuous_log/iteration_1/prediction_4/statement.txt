@@ -1,0 +1,1 @@
+(Convexification by iterate averaging.) Let f be convex and L-smooth, and let x_{n} be GD with a fixed \eta\in(0,\tfrac{2}{L}). Define the averaged iterates \bar x_n:=\tfrac{1}{n+1}\sum_{k=0}^{n} x_k. Then n\mapsto f(\bar x_n) is a convex sequence for all \eta\in(0,\tfrac{2}{L}], and strictly convex whenever \|g_n\|\not\equiv 0.

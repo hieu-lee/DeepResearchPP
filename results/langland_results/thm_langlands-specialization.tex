@@ -1,0 +1,48 @@
+\begin{theorem}[Spectral specialization is essentially surjective in mixed characteristic]\label{thm:langlands-specialization}
+In mixed characteristic (\(\operatorname{char}(K)=0\), \(\operatorname{char}(k)=p>0\)), the spectral specialization functor
+\[
+\Sp^{\IndCoh}_{K\to k}:
+\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,K})\longrightarrow\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,k})
+\]
+is essentially surjective. Equivalently, every object of \(\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,k})\) is the specialization of an object over \(K\) with nilpotent singular support.
+\end{theorem}
+
+\begin{proof}
+To prove Theorem \ref{thm:langlands-specialization}, fix a DVR \(R_0\) with fraction field \(K\) of characteristic \(0\) and residue field \(k\) of characteristic \(p>0\).
+
+(1) Equivalences on the generic and special fibers. By a main theorem in the restricted Langlands framework, the restricted Langlands functor induces canonical equivalences
+There are canonical equivalences on the generic and special fibers $s\in\{K,k\}$:
+\(\mathsf L^{\restr}_{G,s}:\Shv_{\Nilp}(\Bun_{G,s})\xrightarrow{\ \sim\ }\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,s})\).
+They are \(\QCoh(\LS^{\restr}_{\breve G,(-)})\)-linear.
+
+(2) Definition of the spectral specialization. Let
+\[
+\Sp_{K\to k}:\Shv_{\Nilp}(\Bun_{G,K})\longrightarrow\Shv_{\Nilp}(\Bun_{G,k})
+\]
+be the specialization functor; in particular, it is a Verdier quotient (hence essentially surjective), \(t\)-exact, intertwines the \(\QCoh(\LS^{\restr}_{\breve G,k})\)-action, commutes with Hecke functors and parabolic Eisenstein series, and the square with the coarse functor \(\mathsf L^{\restr}_{G,\coarse}\) and \(\Sp^{\QCoh}_{K\to k}\) canonically commutes.
+
+Transporting along the above equivalences, define the spectral specialization
+\[
+\Sp^{\IndCoh}_{K\to k}
+\;:=\;
+\mathsf L^{\restr}_{G,k}\ccomp\Sp_{K\to k}\ccomp(\mathsf L^{\restr}_{G,K})^{-1}
+:\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,K})\longrightarrow\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,k}).
+\]
+By construction, \(\Sp^{\IndCoh}_{K\to k}\) is \(\QCoh(\LS^{\restr}_{\breve G,k})\)-linear, commutes with global Hecke functors and with spectral Eisenstein series, and is compatible with the coarse functors in the sense that
+\[
+\mathsf L^{\restr}_{G,\coarse}\ccomp (\mathsf L^{\restr}_{G,k})^{-1}\ccomp\Sp^{\IndCoh}_{K\to k}
+\;\simeq\;
+\Sp^{\QCoh}_{K\to k}\ccomp\mathsf L^{\restr}_{G,\coarse}\ccomp (\mathsf L^{\restr}_{G,K})^{-1}.
+\]
+
+(3) Essential surjectivity. Since \(\Sp_{K\to k}\) is essentially surjective and \(\mathsf L^{\restr}_{G,(-)}\) are equivalences, their conjugate \(\Sp^{\IndCoh}_{K\to k}\) is essentially surjective. Explicitly, for any \(\cF_k\in\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,k})\), pick \(\cC_k\in\Shv_{\Nilp}(\Bun_{G,k})\) with \(\mathsf L^{\restr}_{G,k}(\cC_k)\simeq\cF_k\). Choose \(\cC_K\in\Shv_{\Nilp}(\Bun_{G,K})\) such that \(\Sp_{K\to k}(\cC_K)\simeq\cC_k\). Then
+\[
+\begin{aligned}
+\cF_K\ &:=\ \mathsf L^{\restr}_{G,K}(\cC_K)\in\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,K}),\\
+\text{and }\quad \Sp^{\IndCoh}_{K\to k}(\cF_K)
+&\;\simeq\;\mathsf L^{\restr}_{G,k}(\Sp_{K\to k}(\cC_K))
+\;\simeq\;\mathsf L^{\restr}_{G,k}(\cC_k)
+\;\simeq\;\cF_k.\qedhere
+\end{aligned}
+\]
+\end{proof}

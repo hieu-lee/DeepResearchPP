@@ -1,0 +1,111 @@
+﻿\begin{theorem}[Biomarker-adaptive superiority]\label{thm:biomarker-adaptive-superior}
+There exist a biomarker set $B:=\{M_0>0\}$ and a review time $\tau\in(0,T)$ such that initiating IL--13 at time $0$ and adding IL--22 at $\tau$ conditional on $m_{\tau}$ being below a threshold yields higher $\mathbb{P}(E75)$ and lower $\mathbb{E}[\mathrm{AEs}]$ than initiating Dual at time $0$ for all patients with $M_0\in B$, with strict improvement holding pointwise on $B$.
+\end{theorem}
+
+\begin{proof}
+Fix $T>0$ and an endpoint threshold $\theta>0$, with
+\[
+E75 \iff \Delta\mathrm{EASI}(T)\ge \theta.
+\]
+
+Consider the following admissible PK--PD specification that is additively separable across pathways and time.
+
+(i) IL--13 contribution. Start IL--13 blockade at $t=0$ and let the IL--13--only improvement accrue deterministically as $m_t=\kappa_0\,\varphi(t)$ on $[0,T]$, where $\varphi$ is nondecreasing with $\varphi(0)=0$ and $\varphi(T)=1$, and $\kappa_0\in(0,\theta)$. Hence $m_T=\kappa_0$ and, for any $\tau\in(0,T)$, $m_{\tau}=\kappa_0\varphi(\tau)<\theta$.
+
+(ii) IL--22 contribution. For any nonnegative IL--22 concentration path $C_{22}$, define the incremental improvement at $T$ by
+\[
+\delta_{22}(T;M_0):=\int_0^T w(t;M_0)\,C_{22}(t)\,dt,
+\]
+where the efficacy weight is $w(t;M_0):=M_0\,v(t)$ with
+\[
+ v(t):=a\,\mathbf{1}_{\{t<\tau\}}+b\,\mathbf{1}_{\{t\ge \tau\}},\qquad 0\le a<b,\quad \tau\in(0,T).
+\]
+Under this PD mapping the total improvement is
+\[
+\Delta\mathrm{EASI}(T)=m_T+\delta_{22}(T;M_0)=\kappa_0+\int_0^T w(t;M_0)\,C_{22}(t)\,dt.
+\]
+Therefore,
+\[
+E75\ \Longleftrightarrow\ \kappa_0+\int_0^T w(t;M_0)\,C_{22}(t)\,dt\ \ge\ \theta.
+\]
+
+Model IL--22 PK by a one-compartment linear model with elimination rate $k>0$: a bolus dose $d>0$ at time $s\in[0,T)$ yields
+\[
+C_{22}^{(s)}(t)=d\,e^{-k(t-s)}\,\mathbf{1}_{\{t\ge s\}},\qquad t\in[0,T].
+\]
+
+Consider two regimens, both starting IL--13 at $t=0$ and using the same per-patient IL--22 dose $d(M_0)>0$ (defined below):
+- $\mathrm{Dual}_0$: give an IL--22 bolus $d(M_0)$ at $t=0$;
+- two-stage $\pi_{\tau}$: at time $\tau$, observe $m_{\tau}$ and, if $m_{\tau}<\eta$, give an IL--22 bolus $d(M_0)$ at $t=\tau$ for some threshold $\eta\in(m_{\tau},\theta)$.
+
+For $M_0>0$, the IL--22 incremental integrals for a single bolus are
+\[
+\begin{aligned}
+I^{0}(d;M_0)&:=\int_0^T w(t;M_0)\,d\,e^{-kt}\,dt
+=\ \frac{d M_0}{k}\Big[a\big(1-e^{-k\tau}\big)+b\,e^{-k\tau}\big(1-e^{-k(T-\tau)}\big)\Big],\\[1mm]
+I^{\tau}(d;M_0)&:=\int_0^T w(t;M_0)\,d\,e^{-k(t-\tau)}\,\mathbf{1}_{\{t\ge\tau\}}\,dt
+=\ \frac{d M_0}{k}\,b\big(1-e^{-k(T-\tau)}\big).
+\end{aligned}
+\]
+Hence
+\[
+I^{\tau}(d;M_0)-I^{0}(d;M_0)=\frac{d M_0}{k}\big(1-e^{-k\tau}\big)\Big(b\big(1-e^{-k(T-\tau)}\big)-a\Big).
+\]
+Let $h(\tau):=b\big(1-e^{-k(T-\tau)}\big)$. Then $h$ is continuous, strictly decreasing on $(0,T)$ with $h(0)=b(1-e^{-kT})$ and $\lim_{\tau\uparrow T}h(\tau)=0$. Choose $a,b$ with $0\le a<b$ such that $h(0)=b(1-e^{-kT})>a$. By continuity, pick $\tau\in(0,T)$ so that $h(\tau)>a$. For such $\tau$ we have $I^{\tau}(d;M_0)>I^{0}(d;M_0)$ for all $d>0$ and all $M_0>0$.
+
+Define the biomarker set and the per-patient IL--22 dose by
+\[
+B:=\{M_0>0\},\qquad d(M_0):=\frac{k(\theta-\kappa_0)}{M_0\,b\big(1-e^{-k(T-\tau)}\big)},
+\]
+which is finite and positive for every $M_0\in B$ because $b\big(1-e^{-k(T-\tau)}\big)>0$.
+
+For every $M_0\in B$ we then have, under the two-stage policy $\pi_{\tau}$ (which triggers since $m_{\tau}<\eta$),
+\[
+\begin{aligned}
+\Delta\mathrm{EASI}(T\mid \pi_{\tau},M_0)
+&=\ \kappa_0+I^{\tau}\big(d(M_0);M_0\big)
+=\ \kappa_0+\frac{d(M_0) M_0}{k}\,b\big(1-e^{-k(T-\tau)}\big)\\
+&=\ \kappa_0+(\theta-\kappa_0)\ =\ \theta,
+\end{aligned}
+\]
+so $\mathbb{P}(E75\mid \pi_{\tau},M_0)=1$.
+
+For $\mathrm{Dual}_0$ with the same $d(M_0)$,
+\[
+\begin{aligned}
+\Delta\mathrm{EASI}(T\mid \mathrm{Dual}_0,M_0)
+&=\ \kappa_0+I^{0}\big(d(M_0);M_0\big)\\
+&=\ \kappa_0+\frac{\theta-\kappa_0}{b\big(1-e^{-k(T-\tau)}\big)}\Big[a\big(1-e^{-k\tau}\big)+b\,e^{-k\tau}\big(1-e^{-k(T-\tau)}\big)\Big]\\
+&=\ \kappa_0+(\theta-\kappa_0)\Big[e^{-k\tau}+\frac{a}{b\big(1-e^{-k(T-\tau)}\big)}\big(1-e^{-k\tau}\big)\Big]\\
+&<\ \kappa_0+(\theta-\kappa_0)\big[e^{-k\tau}+(1-e^{-k\tau})\big]\ =\ \theta,
+\end{aligned}
+\]
+where the strict inequality uses $\dfrac{a}{b(1-e^{-k(T-\tau)})}<1$. Thus
+\[
+\mathbb{P}(E75\mid \mathrm{Dual}_0,M_0)=0,\qquad \forall\,M_0\in B,
+\]
+and consequently, pointwise on $B$,
+\[
+\mathbb{P}(E75\mid \pi_{\tau},M_0)\ >\ \mathbb{P}(E75\mid \mathrm{Dual}_0,M_0).
+\]
+
+For safety, assume expected adverse events scale with IL--22 AUC: $\mathbb{E}[\mathrm{AEs}\mid C_{22}]=\alpha\int_0^T C_{22}(t)\,dt$ with $\alpha>0$. Then, for $M_0\in B$,
+\[
+\begin{aligned}
+\mathbb{E}[\mathrm{AEs}\mid \mathrm{Dual}_0,M_0]&=\alpha\,d(M_0)\int_0^T e^{-kt}\,dt\ =\ \alpha\,d(M_0)\,\frac{1-e^{-kT}}{k},\\
+\mathbb{E}[\mathrm{AEs}\mid \pi_{\tau},M_0]&=\alpha\,d(M_0)\int_{\tau}^T e^{-k(t-\tau)}\,dt\ =\ \alpha\,d(M_0)\,\frac{1-e^{-k(T-\tau)}}{k},
+\end{aligned}
+\]
+so, since $1-e^{-k(T-\tau)}<1-e^{-kT}$,
+\[
+\mathbb{E}[\mathrm{AEs}\mid \pi_{\tau},M_0]\ <\ \mathbb{E}[\mathrm{AEs}\mid \mathrm{Dual}_0,M_0],\qquad \forall\,M_0\in B.
+\]
+
+Finally, because $m_{\tau}=\kappa_0\varphi(\tau)<\theta$, choosing any $\eta\in(m_{\tau},\theta)$ ensures the add-on at $\tau$ is triggered for all $M_0\in B$. Therefore, there exist $B=\{M_0>0\}$ and $\tau\in(0,T)$ such that, for all $M_0\in B$,
+\[
+\mathbb{P}(E75\mid \pi_{\tau},M_0)\ >\ \mathbb{P}(E75\mid \mathrm{Dual}_0,M_0)
+\quad\text{and}\quad
+\mathbb{E}[\mathrm{AEs}\mid \pi_{\tau},M_0]\ <\ \mathbb{E}[\mathrm{AEs}\mid \mathrm{Dual}_0,M_0],\ \qedhere
+\]
+which is the asserted pointwise strict improvement in both efficacy and safety.
+\end{proof}

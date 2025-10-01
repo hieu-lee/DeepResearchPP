@@ -1,0 +1,24 @@
+﻿\begin{proposition}\label{prop-no-eventual-positivity}
+Define
+\[
+\Delta_{22}(M_0):=\mathbb{E}\!\left[\Delta\mathrm{EASI}\,\middle|\,\text{dual(IL-13+IL-22)},\, M_0\right]-\mathbb{E}\!\left[\Delta\mathrm{EASI}\,\middle|\,\text{IL-13 only},\, M_0\right].
+\]
+There exist admissible choices of these conditional expectations (as functions of $M_0$) such that, for every $M_1$, there exist infinitely many $M_0\ge M_1$ with $\Delta_{22}(M_0)<0$ and $\tfrac{\partial}{\partial M_0}\Delta_{22}(M_0)\le 0$. In particular, one cannot in general guarantee the existence of $M_1$ such that $\Delta_{22}(M_0)\ge 0$ for all $M_0\ge M_1$ (hence, a fortiori, cannot guarantee eventual strict increase).
+\end{proposition}
+
+\begin{proof}
+Define the conditional mean improvements (deterministic given $M_0$) by
+\[
+\mathbb{E}\!\left[\Delta\mathrm{EASI}\,\middle|\, \text{dual(IL-13+IL-22)},\, M_0\right]\equiv 0,\qquad
+\mathbb{E}\!\left[\Delta\mathrm{EASI}\,\middle|\, \text{IL-13 only},\, M_0\right]\equiv -\sin M_0.
+\]
+Then
+\[
+\Delta_{22}(M_0)=\sin M_0,\qquad \frac{\partial}{\partial M_0}\Delta_{22}(M_0)=\cos M_0.
+\]
+For any $M_1$, consider the sequence $M_0^{(k)}:=\tfrac{5\pi}{4}+2\pi k$ for $k\in\mathbb{N}$. For all sufficiently large $k$, $M_0^{(k)}\ge M_1$. At each such point,
+\[
+\Delta_{22}\bigl(M_0^{(k)}\bigr)=\sin\!\bigl(\tfrac{5\pi}{4}+2\pi k\bigr)=-\tfrac{\sqrt{2}}{2}<0,\qquad
+\frac{\partial}{\partial M_0}\Delta_{22}\bigl(M_0^{(k)}\bigr)=\cos\!\bigl(\tfrac{5\pi}{4}+2\pi k\bigr)=-\tfrac{\sqrt{2}}{2}\le 0.\qedhere
+\]
+\end{proof}

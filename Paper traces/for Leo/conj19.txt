@@ -1,0 +1,9 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $(\sigma_n)_{n\ge1}$ be the increasing sequence of SG cyclics (i.e., cyclic $c$ with $2c+1$ cyclic).
+\end{definition}
+\bigskip
+\textbf{Conjecture (Ishikawa analog for SG cyclics).}\ For all $n>2$,
+\[
+\sigma_n+\sigma_{n+1}\ >\ \sigma_{n+2},
+\]
+with $\sigma_1+\sigma_2=\sigma_3=3$ and $\sigma_2+\sigma_3=\sigma_4=5$ for $n=1,2$.

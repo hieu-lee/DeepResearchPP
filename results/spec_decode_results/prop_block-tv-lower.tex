@@ -1,0 +1,50 @@
+\begin{proposition}[Block full-acceptance lower bound via additive TVs]\label{prop:block-tv-lower}
+For $K$-block draft--verify with longest-prefix verification and fixed proposal conditionals $p_{n:n+K-1}$, let
+\[
+\pi_{n+i} := \operatorname{TV}\big(p_{n+i}(\cdot\mid X_{1:n+i-1}),\, q_{n+i}(\cdot\mid X_{1:n+i-1})\big),\qquad i=0,\dots,K-1.
+\]
+Then the full-acceptance probability satisfies the pathwise inequality
+\[
+\prod_{i=0}^{K-1}\bigl(1-\pi_{n+i}\bigr)\;\ge\; 1-\sum_{i=0}^{K-1}\pi_{n+i}.
+\]
+Averaging over prefixes yields the unconditional bound
+\[
+\mathbb{P}\{A^{(K)}=K\}\;\ge\;1-\sum_{i=0}^{K-1}\mathbb{E}\big[\operatorname{TV}(p_{n+i},q_{n+i})\big].
+\]
+\end{proposition}
+
+\begin{proof}
+Fix a block starting at position $n$ of length $K$, and the longest-prefix verifier with proposal conditionals $(p_{n},\dots,p_{n+K-1})$. For each $i\in\{0,\dots,K-1\}$ define the prefix-measurable total-variation gap
+\[
+\pi_{n+i} \,=\, \operatorname{TV}\big(p_{n+i}(\cdot\mid X_{1:n+i-1}),\, q_{n+i}(\cdot\mid X_{1:n+i-1})\big)\in[0,1].
+\]
+By the maximal coupling lemma, at step $n+i$ and conditional on the event that the first $i$ tokens in the block have been accepted (so both models condition on the same realized prefix $X_{1:n+i-1}$), there exists a coupling such that
+\[
+\mathbb{P}\{\text{token }n+i\text{ is accepted}\mid X_{1:n+i-1},\, A^{(i)}=i\}\;=\;1-\pi_{n+i}.
+\]
+Construct the joint coupling sequentially via the standard overlap--residual procedure, using fresh independent auxiliary randomness at each step. Then, by the chain rule of conditional probabilities,
+\[
+\mathbb{P}\{A^{(K)}=K\mid X_{1:n+K-1}\}\;=\;\prod_{i=0}^{K-1}\bigl(1-\pi_{n+i}\bigr).
+\]
+We now use the elementary inequality: for any $a_0,\dots,a_{K-1}\in[0,1]$,
+\[
+\prod_{i=0}^{K-1}(1-a_i)\;\ge\;1-\sum_{i=0}^{K-1}a_i.
+\]
+A short induction proves it: for $K=1$ it is equality; if it holds for $K-1$, then
+\[
+\prod_{i=0}^{K-1}(1-a_i) - \Bigl(1-\sum_{i=0}^{K-1}a_i\Bigr)
+= \Bigl[\prod_{i=0}^{K-2}(1-a_i) - \Bigl(1-\sum_{i=0}^{K-2}a_i\Bigr)\Bigr] 
+\; +\; a_{K-1}\Bigl(1-\prod_{i=0}^{K-2}(1-a_i)\Bigr)\;\ge\;0.
+\]
+Applying this pathwise with $a_i=\pi_{n+i}$ yields
+\[
+\mathbb{P}\{A^{(K)}=K\mid X_{1:n+K-1}\}\;=\;\prod_{i=0}^{K-1}(1-\pi_{n+i})\;\ge\;1-\sum_{i=0}^{K-1}\pi_{n+i}.
+\]
+Finally, taking expectations over the (target) prefix randomness and the internal coins gives
+\[
+\mathbb{P}\{A^{(K)}=K\}\;=\;\mathbb{E}\Bigl[\prod_{i=0}^{K-1}(1-\pi_{n+i})\Bigr]
+\;\ge\;\mathbb{E}\Bigl[1-\sum\limits_{i=0}^{K-1}\pi_{n+i}\Bigr]
+\;=\;1-\sum_{i=0}^{K-1}\mathbb{E}\big[\operatorname{TV}(p_{n+i},q_{n+i})\big],\qquad \qedhere
+\]
+where $\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})]$ abbreviates $\mathbb{E}_{X_{1:n+i-1}\sim q}\big[\operatorname{TV}(p_{n+i}(\cdot\mid X_{1:n+i-1}),q_{n+i}(\cdot\mid X_{1:n+i-1}))\big]$.
+\end{proof}

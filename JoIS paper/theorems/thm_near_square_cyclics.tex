@@ -1,0 +1,62 @@
+\begin{theorem}[Near-square analog for cyclics (resolves Conj.~14 of \cite{Cohen2025})]\label{thm:near_square_cyclics}
+Infinitely many \(n\in\mathbb{N}\) satisfy \(n^2+1\in\mathcal{C}\).
+\end{theorem}
+
+\begin{proof}
+If $n$ is odd with $n\ge 3$, then $n^2+1$ is even $>2$, hence $\varphi(n^2+1)$ is even and $2\mid\gcd(n^2+1,\varphi(n^2+1))$, so $n^2+1\notin\mathcal C$. The exceptional case $n=1$ gives $n^2+1=2\in\mathcal C$. Thus it suffices to produce infinitely many even $n$ with $n^2+1\in\mathcal C$.
+
+Write $n=2k$ and set $M_k:=4k^2+1$. Every odd prime divisor $p\mid M_k$ satisfies $p\equiv1\pmod4$ (Euler's criterion), and $M_k$ cannot be a perfect square because $x^2+1=y^2$ has no solutions with $x\ge1$. Throughout we use Szele's characterization of cyclic integers \cite{Szele1947}.
+
+We use two inputs.
+
+1) Half-dimensional sieve (with mild roughness). Let
+\[
+\begin{aligned}
+\mathcal K(X;y)
+ &:= \{\,1\le k\le X:\; M_k \text{ has at most two prime factors (counted with multiplicity)}\\
+ &\qquad \text{and } P^-(M_k)>y\,\}.
+\end{aligned}
+\]
+By Iwaniec's weighted half-dimensional sieve for a single quadratic polynomial $4k^2+1$, there exist absolute constants $\delta>0$, $A>0$ and $c_1>0$ such that for all sufficiently large $X$ and all $2\le y\le X^{\delta}$ one has
+$$
+\#\mathcal K(X;y)\ \ge\ \frac{c_1}{(\log X)^{A}\,\log y}\,X.
+$$ (See e.g. Iwaniec \cite{Iwaniec1978} and the weighted half-dimensional sieve as presented in Friedlander--Iwaniec \cite{FI2010}.)
+
+2) Congruential detection of the cyclicity obstruction for semiprimes. If $M_k=pq$ with primes $p\le q$, then
+$$
+\gcd(M_k,\varphi(M_k))=\gcd\bigl(pq,(p-1)(q-1)\bigr)=1
+\iff p\nmid(q-1)
+$$ (the condition $q\nmid(p-1)$ is automatic since $q>p$). Because $M_k\equiv pq\pmod{p^2}$, the condition $p\mid(q-1)$ is equivalent to
+$$
+M_k\equiv p\pmod{p^2}.
+$$
+Fix an odd prime $p\equiv1\pmod4$. The congruence $4k^2\equiv-1\pmod p$ has exactly two solutions $k\equiv\pm\gamma\pmod p$. Writing $k\equiv\gamma+\ell p\pmod{p^2}$ and expanding,
+$$
+4k^2+1\equiv 4\gamma^2+1+8\gamma\ell p\pmod{p^2}.
+$$
+Since $4\gamma^2\equiv-1\pmod p$, write $4\gamma^2+1\equiv sp\pmod{p^2}$ for some $s\in\mathbb Z/p\mathbb Z$, and obtain
+$$
+4k^2+1\equiv p\,(s+8\gamma\ell)\pmod{p^2}.
+$$
+As $\ell$ runs over $\mathbb Z/p\mathbb Z$, the residue $s+8\gamma\ell$ runs over all classes mod $p$, so exactly one lift from $\gamma$ (and likewise one from $-\gamma$) yields $4k^2+1\equiv p\pmod{p^2}$. Hence, for each such $p$, there are precisely two residue classes $\bmod\,p^2$ of $k$ with $M_k\equiv p\pmod{p^2}$. Consequently, for $X\ge1$ the number of $k\le X$ with $M_k\equiv p\pmod{p^2}$ is at most $2\lfloor X/p^2\rfloor\le 2X/p^2$.
+
+We now complete the argument. Fix large $X$ and choose $y=(\log X)^B$ with $B>A+2$. Consider $\mathcal K(X;y)$. For any $k\in\mathcal K(X;y)$ there are two possibilities.
+
+- If $M_k$ is prime, then $M_k\in\mathcal C$ since $\gcd(M_k,\varphi(M_k))=\gcd(M_k,M_k-1)=1$.
+
+- If $M_k=pq$ with primes $p\le q$, then, because $M_k$ is not a square, $p<q$ and by definition of $\mathcal K(X;y)$ the least prime factor satisfies $p>y$. The obstruction to cyclicity is exactly $p\mid(q-1)$, which, by (2), is equivalent to $M_k\equiv p\pmod{p^2}$. For a fixed $p>y$ this occurs for at most $2X/p^2$ integers $k\le X$. Summing over all primes $p\equiv1\pmod4$ with $p>y$ gives that the number of obstructed $k\le X$ is at most
+$$
+\sum_{\substack{p>y\ p\equiv1\ (4)}} \frac{2X}{p^2}\ \le\ 2X\sum_{p>y}\frac{1}{p^2}\ \ll\ \frac{X}{y}\ =\ \frac{X}{(\log X)^B}.
+$$
+By the sieve lower bound,
+$$
+\#\mathcal K(X;y)\ \ge\ \frac{c_1}{(\log X)^{A}\,\log y}\,X\ =\ \frac{c_1}{B\,(\log X)^{A}\,\log\log X}\,X.
+$$
+Since $B>A+2$, we have $X/(\log X)^B=o\!\left(X/\bigl((\log X)^A\log\log X\bigr)\right)$. Thus, for all sufficiently large $X$,
+$$
+\#\{1\le k\le X:\ k\in\mathcal K(X;y)\text{ and }M_k\in\mathcal C\}
+\ \ge\ \#\mathcal K(X;y)\ -\ \#\{\text{obstructed }k\le X\}
+\ >\ 0.
+$$
+Therefore, for arbitrarily large $X$ there exists $1\le k\le X$ such that $M_k=4k^2+1\in\mathcal C$. Hence there are infinitely many such $k$, and with $n=2k$ we obtain infinitely many even integers $n$ for which $n^2+1\in\mathcal C$. This proves the claim. 
+\end{proof}

@@ -1,0 +1,30 @@
+\begin{theorem}[Firoozbakht analog for cyclics 4 (resolves Conj.~42 of \cite{Cohen2025})]\label{thm:firoozbakht_cyclics_4}
+For \(k\in\{0\}\cup\mathbb{N}\), define \(A_{\mathcal{C}}(k):=\max_{n\ge1} c_n^{1/(n+k)}\). Then \(A_{\mathcal{C}}(k)\) strictly decreases with k (empirical values in paper).
+\end{theorem}
+
+\begin{proof}
+1) Since every prime is cyclic (Szele \cite{Szele1947}), $\mathcal P\subset\mathcal C$. Hence for each $n\ge1$ we have
+$$C(p_n)\ge \#\{1\}\,+\,\#\{\text{primes}\le p_n\}=1+n.$$
+It follows that $c_{n+1}\le p_n$, and consequently $c_n\le p_n$ for all $n\ge1$.
+
+2) Fix $k\ge0$ and set $a_n(k):=c_n^{1/(n+k)}$. Then $a_n(k)\le p_n^{1/(n+k)}$. By the Rosser--Schoenfeld bound \cite{RosserSchoenfeld1962}, for $n\ge6$,
+$$p_n< n(\log n+\log\log n),$$
+so
+$$\log a_n(k)\le \frac{\log p_n}{n+k}\le \frac{\log\bigl(n(\log n+\log\log n)\bigr)}{n+k}\xrightarrow[n\to\infty]{}0.$$
+Thus $a_n(k)\to1$ as $n\to\infty$.
+
+Moreover, $a_2(k)=2^{1/(k+2)}>1$. Since $a_n(k)\to1$, there exists $N=N(k)\ge6$ such that for all $n\ge N$ we have $a_n(k)<a_2(k)$. Therefore
+$$A_{\mathcal C}(k)=\max_{1\le n<N} a_n(k),$$
+so the maximum is attained (by some $n_k\ge2$) and $A_{\mathcal C}(k)>1$.
+
+3) For $n\ge2$ and any $k\ge0$ we have the strict pointwise decrease
+$$a_n(k+1)=c_n^{1/(n+k+1)}<c_n^{1/(n+k)}=a_n(k),$$
+while $a_1(k)=1$ for all $k$. Let $n_k\ge2$ realize the maximum in step 2, so $A_{\mathcal C}(k)=a_{n_k}(k)$. Then
+$$a_{n_k}(k+1)<a_{n_k}(k)=A_{\mathcal C}(k),$$
+and for every $n$,
+$$a_n(k+1)\le a_n(k)\le A_{\mathcal C}(k),$$
+with strict inequality when $a_n(k)=A_{\mathcal C}(k)$ (in particular for $n=n_k$). Hence
+$$A_{\mathcal C}(k+1)=\max_{n\ge1} a_n(k+1)<A_{\mathcal C}(k).$$
+
+Therefore $A_{\mathcal C}(k)$ strictly decreases with $k$. 
+\end{proof}

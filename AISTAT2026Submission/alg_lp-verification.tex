@@ -1,0 +1,21 @@
+\begin{algorithm}[t]
+\caption{LP Verification (Longest-Prefix) with Maximal-Agreement Coupling}
+\label{alg:lp-verification}
+\begin{algorithmic}[1]
+\Require Prefix $h=x_{1:n-1}$, block length $K$, proposal conditionals $\{p_{n+i-1}(\cdot\mid \cdot)\}_{i=1}^K$, target conditionals $\{q_{n+i-1}(\cdot\mid \cdot)\}_{i=1}^K$
+\State Draft a proposal block $Y_{1:K}$ sequentially: for $i=1$ to $K$, sample $Y_i\sim p_{n+i-1}(\cdot\mid h, Y_{1:i-1})$.
+\State $L\gets 0$ \Comment accepted-prefix length
+\For{$i=1$ to $K$}
+  \State $w\gets (h, Y_{1:i-1})$ \Comment current verified prefix
+  \State Draw $(X_i,\,Y_i)$ by a \emph{maximal-agreement coupling} of $q_{n+i-1}(\cdot\mid w)$ and $p_{n+i-1}(\cdot\mid w)$
+  \If{$X_i=Y_i$}
+     \State $L\gets i$ \Comment extend accepted prefix
+  \Else
+     \State \textbf{break}
+  \EndIf
+\EndFor
+\State \textbf{Commit} $Y_{1:L}$ as accepted tokens.
+\State \textbf{If} $L<K$ \textbf{then} continue exact sampling from the target $q$ starting at position $n+L$ to produce the remaining outputs.
+\end{algorithmic}
+\end{algorithm}
+

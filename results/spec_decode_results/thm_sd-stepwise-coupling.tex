@@ -1,0 +1,68 @@
+\begin{theorem}[Increasing-order optimality and stepwise characterization of SD]\label{thm:sd-stepwise-coupling}
+Fix a finite horizon $T$. Among all unbiased token-level draft--verify algorithms that use exactly one proposal per position with the same proposal conditionals $(p_n)$, standard SD minimizes $\mathbb E[\varphi(N_{\mathrm{rej}})]$ for every function $\varphi$ that is nondecreasing on $\{0,1,\dots,T\}$. Equivalently, $N_{\mathrm{rej}}^{\mathrm{SD}}$ is minimal in the increasing (stochastic) order among all such algorithms. In particular, SD minimizes the mean, the second moment, and all exponential moments of $N_{\mathrm{rej}}$; consequently, within any subclass of algorithms having the same mean, it minimizes the variance. Moreover, any algorithm that is optimal for $\varphi(t)=t$ (and hence any algorithm that is optimal for all such nondecreasing $\varphi$) must, at every step and every prefix, use a maximal-agreement coupling between $q_n(\cdot\mid x)$ and $p_n(\cdot\mid x)$, i.e., it must achieve $\mathbb P\{X_n=Y_n\mid x\}=1-\operatorname{TV}(q_n(\cdot\mid x),p_n(\cdot\mid x))$.
+\end{theorem}
+
+\begin{proof}
+Fix $T\in\mathbb N$ and a finite alphabet $\mathcal V$. Let $q$ be the target autoregressive (AR) model with conditionals $q_n(\cdot\mid x_{1:n-1})$ and let $p$ denote the draft conditionals $p_n(\cdot\mid x_{1:n-1})$. Consider any unbiased token-level draft--verify algorithm $A$ that uses exactly one proposal per position and the given $(p_n)$; unbiasedness means the output law is $q$. At step $n$, after the accepted prefix $X_{1:n-1}=x_{1:n-1}$, the algorithm draws $Y_n\sim p_n(\cdot\mid x_{1:n-1})$ and outputs $X_n\in\mathcal V$ with marginal $q_n(\cdot\mid x_{1:n-1})$. Define $R_n\equiv\mathbf 1\{X_n\ne Y_n\}$ and $N_{\mathrm{rej}}\equiv\sum_{n=1}^T R_n$.
+
+\paragraph{Step 1 (Reduction to couplings at each step).}
+For each $n$ and prefix $x\equiv x_{1:n-1}$, the pair $(X_n,Y_n)$ under $A$ induces a coupling $K_n^A(\cdot,\cdot\mid x)$ of $q_n(\cdot\mid x)$ and $p_n(\cdot\mid x)$. Conversely, any family of couplings $K_n(\cdot,\cdot\mid x)$ can be realized by first sampling $Y_n\sim p_n(\cdot\mid x)$ and then $X_n\sim K_n(\cdot\mid Y_n,x)$, which preserves $X_n\sim q_n(\cdot\mid x)$. Since unbiasedness enforces $X_{1:n-1}\sim q$, expectations at step $n$ are taken with respect to $x\sim q$ for every unbiased algorithm.
+
+\paragraph{Step 2 (Dynamic program).}
+Let $\varphi$ be nondecreasing on $\{0,1,\dots,T\}$. For $n\in\{1,\dots,T+1\}$, $x\in\mathcal V^{n-1}$ and $s\in\{0,1,\dots,n-1\}$ define
+\[
+W_n(x,s)\equiv\inf_{\text{valid one-proposal algorithms from step }n}\ \mathbb E\big[\,\varphi\big(s+\textstyle\sum_{j=n}^T R_j\big)\,\big|\,X_{1:n-1}=x\big].
+\]
+Set $W_{T+1}(x,s)=\varphi(s)$ for all $x,s$. For $n\le T$ and any coupling $K$ of $q_n(\cdot\mid x)$ and $p_n(\cdot\mid x)$ we have
+\[
+\mathbb E_{(u,v)\sim K}\big[\,W_{n+1}(xu,\ s+\mathbf 1\{u\ne v\})\,\big]
+= \mathbb E_{u\sim q_n(\cdot\mid x)}\big[W_{n+1}(xu,s)\big]
++ \mathbb E_{(u,v)\sim K}\big[\Delta_{n+1}(xu;s)\,\mathbf 1\{u\ne v\}\big],
+\]
+where $\Delta_{n+1}(xu;s)\equiv W_{n+1}(xu,s+1)-W_{n+1}(xu,s)\ge 0$, by backward induction from the assumption that $\varphi$ is nondecreasing on $\{0,\dots,T\}$. Hence, for fixed $(x,s)$, minimizing the Bellman expression is equivalent to maximizing
+\[
+\sum_{u\in\mathcal V} \Delta_{n+1}(xu;s)\, K(u,u)\quad\text{over all couplings $K$ of $q_n(\cdot\mid x)$ and $p_n(\cdot\mid x)$}.
+\]
+
+\paragraph{Step 3 (Optimal stepwise coupling via a tight upper bound and explicit attainment).}
+Fix $(x,s)$ and abbreviate $q\equiv q_n(\cdot\mid x)$, $p\equiv p_n(\cdot\mid x)$, and $\Delta(u)\equiv \Delta_{n+1}(xu;s)\ge 0$. For any coupling $K$ of $(q,p)$, each diagonal entry satisfies
+\[
+K(u,u)\le \min\{q(u),p(u)\}\qquad(\forall u\in\mathcal V),
+\]
+so, using nonnegativity of the weights,
+\[
+\sum_{u}\Delta(u)\,K(u,u)\ \le\ \sum_{u}\Delta(u)\,\min\{q(u),p(u)\}.\tag{$*$}
+\]
+We claim the upper bound $(*)$ is attained. Define the overlap and residuals
+\[
+\rho(u)\equiv \min\{q(u),p(u)\},\qquad r(u)\equiv [\,q(u)-p(u)\,]_+,\qquad s(u)\equiv [\,p(u)-q(u)\,]_+.
+\]
+Then $\sum_u r(u)=\sum_u s(u)=\operatorname{TV}(q,p)$ and $r(u)\,s(u)=0$ for every $u$. Choose any matrix $L$ supported on $\{(i,j): r(i)>0,\ s(j)>0\}$ with row sums $r(i)$ and column sums $s(j)$. Now define a coupling $K^*$ by
+\[
+K^*(u,u)=\rho(u)\quad(\forall u),\qquad K^*(i,j)=L(i,j)\ \text{ for }\ i\in\{r>0\},\ j\in\{s>0\},
+\]
+and $K^*(i,j)=0$ otherwise. Then $K^*$ has marginals $(q,p)$, achieves $K^*(u,u)=\min\{q(u),p(u)\}$ for all $u$, and hence attains equality in $(*)$. Consequently, for the Bellman step at $(x,s)$, any maximal-agreement coupling (one with $K(u,u)=\min\{q(u),p(u)\}$ for all $u$) is optimal. In particular, this coupling agrees with the standard token-level SD rule: with probability $\sum_u \min\{q(u),p(u)\}=1-\operatorname{TV}(q,p)$ it sets $X=Y$, and otherwise draws $X$ from the residual $[q-p]_+/\operatorname{TV}(q,p)$.
+
+\paragraph{Backward induction (sufficiency).}
+Since at every $(x,s)$ a maximal-agreement coupling is optimal for the Bellman step, applying it at each $n=1,\dots,T$ yields a globally optimal policy. Hence
+\[
+\mathbb E_{\mathrm{SD}}\big[\varphi(N_{\mathrm{rej}})\big]=\mathbb E\big[W_1(\emptyset,0)\big]\ \le\ \mathbb E_A\big[\varphi(N_{\mathrm{rej}})\big]
+\]
+for every unbiased one-proposal algorithm $A$ with proposal conditionals $(p_n)$. Equivalently, $N_{\mathrm{rej}}^{\mathrm{SD}}$ is minimal in the increasing (stochastic) order among all such algorithms.
+
+\paragraph{Necessity of maximal agreement for mean-optimality.}
+Take $\varphi(t)=t$. Then $\Delta_{n+1}(xu;s)\equiv 1$ for all states, so the Bellman step reduces to maximizing $\sum_u K(u,u)$ subject to $K(u,u)\le\min\{q(u),p(u)\}$, which forces $K(u,u)=\min\{q(u),p(u)\}$ for every $u$. Thus any algorithm that minimizes $\mathbb E[N_{\mathrm{rej}}]$ must, at every step and prefix, use a maximal-agreement coupling; in particular, any algorithm that is simultaneously optimal for all nondecreasing $\varphi$ coincides with SD on the agreement event and attains $\mathbb P\{X_n=Y_n\mid x\}=1-\operatorname{TV}(q_n(\cdot\mid x),p_n(\cdot\mid x))$ at each step.
+
+\paragraph{Consequences.}
+Because the inequality holds for every nondecreasing $\varphi$ on $\{0,\dots,T\}$:
+\begin{itemize}
+  \item With $\varphi(t)=t$, SD minimizes $\mathbb E[N_{\mathrm{rej}}]$ and attains the instance-dependent lower bound $\sum_{n=1}^T\mathbb E_{x\sim q}[\operatorname{TV}(p_n(\cdot\mid x),q_n(\cdot\mid x))]$.
+  \item With $\varphi(t)=t^2$, SD minimizes the second moment $\mathbb E[N_{\mathrm{rej}}^2]$. Consequently, within any class of unbiased algorithms having the same mean $\mathbb E[N_{\mathrm{rej}}]$, SD minimizes the variance.
+  \item With $\varphi(t)=e^{\lambda t}$ for $\lambda>0$, SD minimizes all exponential moments of $N_{\mathrm{rej}}$.
+\end{itemize}
+Thus, among all unbiased token-level draft--verify algorithms using exactly one proposal per position with the same conditionals $(p_n)$, standard SD minimizes $\mathbb E[\varphi(N_{\mathrm{rej}})]$ for every nondecreasing $\varphi$ on $\{0,\dots,T\}$, establishing increasing-order optimality and characterizing stepwise optimality via maximal-agreement couplings.\par\medskip
+To summarize the main inequality concisely,
+\[
+\mathbb E_{\mathrm{SD}}\big[\varphi(N_{\mathrm{rej}})\big]\ \le\ \mathbb E_A\big[\varphi(N_{\mathrm{rej}})\big]\quad\text{for all nondecreasing $\varphi:\{0,\dots,T\}\to\mathbb R$ and all admissible $A$.}\qedhere
+\]
+\end{proof}

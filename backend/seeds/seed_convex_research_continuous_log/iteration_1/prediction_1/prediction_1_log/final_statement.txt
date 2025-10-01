@@ -1,0 +1,1 @@
+Let L>0. For every stepsize $\eta\in(0,\tfrac{2}{L})$ there exist a one-dimensional convex $L$-smooth function $f$ and an initialization $x_0$ such that, for gradient descent $x_{n+1}=x_n-\eta f'(x_n)$ with $g_n:=f'(x_n)$, the forward differences increase at $n=0$: $\|g_0\|-\|g_1\|<\|g_1\|-\|g_2\|$.

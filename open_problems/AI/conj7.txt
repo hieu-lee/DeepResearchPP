@@ -1,0 +1,7 @@
+\begin{definition}
+Suppose a model’s capability decomposes into discrete \emph{quanta} $\{q_k\}_{k\ge1}$ with usage frequencies following a power law $p_k\propto k^{-(1+\alpha)}$.
+Let $n$ be the number of learned quanta and let the mean loss satisfy $L(n)-L_\infty\propto n^{-\alpha}$.
+\end{definition}
+
+\textbf{Conjecture (Quantization Hypothesis of Neural Scaling).}
+Power-law neural scaling of test loss with parameters/data/steps arises because scaling monotonically increases $n$ (the number of learned quanta), and the spectrum of quanta-use is heavy-tailed; hence $L\!\approx\!A N^{-\alpha_N},\ L\!\approx\!B D^{-\alpha_D}$ with exponents tied to the usage spectrum. (Open outside stylized settings.)

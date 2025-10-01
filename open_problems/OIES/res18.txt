@@ -1,0 +1,8 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $(c_n)_{n\ge1}$ enumerate the cyclics increasingly and $\gamma$ be the Euler–Mascheroni constant. Write $\log_3 n=\log\log\log n$ for $n>e^{e}$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Rosser analog for cyclics).}\ For all $n>1$,
+\[
+c_n\ >\ e^{\gamma}\,n\,\log_3 n.
+\]

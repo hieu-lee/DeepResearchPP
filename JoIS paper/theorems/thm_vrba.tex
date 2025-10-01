@@ -1,0 +1,51 @@
+\begin{theorem}[Vrba analog (resolves Conj.~60 of \cite{Cohen2025})]\label{thm:vrba}
+We have $\displaystyle \lim_{n\to\infty} \frac{c_n}{G_n}=e$.
+\end{theorem}
+
+\begin{proof}
+Let $C$ be the set of cyclic numbers and $C(x):=\#\{n\le x:n\in C\}$. Let $(c_n)_{n\ge1}$ be the increasing enumeration of $C$, and set
+\[
+ G_n:=\Big(\prod_{k=1}^n c_k\Big)^{1/n}.
+\]
+All logarithms are natural, and we write $L_3(x):=\log\log\log x$ for $x>e^e$.
+
+By Abel's summation (Riemann--Stieltjes integration by parts), for $x\ge e^e$,
+\[
+ \sum_{\substack{m\in C\ m\le x}} \log m 
+ = C(x)\log x - \int_{e^e}^x \frac{C(t)}{t}\,dt + O(1).
+\]
+Evaluating at $x=c_n$ and using $C(c_n)=n$, we obtain
+\[
+ \sum_{k=1}^n \log c_k 
+ = n\log c_n - \int_{e^e}^{c_n} \frac{C(t)}{t}\,dt + O(1).
+\]
+Dividing by $n$ gives
+\[
+ \log G_n = \log c_n - \frac1n\int_{e^e}^{c_n} \frac{C(t)}{t}\,dt + o(1),
+\]
+whence
+\[
+ \log\frac{c_n}{G_n} = \frac1n\int_{e^e}^{c_n} \frac{C(t)}{t}\,dt + o(1).
+\]
+Thus it suffices to show that
+\[
+ \frac1n\int_{e^e}^{c_n} \frac{C(t)}{t}\,dt \to 1.
+\]
+By Erd\H{o}s' asymptotic for cyclic numbers (see \cite{Pollack2022}) and \eqref{eq:Pollack},
+\[
+ C(x) \sim e^{-\gamma}\,\frac{x}{L_3(x)} \qquad (x\to\infty),
+\]
+with $L_3$ slowly varying. Hence for any $\varepsilon>0$, for all large $t$,
+\[
+ (1-\varepsilon)e^{-\gamma}\,\frac{t}{L_3(t)} \le C(t) \le (1+\varepsilon)e^{-\gamma}\,\frac{t}{L_3(t)}.
+\]
+Integrating and using de Bruijn's asymptotic $\int_{e^e}^x \!\frac{dt}{L_3(t)}\sim \frac{x}{L_3(x)}$ \cite{deBruijn1970} yields
+\[
+ \int_{e^e}^x \frac{C(t)}{t}\,dt \sim e^{-\gamma}\int_{e^e}^x \frac{dt}{L_3(t)} \sim e^{-\gamma}\,\frac{x}{L_3(x)} \sim C(x) \qquad (x\to\infty).
+\]
+Setting $x=c_n$ and recalling $C(c_n)=n$, we conclude
+\[
+ \int_{e^e}^{c_n} \frac{C(t)}{t}\,dt = n\,(1+o(1)).
+\]
+Therefore $\log(c_n/G_n)=1+o(1)$, and hence $\displaystyle \lim_{n\to\infty} \frac{c_n}{G_n} = e$.
+\end{proof}

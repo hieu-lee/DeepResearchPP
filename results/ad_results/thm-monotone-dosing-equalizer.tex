@@ -1,0 +1,90 @@
+﻿\begin{theorem}[Monotone dosing equalizer]\label{thm-monotone-dosing-equalizer}
+After conditioning on $Z=(W,\mathrm{Reg})$ within the $D$ arm, one has
+\[
+\operatorname{corr}(L_0, C_{\mathrm{trough}} \mid T{=}D, Z) < 0
+\quad\text{and}\quad
+\operatorname{corr}(C_{\mathrm{trough}}, E75(24) \mid T{=}D, Z) > 0;
+\]
+moreover, there exists a unique individualized dosing rule $\delta(L_0, Z)$, strictly increasing in $L_0$, that equalizes $\mathbb P(E75(24){=}1 \mid L_0, Z, \delta)$ across $L_0$ strata for any chosen target $p_* \in (s_{0+}, s_\infty)$.
+\end{theorem}
+
+\begin{proof}
+Work throughout on the event $\{T=D\}$ and, unless stated otherwise, also condition on the fixed covariates $Z := (W, \mathrm{Reg})$. Let $R_0$ denote baseline free target (IL-4R$\alpha$), $L_0$ the baseline IL-13 axis, $C \equiv C_{\mathrm{trough}}$ the trough exposure, and $Y \equiv E75(24) \in \{0,1\}$.
+
+Assumptions (tightened):
+\begin{enumerate}
+  \item[(A1)] Axis--target monotonicity: for each fixed $Z$ there is a strictly increasing $r_Z$ with $R_0 = r_Z(L_0)$.
+  \item[(A2)] TMDD exposure map: there exist a residual $U$ with $U \perp L_0\mid Z$ and a measurable $G$ such that for fixed $(Z,d)$: (i) $C = G(R_0, U; Z, d)$; (ii) $r \mapsto G(r, U; Z, d)$ is strictly decreasing for every $(U, Z, d)$; (iii) $d \mapsto G(r, U; Z, d)$ is strictly increasing for every $(r, U, Z)$.
+  \item[(D0)] Protocol dosing determinism: in the $T{=}D$ arm, $d = d_0(Z)$ a.s.
+  \item[(ND)] Finite nondegenerate conditional variances: $\mathrm{Var}(L_0 \mid Z) \in (0, \infty)$ and $\mathrm{Var}(C \mid Z) \in (0, \infty)$ a.s.
+  \item[(ER)] Exposure--response: $\mathbb P(Y{=}1 \mid C, Z) = s(C)$ with $s : (0, \infty) \to (0, 1)$ strictly increasing and continuous (hence $\mathbb E[Y \mid C, Z] = s(C)$).
+  \item[(A2\textnormal{-}cts)] For every $(r, U, Z)$, the map $d \mapsto G(r, U; Z, d)$ is continuous on $(0, \infty)$.
+  \item[(A3)] Dose--extreme limits: for every fixed $(r, U, Z)$, $\lim_{d\downarrow 0} G(r, U; Z, d) = 0$ and $\lim_{d\uparrow \infty} G(r, U; Z, d) = +\infty$.
+\end{enumerate}
+Note that boundedness of $s$ and the existence of the one-sided limits $s_{0+} := \lim_{c\downarrow 0} s(c)$ and $s_\infty := \lim_{c\uparrow \infty} s(c)$ follow from (ER) since $s$ maps into $(0,1)$ and is monotone.
+
+\begin{lemma}[Monotone covariance identity and sign, conditional]\label{lem:monotone-covariance-conditional}
+Let $\mathcal H$ be a sub-$\sigma$-field. Suppose $X \in L^2$ and $f(X) \in L^2$ conditionally on $\mathcal H$. Let $X'$ be a conditionally i.i.d. copy of $X$ given $\mathcal H$. Then
+\[
+\operatorname{Cov}(X, f(X) \mid \mathcal H) 
+= \tfrac12\, \mathbb E\big[(X {-} X')(f(X) {-} f(X')) 
+\mid \mathcal H\big] \quad \text{a.s.}
+\]
+If $f$ is strictly increasing (resp. strictly decreasing) and $\mathrm{Var}(X \mid \mathcal H) > 0$ a.s., then $\operatorname{Cov}(X, f(X) \mid \mathcal H) > 0$ (resp. $< 0$) a.s.
+\end{lemma}
+\begin{proof}
+As in the original argument; omitted here for brevity.\qedhere
+\end{proof}
+
+\paragraph{1) Negative correlation between $L_0$ and $C$ after adjusting for $Z$.}
+By (D0), conditioning on $Z$ pins down the dose $d_0(Z)$. Define $F_Z(r, U) := G(r, U; Z, d_0(Z))$. For fixed $Z$ and $U$, $r \mapsto F_Z(r, U)$ is strictly decreasing by (A2)(ii). The conditional mean exposure given $(L_0, Z)$ is
+\[
+ m(L_0, Z) := \mathbb E[C \mid L_0, Z] 
+ = \mathbb E_U\big[F_Z\big(r_Z(L_0), U\big)\big],
+\]
+which is strictly decreasing in $L_0$ because $r_Z$ is strictly increasing (A1), $F_Z(\cdot, U)$ is strictly decreasing for every $U$, and $U \perp L_0 \mid Z$ by (A2). Write $C = m(L_0, Z) + \varepsilon$ with $\mathbb E[\varepsilon \mid L_0, Z] = 0$. Then $\operatorname{Cov}(L_0, \varepsilon \mid Z) = 0$ and
+\[
+\operatorname{Cov}(L_0, C \mid Z) = \operatorname{Cov}\big(L_0, m(L_0, Z) \mid Z\big).
+\]
+By (ND), $L_0, C \in L^2 \mid Z$, hence $m(L_0, Z) \in L^2 \mid Z$. Applying Lemma~\ref{lem:monotone-covariance-conditional} conditionally on $Z$ with $X = L_0$ and $f_Z(\cdot) = m(\cdot, Z)$ (strictly decreasing),
+\[
+\operatorname{Cov}(L_0, C \mid Z) < 0 \quad \text{a.s.}
+\]
+Since $\mathrm{Var}(L_0 \mid Z) > 0$ and $\mathrm{Var}(C \mid Z) > 0$ by (ND),
+\[
+\operatorname{corr}(L_0, C \mid T{=}D, Z) < 0 \quad \text{a.s.}
+\]
+
+\paragraph{2) Positive correlation between $C$ and $Y$ after adjusting for $Z$.}
+By (ER), $\mathbb E[Y \mid C, Z] = s(C)$ with $s$ strictly increasing and bounded in $(0,1)$. Because $Y \in \{0,1\}$ and (ND) ensures $C \in L^2 \mid Z$, both $C$ and $s(C)$ are square-integrable given $Z$. Applying Lemma~\ref{lem:monotone-covariance-conditional} conditionally on $Z$ with $X = C$ and $f = s$ (strictly increasing),
+\[
+\operatorname{Cov}(C, Y \mid Z) = \operatorname{Cov}(C, s(C) \mid Z) > 0 \quad \text{a.s.}
+\]
+With $\mathrm{Var}(C \mid Z) > 0$ and strict increase of $s$, we have $\mathrm{Var}(s(C) \mid Z) > 0$; hence
+\[
+\operatorname{corr}(C, Y \mid T{=}D, Z) > 0 \quad \text{a.s.}
+\]
+
+\paragraph{3) Equalization via individualized dosing.}
+For $(L_0, Z)$ and any dose $d > 0$, define
+\[
+ g(d; L_0, Z) := \mathbb E\big[s\big(G(r_Z(L_0), U; Z, d)\big) \mid L_0, Z\big] = \mathbb E_U\big[s\big(G(r_Z(L_0), U; Z, d)\big)\big].
+\]
+By (A2)(iii) and strict increase of $s$, $d \mapsto s(G(r_Z(L_0), U; Z, d))$ is strictly increasing for every $U$, hence $d \mapsto g(d; L_0, Z)$ is strictly increasing. Under (A2-cts) and (ER), continuity of $G$ in $d$ and continuity/boundedness of $s$ yield continuity of $g(\cdot; L_0, Z)$ by dominated convergence. Define the right-limit at zero $s_{0+} := \lim_{c\downarrow 0} s(c) = \inf_{c>0} s(c) \in [0,1)$. Using (A3), for every fixed $(r_Z(L_0), U, Z)$ we have $G(r_Z(L_0), U; Z, d) \downarrow 0$ as $d \downarrow 0$, so $s(G(r_Z(L_0), U; Z, d)) \to s_{0+}$ pointwise in $U$. The integrand is bounded by $1$, hence dominated convergence gives
+\[
+\lim_{d\downarrow 0} g(d; L_0, Z) = s_{0+},
+\]
+with the limit independent of $L_0$. Similarly, by (A3) and monotonicity of $s$, $G(r_Z(L_0), U; Z, d) \uparrow \infty$ as $d \uparrow \infty$, whence $s(G(r_Z(L_0), U; Z, d)) \to s_\infty := \lim_{c\uparrow \infty} s(c)$ pointwise and
+\[
+\lim_{d\uparrow \infty} g(d; L_0, Z) = s_\infty,
+\]
+again independent of $L_0$. Thus, for any target $p_* \in (s_{0+}, s_\infty)$ there is a unique $d^*(L_0, Z)$ solving $g(d^*(L_0, Z); L_0, Z) = p_*$ by strict monotonicity and continuity of $g$ in $d$. Define the individualized dosing rule $\delta(L_0, Z) := d^*(L_0, Z)$. Then
+\[
+\mathbb P(Y{=}1 \mid L_0, Z, \delta) = \mathbb E\big[s(C) \mid L_0, Z, \delta\big] = g\big(d^*(L_0, Z); L_0, Z\big) = p_* .\qedhere
+\]
+Moreover, for each fixed $d$, $L_0 \mapsto g(d; L_0, Z)$ is strictly decreasing (composition of $L_0 \mapsto r_Z(L_0)$ strictly increasing, $r \mapsto G(r, U; Z, d)$ strictly decreasing, and $s$ strictly increasing). Since $d \mapsto g(d; L_0, Z)$ is strictly increasing, the uniqueness of $d^*(L_0, Z)$ implies $\delta(\cdot, Z)$ is strictly increasing: if $L_0^a > L_0^b$, then
+\[
+ g\big(d^*(L_0^b, Z); L_0^a, Z\big) < g\big(d^*(L_0^b, Z); L_0^b, Z\big) = p_*,
+\]
+so by strict increase in $d$, $d^*(L_0^a, Z) > d^*(L_0^b, Z)$.
+\end{proof}

@@ -1,0 +1,14 @@
+\begin{definition}
+$F_k$ and $(a_n)$ are as in Def.~1. Define
+\[
+S_{\mathrm{even}}:=\bigl\{\,nF_{\,\frac{n}{2}+3}-(n-1)F_{\,\frac{n}{2}+2}:\ n\in\mathbb{N}\text{ even}\,\bigr\},\quad
+S_{\mathrm{odd}}:=\bigl\{\,F_{\,\frac{n+1}{2}+2}:\ n\in\mathbb{N}\text{ odd}\,\bigr\}.
+\]
+\end{definition}
+\bigskip
+\textbf{Conjecture 2 (Disjointness / non-Fibonacci combination).}
+$S_{\mathrm{even}}\cap S_{\mathrm{odd}}=\varnothing$. Equivalently, for every $n\in\mathbb{N}$,
+\[
+F_{n+2}+2n\,F_{n+1}
+\]
+is not a Fibonacci number.

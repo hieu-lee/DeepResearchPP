@@ -1,0 +1,20 @@
+\begin{theorem}[Carneiro analog for SG cyclics (disproves Conj.~51 of \cite{Cohen2025})]\label{thm:carneiro_sg_cyclics}
+For all $n$ with $\sigma_n>3$, $\sigma_{n+1}-\sigma_n<\sqrt{\sigma_n\,\log \sigma_n}$.
+\end{theorem}
+
+\begin{proof}
+We exhibit a counterexample. First, note that $7\in\mathcal{C}$ since $\varphi(7)=6$ and $\gcd(7,6)=1$ (Szele \cite{Szele1947}). Moreover, $2\cdot 7+1=15\in\mathcal{C}$ because $\varphi(15)=8$ and $\gcd(15,8)=1$. Hence $7$ is an SG cyclic.
+
+Next, we check that there is no SG cyclic in $\{8,9,10\}$:
+- $8\notin\mathcal{C}$ since $\varphi(8)=4$ and $\gcd(8,4)=4>1$ (equivalently, $2^2\mid 8$).
+- $9\notin\mathcal{C}$ since $\varphi(9)=6$ and $\gcd(9,6)=3>1$ (equivalently, $3^2\mid 9$).
+- $10\notin\mathcal{C}$ since $\varphi(10)=4$ and $\gcd(10,4)=2>1$.
+Thus no integer in $\{8,9,10\}$ is cyclic, and hence none is an SG cyclic. On the other hand, $11$ is an SG cyclic, as $11\in\mathcal{C}$ (prime) and $2\cdot 11+1=23\in\mathcal{C}$ (prime).
+
+Therefore the consecutive SG cyclics $7$ and $11$ satisfy
+$$\sigma_{n}=7,\quad \sigma_{n+1}=11,\quad \sigma_{n+1}-\sigma_n=4.$$
+But since $7<e^2$, we have $\log 7<2$, hence
+$$\sqrt{7\log 7}<\sqrt{14}<4.$$ 
+Consequently $\sigma_{n+1}-\sigma_n>\sqrt{\sigma_n\,\log \sigma_n}$ at $\sigma_n=7$, contradicting the conjectured inequality. 
+\end{proof}
+

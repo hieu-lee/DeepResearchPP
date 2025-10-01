@@ -1,0 +1,7 @@
+\begin{definition}
+RASP-L is a restricted language describing attention-style computations implementable by a fixed-depth decoder-only Transformer.
+A task $T$ (next-token function) has \emph{RASP-complexity} $|P|$ equal to the length of its shortest correct RASP-L program $P$ that works for all input lengths.
+\end{definition}
+
+\textbf{Conjecture (RASP-Generalization).}
+A decoder-only Transformer trained to completion on an algorithmic task $T$ \emph{length-generalizes} iff $T$ admits a short ($|P|\le c$) RASP-L program that is realizable by a single Transformer for all lengths. (Open; proven only in restricted settings/one-way directions.)

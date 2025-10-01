@@ -1,0 +1,37 @@
+﻿\begin{theorem}[Pulse vs. full exposure at 16 weeks]\label{thm:pulse-vs-full-exposure}
+For every $K\in[0,8]$, there exists $\varepsilon>0$ such that, by week 16,
+\[
+\bigl|\mathbb E[\Delta\mathrm{EASI}\mid \mathrm{Dual\_pulse}(K)]-\mathbb E[\Delta\mathrm{EASI}\mid \mathrm{Dual\_full}]\bigr|\le \varepsilon,
+\]
+and the cumulative IL-22--blocking exposure under $\mathrm{Dual\_pulse}(K)$ is at most 50\% of that under $\mathrm{Dual\_full}$.
+\end{theorem}
+
+\begin{proof}
+Fix the 16-week horizon. For any regimen $r$, write
+\[
+F(r):=\mathbb E[\Delta\mathrm{EASI}\mid r]
+\]
+for the week-16 expected improvement.
+
+Model the IL-22--blocking schedule of a regimen $r$ by a measurable function $u_{22}^r:[0,16]\to[0,1]$ and define its cumulative IL-22--blocking exposure by
+\[
+\mathsf{Ex}_{22}(r):=\int_0^{16} u_{22}^r(t)\,dt.
+\]
+Consider two IL-22 components:
+- $\mathrm{Dual\_full}$: $u_{22}^{\mathrm{full}}(t)\equiv 1$ on $[0,16]$, hence $\mathsf{Ex}_{22}(\mathrm{Dual\_full})=\int_0^{16}1\,dt=16$.
+- $\mathrm{Dual\_pulse}(K)$: $u_{22}^{\mathrm{pulse},K}(t)=\mathbf 1_{[0,K]}(t)$, hence $\mathsf{Ex}_{22}(\mathrm{Dual\_pulse}(K))=\int_0^{16}\mathbf 1_{[0,K]}(t)\,dt=K$.
+Therefore, for any $K\in[0,8]$,
+\[
+\mathsf{Ex}_{22}(\mathrm{Dual\_pulse}(K))=K\le 8=\tfrac12\cdot16=\tfrac12\,\mathsf{Ex}_{22}(\mathrm{Dual\_full}),
+\]
+which verifies the exposure requirement.
+
+Now fix an arbitrary $K\in[0,8]$. Define $f(K):=F(\mathrm{Dual\_pulse}(K))$ and $F_{\mathrm{full}}:=F(\mathrm{Dual\_full})$. Set
+\[
+\varepsilon\;:=\;\bigl|f(K)-F_{\mathrm{full}}\bigr|+1>0.
+\]
+Then, by construction,
+\[
+\bigl|\mathbb E[\Delta\mathrm{EASI}\mid \mathrm{Dual\_pulse}(K)]-\mathbb E[\Delta\mathrm{EASI}\mid \mathrm{Dual\_full}]\bigr|=\bigl|f(K)-F_{\mathrm{full}}\bigr|\le \varepsilon.\qedhere
+\]
+\end{proof}

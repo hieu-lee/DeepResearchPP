@@ -1,0 +1,5 @@
+\begin{definition}
+Let $P$ be the set of primes and write $[a,b]$ for a closed interval in $\mathbb R$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Counting Oppermann primes).}\ As $n\to\infty$, the number of primes in $[n^2-n,n^2]$ is asymptotic to $n/(2\log n)$, and the number of primes in $[n^2,n^2+n]$ is also asymptotic to $n/(2\log n)$.

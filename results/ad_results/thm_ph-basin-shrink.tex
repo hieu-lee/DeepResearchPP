@@ -1,0 +1,90 @@
+﻿\begin{theorem}\label{thm:ph-basin-shrink}
+In a microbiome system with pH-dependent AMP potency \(\alpha(\mathrm{pH})\), there exist admissible parameters and \(\Delta\mathrm{pH}>0\) such that increasing skin pH by \(\Delta\mathrm{pH}\) (so that \(\alpha\) decreases) strictly shrinks the basin of attraction of the healthy equilibrium:
+\[
+\mathrm{basin}\big(E_{\mathrm{h}};\alpha(\mathrm{pH}{+}\Delta\mathrm{pH})\big)\;\subsetneq\;\mathrm{basin}\big(E_{\mathrm{h}};\alpha(\mathrm{pH})\big).
+\]
+\end{theorem}
+\begin{proof}
+Assume, for contradiction, that in the concrete system below an admissible increase in pH (hence a decrease in \(\alpha\)) enlarges the healthy basin.
+
+Let the physiological pH interval be \(I=[\mathrm{pH}_0,\mathrm{pH}_0+H]\) and set
+\[
+\alpha(p):=\alpha_0-\zeta\,(p-\mathrm{pH}_0),\qquad 0<\alpha_0<1,\;0<\zeta<\alpha_0/H,
+\]
+so \(\alpha(I)=[\alpha_{\min},\alpha_0]\) with \(\alpha_{\min}:=\alpha_0-\zeta H\in(0,\alpha_0)\). Consider the planar system for commensals \(C\ge 0\) and \emph{S.\!aureus} \(S\ge 0\):
+\[
+\dot C=f(C,S):=C(1-C-bS),\qquad \dot S=g(C,S;\alpha):=S(1-\alpha-S-cC),
+\]
+with constants \(b,c>0\) chosen to satisfy
+\[
+\text{(A1)}\; b>\frac{1}{1-\alpha_0},\qquad \text{(A2)}\; c>1-\alpha_{\min}.
+\]
+\emph{1) Forward invariance and boundedness.} The axes \(\{C=0\}\), \(\{S=0\}\) are invariant and
+\[
+\dot C\le C(1-C),\qquad \dot S\le S\big((1-\alpha_{\min})-S\big),
+\]
+so every trajectory with \(C,S\ge 0\) is bounded and the rectangle \(Q:=[0,1]\times[0,1-\alpha_{\min}]\) is forward invariant for all \(\alpha\in\alpha(I)\).
+
+\emph{2) Equilibria and their type.} The Jacobian is
+\[
+J(C,S;\alpha)=\begin{pmatrix}1-2C-bS & -bC\\ -cS & 1-\alpha-2S-cC\end{pmatrix}.
+\]
+The equilibria in the closed first quadrant are
+\[
+E_0=(0,0),\quad E_{\mathrm{h}}=(1,0),\quad E_{\mathrm{d}}=(0,1-\alpha),\quad P(\alpha)=(C^*(\alpha),S^*(\alpha))\in(0,\infty)^2,
+\]
+where
+\[
+S^*(\alpha)=\frac{c-1+\alpha}{cb-1},\qquad C^*(\alpha)=\frac{b(1-\alpha)-1}{cb-1}.
+\]
+Under (A1)--(A2), \(cb>\dfrac{c}{1-\alpha_0}>1\), hence \(P(\alpha)\in(0,\infty)^2\). At \(E_{\mathrm{h}}\) the eigenvalues are \(-1\) and \(1-\alpha-c<-(c-(1-\alpha_{\min}))<0\) by (A2), so \(E_{\mathrm{h}}\) is a sink. At \(E_{\mathrm{d}}\) the eigenvalues are \(-1+\alpha<0\) and \(1-b(1-\alpha)\le 1-b(1-\alpha_0)<0\) by (A1), so \(E_{\mathrm{d}}\) is a sink. At \(E_0\) both eigenvalues are positive, hence a source. At \(P(\alpha)\) one has \(1-2C^*-bS^*=-C^*\) and \(1-\alpha-2S^*-cC^*=-S^*\), so
+\[
+\operatorname{tr}J(P)=-(C^*+S^*)<0,\qquad \det J(P)=C^*S^*(1-cb)<0,
+\]
+whence \(P(\alpha)\) is a saddle.
+
+\emph{3) No periodic orbits.} In \((0,\infty)^2\), take the Bendixson--Dulac function \(B(C,S)=\dfrac{1}{CS}\). Then
+\[
+\frac{\partial}{\partial C}\big(Bf\big)+\frac{\partial}{\partial S}\big(Bg\big)
+=\frac{\partial}{\partial C}\Big(\frac{1}{S}(1-C-bS)\Big)+\frac{\partial}{\partial S}\Big(\frac{1}{C}(1-\alpha-S-cC)\Big)
+=-\frac{1}{S}-\frac{1}{C}<0
+\]
+on \((0,\infty)^2\). Hence there are no nontrivial periodic orbits or other compact invariant curves in the open quadrant.
+
+Consequently, for each \(\alpha\in\alpha(I)\) the only attractors in the first quadrant are the sinks \(E_{\mathrm{h}}\) and \(E_{\mathrm{d}}\); the unique interior saddle \(P(\alpha)\) has a one-dimensional \(C^1\) stable manifold \(\Sigma(\alpha):=W^s(P(\alpha))\) that lies in \((0,\infty)^2\) and separates the two basins \(\mathcal B(\alpha):=\mathrm{basin}(E_{\mathrm{h}};\alpha)\) and \(\mathcal B^{\mathrm{d}}(\alpha):=\mathrm{basin}(E_{\mathrm{d}};\alpha)\) within \(Q\cap(0,\infty)^2\).
+
+\emph{Monotone dependence on \(\alpha\) and basin inclusion.} Fix \(\alpha_0\in\alpha(I)\) and any \(\alpha_1\in\alpha(I)\) with \(\alpha_1<\alpha_0\) (corresponding to an increase of pH by some \(\Delta\mathrm{pH}>0\)). Let \((C_i,S_i)\) denote the solution with the same initial condition \((C_0,S_0)\in Q\) under parameter \(\alpha_i\), \(i\in\{0,1\}\). Define the order \(\preceq\) on \(\mathbb{R}^2\) by \((C,S)\preceq(\widetilde C,\widetilde S)\) iff \(C\le \widetilde C\) and \(S\ge \widetilde S\). A first-violation argument yields, for all \(t\ge 0\),
+\[
+C_1(t)\le C_0(t),\qquad S_1(t)\ge S_0(t).
+\]
+Indeed, suppose \(\tau\) is the first time at which either \(C_1>C_0\) or \(S_1<S_0\). If \(C_1=C_0\) and \(S_1\ge S_0\) at \(t=\tau\), then
+\[
+\dot C_1-\dot C_0=f(C_1,S_1)-f(C_0,S_0)=-b\,C_0(\tau)\,(S_1-S_0)\le 0,
+\]
+so \(C_1\) cannot cross above \(C_0\). If \(S_1=S_0\) and \(C_1\le C_0\) at \(t=\tau\), then
+\[
+\dot S_1-\dot S_0=g(C_1,S_1;\alpha_1)-g(C_0,S_0;\alpha_0)=-c\,S_0(\tau)\,(C_1-C_0)+\big(\alpha_0-\alpha_1\big)S_0(\tau)\ge 0,
+\]
+so \(S_1\) cannot cross below \(S_0\). Thus the order is preserved for all \(t\ge 0\).
+
+Now take any \((C_0,S_0)\in\mathcal B(\alpha_1)\). Then \((C_1,S_1)\to E_{\mathrm{h}}=(1,0)\), and the order inequalities imply \(S_0(t)\le S_1(t)\to 0\) and \(C_0(t)\ge C_1(t)\to 1\), hence \((C_0,S_0)\in\mathcal B(\alpha_0)\). Therefore
+\[
+\mathcal B(\alpha_1)\subseteq\mathcal B(\alpha_0)\qquad\text{whenever }\alpha_1<\alpha_0.
+\]
+This already contradicts the assumed enlargement \(\mathcal B(\alpha_1)\supseteq\mathcal B(\alpha_0)\).
+
+\emph{Strictness of the inclusion.} We strengthen the contradiction by showing \(\mathcal B(\alpha_1)\subsetneq\mathcal B(\alpha_0)\) for every \(\alpha_1<\alpha_0\). First, \(\Sigma(\alpha)=W^s(P(\alpha))\) lies entirely in \(\{C>0,S>0\}\), and it is not contained in the nullcline \(\{f=0\}\) (an invariant curve coinciding with \(\{f=0\}\) would reduce to equilibria). If \(\mathcal B(\alpha_1)=\mathcal B(\alpha_0)\), then within the open quadrant their common boundary equals both \(\Sigma(\alpha_1)\) and \(\Sigma(\alpha_0)\); denote this common \(C^1\) curve by \(\Sigma\). Because \(\Sigma\) is \(\phi_{\alpha_i}^t\)-invariant for each \(i\in\{0,1\}\), at every \(x\in\Sigma\) its tangent must be colinear with the vector field \(F_{\alpha_i}(x):=(f(x),g(x;\alpha_i))\). Choose \(x\in\Sigma\) with \(S(x)>0\) and \(f(x)\neq 0\). Then
+\[
+F_{\alpha_0}(x)=(f(x),g(x;\alpha_0)),\qquad F_{\alpha_1}(x)=(f(x),g(x;\alpha_0)-\big(\alpha_0-\alpha_1\big)S(x)),
+\]
+and since \(S(x)>0\) and \(\alpha_0>\alpha_1\), these two vectors are not colinear. Hence no single tangent line can be simultaneously colinear with both, contradicting the assumed invariance of \(\Sigma\) under both flows. Therefore \(\Sigma(\alpha_1)\ne\Sigma(\alpha_0)\), which, together with \(\mathcal B(\alpha_1)\subseteq\mathcal B(\alpha_0)\), implies
+\[
+\mathcal B(\alpha_1)\subsetneq\mathcal B(\alpha_0)\qquad\text{for every }\alpha_1<\alpha_0.
+\]
+
+\emph{Conclusion.} For the system constructed above, any admissible increase in pH (hence decrease in \(\alpha\)) strictly shrinks the healthy basin:
+\[
+\mathrm{basin}\big(E_{\mathrm{h}};\alpha(\mathrm{pH}_0{+}\Delta\mathrm{pH})\big)\;\subsetneq\;\mathrm{basin}\big(E_{\mathrm{h}};\alpha(\mathrm{pH}_0)\big),\quad\qedhere
+\]
+contradicting the assumed enlargement. Thus there exist admissible parameters and \(\Delta\mathrm{pH}>0\) for which increasing pH strictly shrinks the healthy basin, as claimed.
+\end{proof}

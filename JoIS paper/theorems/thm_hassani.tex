@@ -1,0 +1,29 @@
+\begin{theorem}[Hassani analog (resolves Conj.~61 of \cite{Cohen2025})]\label{thm:hassani}
+We have $\displaystyle \lim_{n\to\infty}\frac{A_n}{G_n}=\frac{e}{2}$.
+\end{theorem}
+
+\begin{proof}
+Let $S(x):=\sum_{c\le x} c$ and $J(x):=\sum_{c\le x} \log c$, where the sums range over $c\in C$ (all logarithms are natural). By Abel's summation (partial summation), for $x\ge1$,
+\[
+ S(x)=x\,C(x)-\int_1^x C(t)\,dt,\qquad J(x)=C(x)\log x-\int_1^x \frac{C(t)}{t}\,dt.
+\]
+From the asymptotic \eqref{eq:Pollack} and the fact that $\log_3$ is slowly varying, Karamata's integral theorem (see \cite[\S1.6]{BGT1989}) yields, as $x\to\infty$,
+\[
+ \int_1^x \frac{C(t)}{t}\,dt\sim e^{-\gamma}\int_1^x \frac{dt}{\log_3 t}\sim \frac{e^{-\gamma}x}{\log_3 x}\sim C(x),
+\]
+\[
+ \int_1^x C(t)\,dt\sim e^{-\gamma}\int_1^x \frac{t\,dt}{\log_3 t}\sim \frac{e^{-\gamma}x^2}{2\log_3 x}\sim \frac{x\,C(x)}{2}.
+\]
+Substituting into Abel's identities gives
+\[
+ S(x)\sim \frac{x\,C(x)}{2},\qquad J(x)\sim C(x)(\log x-1).
+\]
+Let $(c_n)_{n\ge1}$ be the increasing enumeration of cyclics, so that $C(c_n)=n$. Then
+\[
+ A_n:=\frac{1}{n}\sum_{k=1}^n c_k=\frac{S(c_n)}{C(c_n)}\sim \frac{c_n}{2},
+\]
+\[
+ G_n:=\exp\!\Big(\frac{1}{n}\sum_{k=1}^n \log c_k\Big)=\exp\!\Big(\frac{J(c_n)}{C(c_n)}\Big)\sim \exp(\log c_n-1)=\frac{c_n}{e}.
+\]
+Therefore $\displaystyle \frac{A_n}{G_n}\sim \frac{c_n/2}{c_n/e}=\frac{e}{2}$, and the limit follows.
+\end{proof}

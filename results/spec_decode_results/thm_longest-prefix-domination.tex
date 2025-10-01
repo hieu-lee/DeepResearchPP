@@ -1,0 +1,62 @@
+\begin{theorem}[Longest-prefix domination]\label{thm:longest-prefix-domination}
+\sloppy
+Fix a block size $K$ and proposal conditionals $(p_{n:n+K-1})$. Among all unbiased $K$-block draft--verify schemes, the longest-prefix (LP) verifier stochastically dominates any other valid scheme in the first-order sense. For all $j\in\{0,\dots,K\}$,
+\[
+\mathbb{P}_{\mathrm{LP}}\big[A^{(K)}\ge j\big] \;\ge\; \mathbb{P}_{\text{any valid}}\big[A^{(K)}\ge j\big].
+\]
+In particular, it maximizes $\mathbb{E}[A^{(K)}]$.
+\end{theorem}
+
+\begin{proof}
+Fix an iteration index $n$ and a realized history $h\equiv x_{1:n-1}$. For $\tau\in\{1,\dots,K\}$ let
+\[
+P_p^{(\tau)}(x_{1:\tau}\mid h) \,=\, \prod_{i=1}^{\tau} p_{n+i-1}(x_i\mid h, x_{1:i-1}),\qquad
+P_q^{(\tau)}(x_{1:\tau}\mid h) \,=\, \prod_{i=1}^{\tau} q_{n+i-1}(x_i\mid h, x_{1:i-1})
+\]
+denote the $\tau$-step path laws of the proposal and target, respectively. Consider any unbiased (valid) $K$-block draft--verify scheme. By exactness, its (eventual) output law for the next $K$ tokens given $h$ is $P_q^{(K)}(\cdot\mid h)$. Therefore the scheme induces a coupling $\Gamma_h$ of two random blocks $(X_{1:K},Y_{1:K})\in\mathcal V^K\times\mathcal V^K$ with marginals $P_p^{(K)}(\cdot\mid h)$ and $P_q^{(K)}(\cdot\mid h)$, where $X_{1:K}$ is the drafted block and $Y_{1:K}$ is the scheme's (eventual) output block.
+
+Let the first-disagreement time be
+\[
+\sigma\,:=\,\inf\{j\ge 1: X_j\ne Y_j\}\ (\inf\emptyset:=\infty),\qquad L^{(K)}\,:=\,\min\{K,\,\sigma-1\}.
+\]
+By construction of the induced coupling (accepted tokens are committed as the prefix of the output), the accepted-prefix length $A^{(K)}$ of the scheme satisfies $A^{(K)}\le L^{(K)}$ almost surely, with equality $A^{(K)}=L^{(K)}$ for the longest-prefix (LP) verifier.
+
+Hence, for every $j\in\{1,\dots,K\}$ and realized $h$,
+\begin{equation}
+\begin{aligned}
+\mathbb P\big(A^{(K)}\ge j\mid h\big)
+&\le \Gamma_h\big(X_{1:j}=Y_{1:j}\big)\\
+&\le 1-\operatorname{TV}\big(P_p^{(j)}(\cdot\mid h),P_q^{(j)}(\cdot\mid h)\big)\\
+&= \sum_{x_{1:j}\in\mathcal V^j} \min\Big\{P_p^{(j)}(x_{1:j}\mid h),\,P_q^{(j)}(x_{1:j}\mid h)\Big\}.
+\end{aligned}
+\tag{1}
+\end{equation}
+The first inequality uses $\{A^{(K)}\ge j\}\subseteq\{X_{1:j}=Y_{1:j}\}$ under $\Gamma_h$; the second is the maximal-coupling bound applied to the distributions on $\mathcal V^j$.
+
+Now average (1) over the random prefix $h\sim q$ (the target's prefix law): for any valid scheme,
+\begin{equation}
+\mathbb P\big(A^{(K)}\ge j\big)
+\ \le\ \mathbb E_{h\sim q}\Big[\sum_{x_{1:j}} \min\{P_p^{(j)}(x_{1:j}\mid h),P_q^{(j)}(x_{1:j}\mid h)\}\Big]
+\ =:\ S_j.
+\tag{2}
+\end{equation}
+Summing (2) over $j=1,\dots,K$ and using $\mathbb E[A^{(K)}]=\sum_{j=1}^K \mathbb P(A^{(K)}\ge j)$ gives, for any valid scheme,
+\begin{equation}
+\mathbb E\big[A^{(K)}\big] \ \le\ \sum_{j=1}^K S_j.
+\tag{3}
+\end{equation}
+For the LP verifier, the block-verification optimality formula yields the exact value
+\begin{equation}
+\mathbb E\big[A^{(K)}_{\mathrm{LP}}\big] \ =\ \sum_{j=1}^K S_j.
+\tag{4}
+\end{equation}
+Since each inequality in (2) is an individual upper bound with nonnegative slack and the sum of these slacks equals zero for LP by (3)--(4), every slack must be zero. Thus, for every $j\in\{1,\dots,K\}$,
+\[
+\mathbb P_{\mathrm{LP}}\big(A^{(K)}\ge j\big) \ =\ S_j \ \ge\ \mathbb P_{\text{any valid}}\big(A^{(K)}\ge j\big).
+\]
+For $j=0$ the inequality is trivial. Hence the LP verifier first-order stochastically dominates every other unbiased $K$-block scheme, and in particular maximizes $\mathbb E[A^{(K)}]$. Equivalently, the LP-induced coupling attains the maximal agreement probabilities
+\[
+\Gamma_h\big(X_{1:j}=Y_{1:j}\big)\ =\ 1-\operatorname{TV}\big(P_p^{(j)}(\cdot\mid h),P_q^{(j)}(\cdot\mid h)\big)\quad\text{for all }j\in\{1,\dots,K\}.\qedhere
+\]
+\end{proof}
+

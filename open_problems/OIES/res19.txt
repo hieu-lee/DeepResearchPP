@@ -1,0 +1,9 @@
+\begin{definition}
+Let $(c_n)_{n\ge1}$ enumerate the cyclics increasingly and let $\gamma$ be the Euler–Mascheroni constant.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Ishikawa analog for cyclics).}\ For all $n>2$,
+\[
+c_n+c_{n+1}\ >\ c_{n+2},
+\]
+with $c_1+c_2=c_3=3$ and $c_2+c_3=c_4=5$ as equalities at $n=1,2$.

@@ -1,0 +1,9 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. A \emph{near-square cyclic} is a cyclic of the form $n^2+1$ with $n\in\mathbb N$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Near-square analog of Golubew for cyclics).}\ For every $m\in\mathbb N$,
+\begin{itemize}
+\item the interval $(m^3,(m+1)^3)$ contains at least one near-square cyclic $n^2+1$;
+\item the interval $(m^4,(m+1)^4)$ contains at least two distinct near-square cyclics $n^2+1$.
+\end{itemize}

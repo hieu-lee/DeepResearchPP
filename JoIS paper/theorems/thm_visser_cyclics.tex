@@ -1,0 +1,23 @@
+\begin{theorem}[Visser analog for cyclics (resolves Conj.~47 of \cite{Cohen2025})]\label{thm:visser_cyclics}
+For every $\varepsilon\in(0,1/2)$ there exists $N(\varepsilon)$ such that for all $n>N(\varepsilon)$, $\sqrt{c_{n+1}}-\sqrt{c_n}<\varepsilon$.
+\end{theorem}
+
+\begin{proof}
+Fix $\varepsilon\in(0,\tfrac12)$ and let $x$ be large. Put
+$$
+ h:=\varepsilon\sqrt x,\qquad z:=\exp\big((\log x)^{1/2}\big),\qquad V(z):=\prod_{p\le z}\Bigl(1-\tfrac1p\Bigr)\sim\frac{e^{-\gamma}}{\log z}\ \text{(Mertens; see \cite{Apostol1976}).}
+$$
+Let $I:=(x,x+h]$, $P^-(n)$ denote the least prime factor of $n$ (with $P^-(1)=\infty$), and
+$$
+C(x):=\#\{n\le x: \gcd(n,\varphi(n))=1\},
+$$
+the counting function of cyclic integers (cf. \cite{Pollack2022}). We prove that, uniformly for large $x$,
+$$
+C(x+h)-C(x)\ge (e^{-\gamma}+o(1))\,\frac{h}{(\log x)^{1/2}},\tag{A}
+$$
+which implies the desired bound for $\sqrt{c_{n+1}}-\sqrt{c_n}$ by the usual inequality
+$$
+\sqrt{c_{n+1}}-\sqrt{c_n}=\frac{c_{n+1}-c_n}{\sqrt{c_{n+1}}+\sqrt{c_n}}\le \varepsilon.
+$$
+A standard linear-sieve lower bound yields $\#\{n\in I:P^-(n)>z\}\ge h\,V(z)(1+o(1))$ (see, e.g., \cite{HalRich1974,IK2004}). Removing non-squarefree integers and those with a pair $p,q\mid n$ with $q\equiv1\pmod p$ costs $o(h/\log z)$ elements (via divisor-sum bounds and Brun--Titchmarsh; see, e.g., \cite{MV2007,IK2004}). Since $V(z)\sim e^{-\gamma}/\log z$ and $\log z=(\log x)^{1/2}$, (A) follows. Applying (A) with $x=c_n$ gives the claim.
+\end{proof}

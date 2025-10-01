@@ -1,0 +1,72 @@
+﻿\begin{theorem}\label{thm:extval-auc-gap}
+There exist an external-validation distribution and a policy $\pi(H,E)$ mapping to $T\in\{D,\mathrm{L13},\mathrm{Dual}\}$ such that
+\[
+\mathrm{AUC}(\text{E75 predicted by }\pi) - \sup_{\pi'\,:\,\pi'\text{ ignores }E}\mathrm{AUC}(\text{E75 predicted by }\pi')\;\ge\;\frac{16792}{94435}\;>\;0.17.
+\]
+Equivalently, for the constructed instance one has $\mathrm{AUC}(\pi)=\tfrac{129}{170}$ and $\sup_{\pi'\,:\,\pi'\text{ ignores }E}\mathrm{AUC}(\pi')=\tfrac{1291}{2222}$.
+\end{theorem}
+
+\begin{proof}
+Construct an external-validation population as follows.
+\begin{enumerate}
+\item Features and strata. Let $H\in\{0,1\}$ (endotype) and $E\in\{0,1\}$ (environment). Specify the stratum masses directly by
+\[
+\mathbb P(H=0)=\tfrac{1}{10},\qquad \mathbb P(H=1,E=1)=\tfrac{9}{20},\qquad \mathbb P(H=1,E=0)=\tfrac{9}{20}.
+\]
+No independence assumptions are needed. Denote strata $A:(H=0)$, $B:(H=1,E=1)$, $C:(H=1,E=0)$.
+
+\item Potential-response model (EASI-75). For $T\in\{D,\mathrm{L13},\mathrm{Dual}\}$ set
+\begin{itemize}
+\item $H=0$ (low IL-13): $\mathbb P(E75\mid D,H=0)=\tfrac{9}{10}$, $\mathbb P(E75\mid \mathrm{L13},H=0)=\tfrac{13}{20}$, $\mathbb P(E75\mid \mathrm{Dual},H=0,E)=\tfrac{17}{20}$ (both $E$).
+\item $H=1,E=1$ (high IL-13, high burden): $\mathbb P(E75\mid \mathrm{Dual},H=1,E=1)=\tfrac{19}{20}$, $\mathbb P(E75\mid \mathrm{L13},H=1,E=1)=\tfrac{3}{10}$.
+\item $H=1,E=0$ (high IL-13, low burden): $\mathbb P(E75\mid \mathrm{L13},H=1,E=0)=\tfrac{3}{5}$, $\mathbb P(E75\mid \mathrm{Dual},H=1,E=0)=\tfrac{11}{20}$.
+\end{itemize}
+Additionally, $\mathbb P(E75\mid D,H=1,E)=\tfrac{1}{2}$ for both $E$.
+
+\item Scores and AUC. For a policy $\pi$ that uses features $Z$, define the Bayes score $s_{\pi}(z):=\mathbb P(E75\mid T=\pi(z),z)$. Its AUC is
+\[
+\mathrm{AUC}(\pi)=\mathbb P\big(s_{\pi}(X^+) > s_{\pi}(X^-)\big)+\tfrac12\,\mathbb P\big(s_{\pi}(X^+) = s_{\pi}(X^-)\big),
+\]
+with $X^+\sim(Z\mid Y_{\pi}=1)$ and $X^-\sim(Z\mid Y_{\pi}=0)$ independent. When $\pi$ ignores $E$, $Z=H$ and $s_{\pi}(1)=\mathbb P(E75\mid T, H=1)$ is the $E$-mixture under $H=1$; by the chosen masses, $\mathbb P(E=1\mid H=1)=\mathbb P(E=0\mid H=1)=\tfrac12$.
+
+\item An environment-aware policy. Set
+\[
+\pi(H,E)=\begin{cases}
+D,& H=0,\\
+\mathrm{Dual},& H=1,\ E=1,\\
+\mathrm{L13},& H=1,\ E=0.
+\end{cases}
+\]
+The induced scores on strata $(A,B,C)$ are $\big(\tfrac{9}{10},\tfrac{19}{20},\tfrac{3}{5}\big)$. The corresponding positive and negative masses are
+\[
+\big(\tfrac{9}{100},\tfrac{171}{400},\tfrac{27}{100}\big)\quad\text{and}\quad\big(\tfrac{1}{100},\tfrac{9}{400},\tfrac{9}{50}\big),
+\]
+respectively. A direct Mann--Whitney calculation over the three distinct score levels $0.95>0.9>0.6$ yields
+\[
+\mathrm{AUC}(\pi)=\frac{903}{1190}=\frac{129}{170}.
+\]
+
+\item E-ignoring competitors. Any policy $\pi'$ that ignores $E$ maps $H\mapsto T$ and hence has exactly two score values $s_0:=\mathbb P(E75\mid T_0,H=0)$ and $s_1:=\mathbb P(E75\mid T_1,H=1)$ with $T_0,T_1\in\{D,\mathrm{L13},\mathrm{Dual}\}$. From the model and $\mathbb P(E=1\mid H=1)=\mathbb P(E=0\mid H=1)=\tfrac12$,
+\[
+ s_0\in\Big\{\tfrac{9}{10},\,\tfrac{13}{20},\,\tfrac{17}{20}\Big\},\qquad s_1\in\Big\{\tfrac12,\,\tfrac{9}{20},\,\tfrac34\Big\}.
+\]
+Writing $p_0=\tfrac{1}{10}$, $p_1=\tfrac{9}{10}$, $q_0=s_0$, $q_1=s_1$, and masses $m_h^+=p_h q_h$, $n_h^-=p_h(1-q_h)$ with $M=m_0^++m_1^+$, $N=n_0^-+n_1^-$, the AUC equals
+\[
+\begin{aligned}
+\text{if } s_0>s_1:\quad &\mathrm{AUC}(\pi')
+=\frac{m_0^+n_1^-+\tfrac12 m_0^+n_0^-+\tfrac12 m_1^+n_1^-}{MN},\\
+\text{if } s_0<s_1:\quad &\mathrm{AUC}(\pi')
+=\frac{m_1^+n_0^-+\tfrac12 m_0^+n_0^-+\tfrac12 m_1^+n_1^-}{MN}.
+\end{aligned}
+\]
+Evaluating all nine $(T_0,T_1)$ choices gives the maxima at $(T_0,T_1)=(D,\mathrm{L13})$ with
+\[
+\sup_{\pi'\,:\,E\ \text{ignored}}\mathrm{AUC}(\pi')=\frac{1291}{2222}\approx0.5810.
+\]
+
+\item Quantified improvement. Therefore
+\[
+\mathrm{AUC}(\pi)-\sup_{\pi'\,:\,E\ \text{ignored}}\mathrm{AUC}(\pi')\;\ge\;\frac{129}{170}-\frac{1291}{2222}\;=\;\frac{16792}{94435}\;>\;0.17.\qedhere
+\]
+\end{enumerate}
+\end{proof}

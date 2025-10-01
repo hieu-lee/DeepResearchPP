@@ -1,0 +1,36 @@
+﻿\begin{theorem}[Pulse superiority under exposure-only PD]\label{thm:pulse-superiority}
+There exist PK--PD settings in which Anti22's efficacy and AE penalty depend only on Anti22 AUC through continuously differentiable, strictly increasing functions \(\Phi\) and \(\Psi\), such that for some \(\lambda_0>0\) and all \(\lambda\in(0,\lambda_0]\), a regimen with pulsed Anti22 (duty cycle $<1$) and steady IL-13 blockade satisfies \(J_\lambda(\mathrm{Dual\_pulse})>J_\lambda(\mathrm{Dual\_continuous})\) while achieving \(\mathbb P(\mathrm{E75})\) within \(\delta\) of \(\mathrm{Dual\_continuous}\) for arbitrary \(\delta>0\) by suitable pulse design.
+\end{theorem}
+
+\begin{proof}
+Fix a finite horizon $T>0$. Let Anti22 concentration $C_{22}(t)$ obey linear one-compartment PK with elimination rate $k>0$ and input $u(t)\ge 0$ (Anti22 dosing rate):
+\[\dot C_{22}(t)=-kC_{22}(t)+u(t),\qquad C_{22}(0)=0.\]
+Define the Anti22 exposure over $[0,T]$ by
+\[A:=\mathrm{AUC}(T)=\int_0^T C_{22}(t)\,dt.\]
+Keep IL-13 blockade steady (time-constant). Assume the mean efficacy and AE penalty depend only on Anti22 exposure:
+\[\mathbb E[\Delta\mathrm{EASI}\mid d]=\Phi(A),\qquad \mathbb E[\mathrm{AEs}\mid d]=\Psi(A),\]
+with $\Phi,\Psi:\mathbb R_+\to\mathbb R$ continuously differentiable and strictly increasing. The objective is
+\[J_\lambda(d)=\Phi(A)-\lambda\,\Psi(A),\qquad \lambda\ge 0.\]
+Let a continuous Anti22 add-on regimen (\emph{Dual\_continuous}) yield exposure $A_c>0$. For the EASI-75 indicator, suppose there is regimen-independent noise $Z$ with continuous CDF $F_Z$ and a fixed threshold $\theta>0$ such that patient-level response satisfies $\Delta\mathrm{EASI}=\Phi(A)+Z$. Then
+\[p(A):=\mathbb P(\mathrm{E75}\mid A)=\mathbb P(\Phi(A)+Z\ge\theta)=1-F_Z\big(\theta-\Phi(A)\big).\]
+Since $F_Z$ is a CDF, it is nondecreasing and continuous; because $\Phi$ is increasing, $A\mapsto \theta-\Phi(A)$ is decreasing. Hence $A\mapsto F_Z(\theta-\Phi(A))$ is nonincreasing, so $p(A)$ is nondecreasing and continuous.
+
+\emph{Step 1 (a uniform improvement window at small $\lambda$).} By continuity of $\Phi'$ and $\Psi'$ and $\Phi'(A_c)>0$, there exists $\varepsilon_0>0$ such that on $[A_c,A_c+\varepsilon_0]$ we have $\inf \Phi'\ge m:=\tfrac12\Phi'(A_c)>0$ and $M:=\sup \Psi'<\infty$. Define $\lambda_0:=m/(2M)$ (if $M=0$, any $\lambda_0>0$ works). Then for any $\lambda\in(0,\lambda_0]$ and any $a\in[A_c,A_c+\varepsilon_0]$,
+\[J_\lambda'(a)=\Phi'(a)-\lambda\Psi'(a)\ge m-\lambda M\ge \tfrac12 m>0.\]
+Thus $J_\lambda$ is strictly increasing on $[A_c,A_c+\varepsilon_0]$ for all $\lambda\in(0,\lambda_0]$. Consequently, for $\varepsilon\in(0,\varepsilon_0]$,
+\[J_\lambda(A_c+\varepsilon)-J_\lambda(A_c)=\int_{A_c}^{A_c+\varepsilon}J_\lambda'(a)\,da\ \ge\ \tfrac12 m\,\varepsilon\ >\ 0.\]
+
+\emph{Step 2 (arbitrarily small E75 deviation).} By continuity of $p$ at $A_c$, for any $\delta>0$ there exists $\varepsilon(\delta)\in(0,\varepsilon_0]$ such that
+\[|p(A_c+\varepsilon)-p(A_c)|<\delta\quad\text{whenever }\varepsilon\in(0,\varepsilon(\delta)].\]
+Fix such $\varepsilon\in(0,\varepsilon(\delta)]$ and put $A_p:=A_c+\varepsilon$.
+
+\emph{Step 3 (construct a pulsed Anti22 achieving $A_p$ with duty cycle $<1$).} Fix any duty cycle $\alpha\in(0,1)$ and choose any nontrivial $\alpha$-on/$1{-}\alpha$-off input $u_0\not\equiv 0$ over $[0,T]$. In the linear PK system, the map $u\mapsto A=\int_0^T C_{22}(t;u)\,dt$ is linear and positively homogeneous, so for $\gamma:=A_p/A(u_0)>0$ the input $u_p:=\gamma u_0$ is pulsed with duty cycle $\alpha<1$ and produces exactly $\mathrm{AUC}(T)=A_p$. Keep IL-13 blockade steady; call the resulting regimen \emph{Dual\_pulse}.
+
+\emph{Conclusion.} For the constructed \emph{Dual\_pulse} and the baseline \emph{Dual\_continuous}, for all $\lambda\in(0,\lambda_0]$,
+\[J_\lambda(\mathrm{Dual\_pulse})=J_\lambda(A_p)>J_\lambda(A_c)=J_\lambda(\mathrm{Dual\_continuous}),\]
+by Step 1, and
+\begin{equation*}
+\big|\mathbb P(\mathrm{E75}\mid\mathrm{Dual\_pulse})-\mathbb P(\mathrm{E75}\mid\mathrm{Dual\_continuous})\big|=|p(A_p)-p(A_c)|<\delta,\ \qedhere
+\end{equation*}
+by Step 2. Since $\delta>0$ is arbitrary and \emph{Dual\_pulse} has duty cycle $<1$, the statement follows.
+\end{proof}

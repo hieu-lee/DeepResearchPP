@@ -1,0 +1,8 @@
+\begin{definition}
+Let $(c_n)_{n\ge1}$ enumerate the cyclics increasingly.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Hassani analog for cyclics).}\ We have
+\[
+\lim_{n\to\infty}\ \frac{(c_1+\cdots+c_n)/n}{(c_1c_2\cdots c_n)^{1/n}}\ =\ \frac{e}{2}.
+\]

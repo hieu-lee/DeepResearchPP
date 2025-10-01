@@ -1,0 +1,7 @@
+\begin{definition}
+Let $h(x;\theta)$ be a DNN trained by gradient descent on target $f^\star$.
+Write the Fourier transform $\widehat{h}(\xi)$ of $h$ w.r.t.\ input and define the energy at frequency band $B$ as $\int_{B} |\widehat{h}(\xi)|^2 d\xi$.
+\end{definition}
+
+\textbf{Conjecture (Frequency Principle / Spectral-Bias Universality).}
+Across architectures/losses/datasets, DNNs fit $f^\star$ by first matching low-frequency components and only later high-frequency components; this low-to-high learning order persists beyond regime-specific proofs and predicts generalization trends. (Open in full generality.)

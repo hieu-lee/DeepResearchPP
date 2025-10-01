@@ -1,0 +1,5 @@
+\begin{definition}
+Let $P$ be the set of primes. For $k\in\mathbb N$, define $N(k)$ to be the least integer such that for all $n>N(k)$ there are at least $k$ primes in each of the intervals $[n^2-n,n^2]$ and $[n^2,n^2+n]$.
+\end{definition}
+\bigskip
+\textbf{Conjecture ($k$-fold Oppermann for primes).}\ For every $k\in\mathbb N$, such an $N(k)$ exists; in particular $N(2)=16$, $N(3)=36$, $N(4)=46$, $N(5)=76$, $N(6)=N(7)=79$, $N(8)=85$, $N(9)=118$, $N(10)=136$, $N(11)=N(12)=155$, $N(13)=188$.

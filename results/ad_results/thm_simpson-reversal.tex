@@ -1,0 +1,35 @@
+﻿\begin{theorem}[Simpson-type reversal under identical exposure distributions]\label{thm:simpson-reversal}
+In high--NO$_2$ contexts among week--8 dupilumab partial responders, for any choice of two NO$_2$ exposure levels within the high--NO$_2$ band and any identical exposure distribution across the add--on (dupilumab + Anti22) and dose--intensified regimens (with identical adherence across regimens), there exist settings in which the add--on pathway blockade has a strictly larger NO$_2$--associated flare odds ratio than dose intensification. Moreover, such settings can be arranged while the add--on arm has a strictly lower flare risk at each exposure level; that is,
+\[
+\operatorname{OR}(F\mid \text{Add-on}, \mathrm{NO}_2) \,{>}\\[-2pt] \, \operatorname{OR}(F\mid \text{D-intensified}, \mathrm{NO}_2)
+\]
+with $p_{\mathrm{Add\text{-}on}}(e) < p_{\mathrm{D\text{-}intensified}}(e)$ at both exposure levels.
+\end{theorem}
+
+\begin{proof}
+Fix the post--week--8 window within the cohort of week--8 dupilumab partial responders. Let the NO$_2$ exposure take two levels $e_0 < e_1$ inside the high--NO$_2$ band. Fix arbitrarily any identical distribution of $E$ across the two regimens (e.g., enforce $\Pr(E=e_1\mid T)=q\in(0,1)$ for both $T$) and impose identical adherence across regimens.
+
+For $T\in\{\text{Add-on (dupilumab + Anti22)},\,\text{D-intensified}\}$ and $e\in\{e_0,e_1\}$, write $p_T(e) := \Pr(F=1\mid T, E=e)$. Set the following values, all in $(0,1)$:
+\[
+ p_{\mathrm{Add\text{-}on}}(e_0)=0.05,\quad p_{\mathrm{Add\text{-}on}}(e_1)=0.15,\quad p_{\mathrm{D\text{-}intensified}}(e_0)=0.10,\quad p_{\mathrm{D\text{-}intensified}}(e_1)=0.20.
+\]
+Then $p_{\mathrm{Add\text{-}on}}(e)<p_{\mathrm{D\text{-}intensified}}(e)$ for both $e\in\{e_0,e_1\}$, and $p_T(e_1)>p_T(e_0)$ for both $T$. The regimen--specific NO$_2$--associated odds ratios are
+\[
+\begin{aligned}
+\operatorname{OR}(F\mid \text{Add-on}, \mathrm{NO}_2)
+&= \frac{p_{\mathrm{Add\text{-}on}}(e_1)/(1-p_{\mathrm{Add\text{-}on}}(e_1))}{p_{\mathrm{Add\text{-}on}}(e_0)/(1-p_{\mathrm{Add\text{-}on}}(e_0))}\\
+&= \frac{0.15/0.85}{0.05/0.95} = \frac{3/17}{1/19} = \frac{57}{17} \approx 3.35,
+\end{aligned}
+\]
+\[
+\begin{aligned}
+\operatorname{OR}(F\mid \text{D-intensified}, \mathrm{NO}_2)
+&= \frac{p_{\mathrm{D\text{-}intensified}}(e_1)/(1-p_{\mathrm{D\text{-}intensified}}(e_1))}{p_{\mathrm{D\text{-}intensified}}(e_0)/(1-p_{\mathrm{D\text{-}intensified}}(e_0))}\\
+&= \frac{0.20/0.80}{0.10/0.90} = \frac{1/4}{1/9} = \frac{9}{4} = 2.25.
+\end{aligned}
+\]
+These computations depend only on the conditional risks $p_T(e)$ and are unaffected by the (common) marginal distribution of $E$ or by adherence, which is held identical across regimens. Therefore, for any identical exposure distribution across regimens (with identical adherence), there exist settings in the specified high--NO$_2$, week--8 partial--responder context in which the add--on regimen has a strictly larger NO$_2$--associated flare odds ratio than dose intensification, even though its flare risk is lower at each exposure level. In particular,
+\[
+\operatorname{OR}(F\mid \text{Add-on}, \mathrm{NO}_2) \,{>}\, \operatorname{OR}(F\mid \text{D-intensified}, \mathrm{NO}_2).\qedhere
+\]
+\end{proof}

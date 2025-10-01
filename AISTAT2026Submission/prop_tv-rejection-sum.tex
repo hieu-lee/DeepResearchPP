@@ -1,0 +1,11 @@
+\begin{proposition}[Rejection--correction with approximate coupling]\label{prop:tv-rejection-sum}\sloppy
+Suppose at each step the verifier uses a coupling whose agreement probability is $1-\operatorname{TV}(p_n,q_n)-\epsilon_n$ with $\epsilon_n\in[0,1-\operatorname{TV}(p_n,q_n)]$, and employs a single-step rejection--correction that, upon spurious rejection, resamples from a calibrated correction kernel preserving the marginal $q_n$. Then the overall joint law remains exact, and the expected extra rejections over SD satisfy
+\[
+\mathbb E[\Delta N_{\mathrm{rej}}]=\sum_{n=1}^T\mathbb E[\epsilon_n].
+\]
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+For a fixed step and prefix, write $p=c+s$, $q=c+r$ with $c=\min\{p,q\}$ and residuals $r=[q-p]_+$, $s=[p-q]_+$. An approximate coupling with on-diagonal mass $\|c\|_1-\epsilon$ withholds overlap mass $\sigma=c-\alpha$ of size $\epsilon$. On acceptance we contribute $\alpha$; on rejection, we route true mismatches of total mass $t=\operatorname{TV}(p,q)$ to $r/t$ and spurious rejections of total mass $\epsilon$ to $\sigma/\epsilon$. The unconditional contribution equals $\alpha+(r+\sigma)=q$, hence exactness holds by the chain rule across steps. Compared to SD, the rejection probability at that step increases from $t$ to $t+\epsilon$, so the per-step excess is $\epsilon$; summing over steps and averaging over prefixes yields the claim.\qedhere
+\end{proof}
+

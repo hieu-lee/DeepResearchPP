@@ -1,0 +1,1 @@
+(Convexity of the squared-gradient curve under Polyak–Łojasiewicz.) If f is L-smooth and satisfies the PL condition with parameter \mu, then for any \eta\in(0,\tfrac{2}{L}], the sequence n\mapsto \|g_n\|^2 is convex: \|g_n\|^2-\|g_{n+1}\|^2\ge \|g_{n+1}\|^2-\|g_{n+2}\|^2\ge 0. Consequently, n\mapsto \log\|g_n\| is convex for all sufficiently large n.

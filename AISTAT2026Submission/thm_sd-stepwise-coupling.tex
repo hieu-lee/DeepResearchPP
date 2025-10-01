@@ -1,0 +1,10 @@
+\begin{theorem}[Increasing-order optimality and stepwise characterization of SD]\label{thm:sd-stepwise-coupling}\sloppy
+Fix a finite horizon $T$. Among all unbiased token-level draft--verify algorithms that use exactly one proposal per position with the same proposal conditionals $(p_n)$, standard SD minimizes $\mathbb E[\varphi(N_{\mathrm{rej}})]$ for every function $\varphi$ that is nondecreasing on $\{0,1,\dots,T\}$. Equivalently, $N_{\mathrm{rej}}^{\mathrm{SD}}$ is minimal in the increasing (stochastic) order among all such algorithms. In particular, SD minimizes the mean, the second moment, and all exponential moments of $N_{\mathrm{rej}}$; consequently, within any subclass of algorithms having the same mean, it minimizes the variance. Moreover, any algorithm that is optimal for $\varphi(t)=t$ (and hence any algorithm that is optimal for all such nondecreasing $\varphi$) must, at every step and every prefix, use a maximal-agreement coupling between $q_n(\cdot\mid x)$ and $p_n(\cdot\mid x)$, i.e., it must achieve $\mathbb P\{X_n=Y_n\mid x\}=1-\operatorname{TV}(q_n(\cdot\mid x),p_n(\cdot\mid x))$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+We set up a dynamic program for the cumulative nondecreasing cost $\varphi$ of rejections. Given a prefix $x$, any unbiased one-proposal method is equivalent to a coupling $K$ of $(q_n(\cdot\mid x),p_n(\cdot\mid x))$. The Bellman step depends on $K$ only through the diagonal masses with nonnegative weights, so it is upper-bounded by replacing each $K(u,u)$ with $\min\{q(u),p(u)\}$. This bound is tight via the standard overlap–residual construction that matches the overlap on-diagonal and distributes residuals off-diagonal, which is exactly SD’s step.
+
+Backward induction implies SD is optimal for every nondecreasing $\varphi$, i.e., $N_{\mathrm{rej}}^{\mathrm{SD}}$ is increasing-order minimal. Taking $\varphi(t)=t$ forces any mean-optimal algorithm to maximize the diagonal mass at every step, hence to use a maximal-agreement coupling; therefore the characterization follows. The listed moment and exponential-moment consequences follow by instantiating $\varphi$.\qedhere
+\end{proof}
+

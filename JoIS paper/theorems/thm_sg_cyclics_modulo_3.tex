@@ -1,0 +1,80 @@
+\begin{theorem}[SG cyclics modulo 3 (resolves Conj.~37 of \cite{Cohen2025})]\label{thm:sg_cyclics_modulo_3}
+As the number of SG cyclics grows, the limiting fractions congruent to 1 and 3 mod 3 are equal.
+\end{theorem}
+
+\begin{proof}
+\[N_r(x):=\#\{n\le x:\, n\in S,\ n\equiv r\pmod 3\},\qquad C_{\mathrm{SG}}(x):=\#\{n\le x:\, n\in S\}.
+\]
+Then
+$$\lim_{x\to\infty}\frac{N_1(x)-N_0(x)}{C_{\mathrm{SG}}(x)}=0.$$
+Equivalently, among SG cyclics the limiting fractions in the classes $1$ and $3\pmod3$ are equal.
+
+Write $L_1(n)=n$ and $L_2(n)=2n+1$. For a positive integer $m$, the condition $\gcd(m,\varphi(m))=1$ is equivalent to: (i) $m$ is squarefree, and (ii) there is no pair of distinct prime divisors $p,q\mid m$ with $p\mid(q-1)$ (cf. Szele \cite{Szele1947}). Indeed, $p^2\mid m\Rightarrow p\mid\varphi(m)$, and if $p,q\mid m$ with $p\mid(q-1)$ then also $p\mid\varphi(m)=\prod_{r\mid m}(r-1)$; conversely, if $m$ is squarefree and no such pair occurs then $\gcd\bigl(m,\prod_{q\mid m}(q-1)\bigr)=1$.
+
+Fix large $x$ and set $y:=\lfloor\log x\rfloor\ge3$. We split small primes ($\le y$) from large primes ($>y$).
+
+1) Lower bound for $C_{\mathrm{SG}}(x)$. Let $\mathcal P(y)=\prod_{p\le y}p$ and
+$$\mathcal T(y):=\Bigl\{n\le x:\, \gcd\bigl(L_1(n)L_2(n),\mathcal P(y)\bigr)=1\Bigr\}.$$
+For each prime $p$, the set of residues $n\pmod p$ with $p\mid L_1(n)L_2(n)$ has cardinality $\nu(p)$, where $\nu(2)=1$ and $\nu(p)=2$ for $p\ge3$. By the two-dimensional Brun--Selberg sieve (fundamental lemma; see \cite{HalRich1974,Greaves2001,IK2004}),
+$$\#\mathcal T(y)\asymp x\prod_{p\le y}\Bigl(1-\frac{\nu(p)}{p}\Bigr)=\Bigl(1-\tfrac12\Bigr)x\prod_{3\le p\le y}\Bigl(1-\frac{2}{p}\Bigr)\asymp \frac{x}{(\log y)^2}.\tag{1}$$
+
+Remove from $\mathcal T(y)$ those $n$ that still violate cyclicity for $L_1$ or $L_2$ at large primes ($>y$).
+
+- Large square divisors: for $j\in\{1,2\}$ the number of $n\le x$ with $p^2\mid L_j(n)$ for some prime $p>y$ is bounded by
+\[\sum_{y<p\le\sqrt{2x+1}}\Bigl(\frac{x}{p^2}+1\Bigr)\ \ll\ x\sum_{p>y}\frac{1}{p^2}\ +\ \pi(\sqrt{2x+1})\ \ll\ \frac{x}{y}\ +\ \frac{\sqrt{x}}{\log x}.\tag{2}\]
+
+- Large-large pair violations in one $L_j$: existence of primes $y<p<q\le 2x+1$ with $p\mid L_j(n)$, $q\mid L_j(n)$ and $q\equiv1\pmod p$. For each fixed pair $(p,q)$ there is exactly one residue class $\bmod\,pq$ for $n$ (by CRT), hence the count per pair is $\frac{x}{pq}+O(1)$. Summing over pairs we get, for each $j$, a contribution
+\[\Sigma_j\ \le\ x\sum_{\substack{y<p<q\le 2x+1\ q\equiv1\ (p)}}\frac{1}{pq}\ +\ \sum_{\substack{y<p<q\le 2x+1\ q\equiv1\ (p)}}1\ =:\ x\,S_1\ +\ S_2.\]
+We bound $S_1$ and $S_2$ separately.
+
+* Bound for $S_1$. By the Brun--Titchmarsh inequality and partial summation (e.g., \cite{MV2007,IK2004}), for $t>p$ we have
+$$\sum_{\substack{q\le t\ q\equiv1\ (p)}}\frac{1}{q}\ \ll\ \frac{1}{\varphi(p)}\log\log t\ \ll\ \frac{\log\log t}{p-1}.$$
+Therefore
+$$S_1\le \sum_{p>y}\frac{1}{p}\sum_{\substack{y<q\le 2x+1\ q\equiv1\ (p)}}\frac{1}{q}\ \ll\ \log\log x\sum_{p>y}\frac{1}{p(p-1)}\ \ll\ \frac{\log\log x}{y}.\tag{3}$$
+
+* Bound for $S_2$. Write $U:=2x+1$. Split at $\sqrt U$:
+\[S_2=\sum_{\substack{y<p\le\sqrt U}}\pi(U;p,1)\ +\ \sum_{\substack{\sqrt U<p\le U}}\pi(U;p,1)=:S_{2,\le}+S_{2,>}.
+\]
+For $p\le\sqrt U$, the Brun--Titchmarsh inequality gives (e.g., \cite{MV2007,IK2004})
+$$\pi(U;p,1)\ \le\ \frac{2U}{\varphi(p)\log(U/p)}\ \le\ \frac{4U}{(p-1)\log U},$$
+whence
+$$S_{2,\le}\ \ll\ \frac{U}{\log U}\sum_{p>y}\frac{1}{p-1}\ \ll\ \frac{U}{\log U}\sum_{p>y}\frac{1}{p}\ \ll\ \frac{U\log\log U}{\log U}.\tag{4}$$
+For $p>\sqrt U$, any prime $q\le U$ with $q\equiv1\pmod p$ forces $p\mid(q-1)$ and $p>\sqrt{q-1}$, so $p$ is the unique prime factor of $q-1$ exceeding $\sqrt{q-1}$. Thus each prime $q\le U$ contributes to at most one such $p$, and
+$$S_{2,>}\ \le\ \pi(U)\ \ll\ \frac{U}{\log U}.\tag{5}$$
+Combining (4)-(5),
+$$S_2\ \ll\ \frac{U\log\log U}{\log U}\ =\ \frac{x\log\log x}{\log x}.\tag{6}$$
+From (3) and (6), for each $j\in\{1,2\}$,
+$$\Sigma_j\ \ll\ x\cdot\frac{\log\log x}{y}\ +\ \frac{x\log\log x}{\log x}.\tag{7}$$
+
+Let $\mathcal T^{\rm good}(y)$ be the subset of $\mathcal T(y)$ that suffers neither large squares (in (2)) nor large-large pair violations (in (7)) for $L_1$ and $L_2$. Using (1)-(2)-(7),
+\[\#\mathcal T^{\rm good}(y)\ \ge\ \#\mathcal T(y)\ -\ O\!\Bigl(\frac{x}{y}+\frac{\sqrt{x}}{\log x}+x\frac{\log\log x}{y}+\frac{x\log\log x}{\log x}\Bigr).\tag{8}\]
+Taking $y=\lfloor\log x\rfloor$, (1) yields $\#\mathcal T(y)\asymp x/(\log\log x)^2$, while every error term on the right of (8) is $o\bigl(x/(\log\log x)^2\bigr)$. Hence
+$$\#\mathcal T^{\rm good}(y)\ \gg\ \frac{x}{(\log\log x)^2}.\tag{9}$$
+Each $n\in\mathcal T^{\rm good}(y)$ has both $L_1(n)$ and $L_2(n)$ squarefree with all prime factors $>y$ and, within each $L_j$, no pair $p,q\mid L_j(n)$ with $p\mid(q-1)$. Thus both $L_1(n)$ and $L_2(n)$ are cyclic, so
+$$C_{\mathrm{SG}}(x)=\#S\ \ge\ \#\mathcal T^{\rm good}(y)\ \gg\ \frac{x}{(\log\log x)^2}.\tag{10}$$
+
+2) Upper bound for $N_0(x)+N_1(x)$. Note
+$$n\equiv0\ (3)\iff 3\mid L_1(n),\qquad n\equiv1\ (3)\iff 3\mid L_2(n).$$
+If $3\mid L_j(n)$ and $n\in S$, then no prime $q\equiv1\pmod3$ divides $L_j(n)$ (else $(3,q)$ violates cyclicity of $L_j(n)$). Let
+$$Q:=\{\,q:\ y<q\le 2x+1,\ q\equiv1\ (3),\ q\text{ prime}\,\}.$$
+For $j\in\{1,2\}$ and $a_1=0$, $a_2=1$, define
+$$S_j(x;y):=\#\Bigl\{n\le x:\ n\equiv a_j\ (3),\ q\nmid L_j(n)\ \forall\ q\in Q\Bigr\}.$$
+Then
+$$N_0(x)\le S_1(x;y),\qquad N_1(x)\le S_2(x;y),\qquad |N_1(x)-N_0(x)|\le S_1(x;y)+S_2(x;y).\tag{11}$$
+Let $\mathcal A_j=\{n\le x:\ n\equiv a_j\ (3)\}$, so $X:=\#\mathcal A_j=x/3+O(1)$. For squarefree $d$ supported on primes in $Q$, the system $d\mid L_j(n)$ together with $n\equiv a_j\ (3)$ picks exactly one residue class modulo $3d$; hence
+$$A_j(d):=\#\{n\in\mathcal A_j:\ d\mid L_j(n)\}=\frac{X}{d}+O(1).\tag{12}$$
+Applying the upper-bound Selberg--Brun sieve (see, e.g., \cite{HalRich1974,IK2004}) with sifting set $Q$, level $z=2x+1$, and weights supported on $d\le D=x^{1/2}$, one obtains
+$$S_j(x;y)\ \le\ X\,V(z)\,F\!\Bigl(\frac{\log D}{\log z}\Bigr)+O(D),\tag{13}$$
+where $V(z)=\prod_{q\in Q,\ q<z}(1-1/q)=\prod_{q\in Q}(1-1/q)$ and the dimension-$1$ sieve function $F$ is uniformly bounded. Thus
+$$S_j(x;y)\ \ll\ \frac{x}{3}\prod_{q\in Q}\Bigl(1-\frac1q\Bigr)+x^{1/2}.\tag{14}$$
+By PNT in arithmetic progressions modulo $3$ and partial summation,
+$$\sum_{\substack{q\le t\ q\equiv1\ (3)}}\frac1q=\tfrac12\log\log t+O(1),\qquad \prod_{\substack{q\le t\ q\equiv1\ (3)}}\Bigl(1-\frac1q\Bigr)\asymp (\log t)^{-1/2}.$$
+Therefore
+$$\prod_{q\in Q}\Bigl(1-\frac1q\Bigr)=\frac{\displaystyle\prod_{\substack{q\le 2x+1\ q\equiv1\ (3)}}(1-1/q)}{\displaystyle\prod_{\substack{q\le y\ q\equiv1\ (3)}}(1-1/q)}\ \ll\ \Bigl(\frac{\log y}{\log x}\Bigr)^{1/2}.\tag{15}$$
+Combining (11), (14), and (15) with $y=\lfloor\log x\rfloor$ gives
+$$|N_1(x)-N_0(x)|\ \le\ S_1(x;y)+S_2(x;y)\ \ll\ x\Bigl(\frac{\log\log x}{\log x}\Bigr)^{1/2}+x^{1/2}.\tag{16}$$
+
+3) Conclusion. From (10) and (16),
+$$\frac{|N_1(x)-N_0(x)|}{C_{\mathrm{SG}}(x)}\ \ll\ \frac{x\bigl(\tfrac{\log\log x}{\log x}\bigr)^{1/2}+x^{1/2}}{x/(\log\log x)^2}\ \ll\ \frac{(\log\log x)^{5/2}}{\sqrt{\log x}}+\frac{(\log\log x)^2}{\sqrt{x}}\ \to\ 0.$$
+Thus the limiting fractions of SG cyclics in the residue classes $1$ and $3\pmod3$ are equal. 
+\end{proof}

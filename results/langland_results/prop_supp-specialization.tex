@@ -1,0 +1,57 @@
+\begin{proposition}\label{prop:supp-specialization}
+For any $E\in\IndCoh\big(\LS^{\restr}_{\breve G,K}\big)$ one has an equality of closed derived substacks inside $\LS^{\restr}_{\breve G,k}$:
+\[
+\operatorname{Supp}_{\breve G}\big(\Sp^{\IndCoh}_{K\to k}(E)\big)
+=\overline{\mathrm{Spc}}_{K\to k}\big(\operatorname{Supp}_{\breve G}(E)\big),
+\]
+where $\overline{\mathrm{Spc}}_{K\to k}$ denotes schematic specialization of closed subsets under the base change $\LS^{\restr}_{\breve G,K}\to\LS^{\restr}_{\breve G,k}$.
+\end{proposition}
+
+\begin{proof}
+Set $Y_{R_0}:=\LS^{\restr}_{\breve G,R_0}$ with generic and special fibers $Y_K$ and $Y_k$, and write
+\[
+ j: Y_K\hookrightarrow Y_{R_0},\qquad i: Y_k\hookrightarrow Y_{R_0}
+\]
+for the canonical open and closed immersions. Let $E\in\IndCoh(Y_K)$.
+
+Define spectral specialization along the trait by the functor
+\[
+\Sp^{\IndCoh}_{K\to k}:
+\IndCoh(Y_K)\xrightarrow{\ j_{*,\mathrm{ren}}\ }\IndCoh(Y_{R_0})\xrightarrow{\ i^*\ }\IndCoh(Y_k),
+\qquad \Sp^{\IndCoh}_{K\to k}:=i^*\ccomp j_{*,\mathrm{ren}}.
+\]
+Here $j^*:\IndCoh(Y_{R_0})\to\IndCoh(Y_K)$ is a localization with fully faithful right adjoint $j_{*,\mathrm{ren}}$, and $i_*:\IndCoh(Y_k)\to\IndCoh(Y_{R_0})$ is fully faithful with both adjoints $i^*$ and $i^!$.
+
+We compute supports using two standard facts for $\IndCoh$.
+
+(A) Closure under renormalized extension by zero. For any open immersion $j:U\hookrightarrow Y$ and $\mathcal M\in\IndCoh(U)$,
+\[
+\operatorname{Supp}_Y\big(j_{*,\mathrm{ren}}\mathcal M\big)=\overline{\operatorname{Supp}_U(\mathcal M)}\subset Y.
+\]
+Indeed, support is Zariski-local on $Y$. For a quasi-compact open $W\subset Y$, with $U_W:=U\times_Y W$ and $j_W:U_W\hookrightarrow W$, one has
+\[
+\big(j_{*,\mathrm{ren}}\mathcal M\big)\big|_W\;\simeq\;(j_W)_*\big(\mathcal M\big|_{U_W}\big),
+\]
+where $j_W$ is quasi-compact and the usual $(j_W)_*$ exists; for such $j_W$ the familiar formula $\operatorname{Supp}_W\big((j_W)_*\mathcal N\big)=\overline{\operatorname{Supp}_{U_W}(\mathcal N)}$ holds. Gluing over $W$ gives the claim.
+
+(B) Intersection under $*$-pullback to a closed substack. For a closed immersion $i:Z\hookrightarrow Y$ and $\mathcal N\in\IndCoh(Y)$,
+\[
+\operatorname{Supp}_Z\big(i^*\mathcal N\big)=\operatorname{Supp}_Y(\mathcal N)\times_Y Z.
+\]
+This follows because $i_*:\IndCoh(Z)\xrightarrow{\sim}\IndCoh_Z(Y)$ is an equivalence onto the full subcategory of objects scheme-theoretically supported on $Z$, and $i^*$ is left adjoint to $i_*$. Under this identification, $i^*$ extracts the maximal quotient of $\mathcal N$ scheme-theoretically supported on $Z$, hence its support is the scheme-theoretic intersection with $Z$.
+
+Apply (A) to $j:Y_K\hookrightarrow Y_{R_0}$ and $E$, and then (B) to $i:Y_k\hookrightarrow Y_{R_0}$ and $j_{*,\mathrm{ren}}E$:
+\[
+\begin{aligned}
+\operatorname{Supp}_{Y_k}\big(\Sp^{\IndCoh}_{K\to k}(E)\big)
+&=\operatorname{Supp}_{Y_k}\big(i^*\,j_{*,\mathrm{ren}}E\big)\\
+&=\operatorname{Supp}_{Y_{R_0}}\big(j_{*,\mathrm{ren}}E\big)\times_{Y_{R_0}} Y_k\\
+&=\overline{\operatorname{Supp}_{Y_K}(E)}\times_{Y_{R_0}} Y_k.
+\end{aligned}
+\]
+By definition, $\overline{\operatorname{Supp}_{Y_K}(E)}\times_{Y_{R_0}} Y_k$ is the schematic specialization $\overline{\mathrm{Spc}}_{K\to k}\big(\operatorname{Supp}_{Y_K}(E)\big)$ of the closed derived substack $\operatorname{Supp}_{Y_K}(E)\subset Y_K$ along $\,Y_{R_0}\to\operatorname{Spec} R_0$. Under the identifications $Y_K=\LS^{\restr}_{\breve G,K}$ and $Y_k=\LS^{\restr}_{\breve G,k}$, this yields the desired equality as closed derived substacks of $\LS^{\restr}_{\breve G,k}$:
+\begin{equation*}
+\operatorname{Supp}_{\breve G}\big(\Sp^{\IndCoh}_{K\to k}(E)\big)
+=\overline{\mathrm{Spc}}_{K\to k}\big(\operatorname{Supp}_{\breve G}(E)\big).\;\qedhere
+\end{equation*}
+\end{proof}

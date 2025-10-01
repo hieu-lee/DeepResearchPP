@@ -1,0 +1,15 @@
+\begin{proposition}[Block full-acceptance lower bound via additive TVs]\label{prop:block-tv-lower}
+For $K$-block draft--verify with longest-prefix verification and fixed proposal conditionals $p_{n:n+K-1}$, define the prefix-measurable gaps $\pi_{n+i}:=\operatorname{TV}(p_{n+i}(\cdot\mid X_{1:n+i-1}),q_{n+i}(\cdot\mid X_{1:n+i-1}))$. Then
+\[
+\mathbb{P}\{A^{(K)}=K\}\;\ge\;1-\sum_{i=0}^{K-1}\mathbb{E}\big[\operatorname{TV}(p_{n+i},q_{n+i})\big].
+\]
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+By maximal coupling at each in-block step, conditional on the first $i$ matches the acceptance probability at the next step equals $1-\pi_{n+i}$. Hence pathwise
+\(
+\mathbb P\{A^{(K)}=K\mid X_{1:n+K-1}\}=\prod_{i=0}^{K-1}(1-\pi_{n+i}).
+\)
+The elementary inequality $\prod_{i}(1-a_i)\ge 1-\sum_i a_i$ for $a_i\in[0,1]$ gives a pathwise lower bound by $1-\sum_i\pi_{n+i}$; averaging over prefixes and internal randomness yields the claim.\qedhere
+\end{proof}
+

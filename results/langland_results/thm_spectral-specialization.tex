@@ -1,0 +1,51 @@
+\begin{theorem}[Spectral specialization at the QCoh-valued (coarse Langlands) level]\label{thm:spectral-specialization}
+For any $\mathcal F\in\Shv_{\Nilp}(\Bun_{G,K})_{\mathrm{temp}}$, there is a canonical isomorphism in $\QCoh(\LS^{\restr}_{\breve G,k})$:
+\[
+\mathsf L^{\restr}_{G,k,\coarse}\bigl(\Sp_{K\to k}(\mathcal F)\bigr)
+\;\simeq\;
+\omega\otimes^{\mathbb L}\underline{\operatorname{Hom}}\bigl(\Poinc^{!}_{\Vac,\spec,k},\,\Sp^{\IndCoh}_{K\to k}\,\mathsf L^{\restr}_{G,K}(\mathcal F)\bigr),
+\]
+compatible with Hecke and Eisenstein functorialities. In particular, applying global sections recovers the Whittaker coefficient identity
+\[
+\coeff^{\Vac}_{G,k}\bigl(\Sp_{K\to k}(\mathcal F)\bigr)\;\simeq\;\Gamma\Bigl(\LS^{\restr}_{\breve G,k},\,\omega\otimes^{\mathbb L}\underline{\operatorname{Hom}}\bigl(\Poinc^{!}_{\Vac,\spec,k},\,\Sp^{\IndCoh}_{K\to k}\,\mathsf L^{\restr}_{G,K}(\mathcal F)\bigr)\Bigr),
+\]
+with the same compatibilities.
+\end{theorem}
+
+\begin{proof}
+Fix a DVR $R_0$ with fraction field $K$ and residue field $k$. By the restricted Langlands equivalence, for $s\in\{K,k\}$ there is an equivalence
+\[
+\mathsf L^{\restr}_{G,s}:
+\Shv_{\Nilp}(\Bun_{G,s})\xrightarrow{\ \sim\ }\IndCoh_{\Nilp}(\LS^{\restr}_{\breve G,s}),
+\]
+compatible with the ambient embeddings; write $\Poinc^{!}_{\Vac,\spec,s}:=\mathsf L^{\restr}_{G,s}(\Poinc^{!}_{\Vac,s})$ and let $\omega$ denote the dualizing sheaf on $\LS^{\restr}_{\breve G,s}$.
+
+(1) Whittaker normalization at the QCoh level. There is a canonical identification of $\QCoh(\LS^{\restr}_{\breve G,s})$-valued functors
+\[
+\mathsf L^{\restr}_{G,s,\coarse}(-)\;\simeq\;\omega\otimes^{\mathbb L}\underline{\operatorname{Hom}}\bigl(\Poinc^{!}_{\Vac,\spec,s},\,\mathsf L^{\restr}_{G,s}(-)\bigr).
+\]
+
+(2) Apply $s=k$ to $\Sp_{K\to k}(\mathcal F)$. Using step (1) with $s=k$ gives a canonical identification in $\QCoh(\LS^{\restr}_{\breve G,k})$:
+\[
+\mathsf L^{\restr}_{G,k,\coarse}\bigl(\Sp_{K\to k}(\mathcal F)\bigr)
+\;\simeq\;
+\omega\otimes^{\mathbb L}\underline{\operatorname{Hom}}\bigl(\Poinc^{!}_{\Vac,\spec,k},\,\mathsf L^{\restr}_{G,k}(\Sp_{K\to k}(\mathcal F))\bigr).
+\]
+
+(3) Spectral specialization. There is a canonical identification, functorial and $\QCoh$-linear on tempered objects,
+\[
+\mathsf L^{\restr}_{G,k}\ccomp\Sp_{K\to k}
+\;\simeq\;
+\Sp^{\IndCoh}_{K\to k}\ccomp\mathsf L^{\restr}_{G,K}.
+\]
+Substituting this into the right-hand side of step (2) yields the desired isomorphism in $\QCoh(\LS^{\restr}_{\breve G,k})$:
+\[
+\mathsf L^{\restr}_{G,k,\coarse}\bigl(\Sp_{K\to k}(\mathcal F)\bigr)
+\;\simeq\;
+\omega\otimes^{\mathbb L}\underline{\operatorname{Hom}}\bigl(\Poinc^{!}_{\Vac,\spec,k},\,\Sp^{\IndCoh}_{K\to k}\,\mathsf L^{\restr}_{G,K}(\mathcal F)\bigr).
+\]
+
+Taking global sections of both sides and using step (1) again (together with Serre duality if desired) recovers the stated identity for Whittaker coefficients.
+
+Hecke and Eisenstein compatibilities follow from the functorial compatibilities of the ingredients: $\Sp_{K\to k}$ commutes with Hecke and with parabolic Eisenstein and preserves temperedness; $\mathsf L^{\restr}_G$ is compatible with Hecke/Satake and intertwines automorphic and spectral Eisenstein; the identification in step (3) is $\QCoh$-linear; and $\omega\otimes^{\mathbb L}\underline{\operatorname{Hom}}(-,-)$ is $\QCoh$-linear.
+\end{proof}

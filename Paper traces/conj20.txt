@@ -1,0 +1,9 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $(c_n)_{n\ge1}$ enumerate the cyclics increasingly.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Dusart–Mandl analog for cyclics).}\ For all $n>5$,
+\[
+\frac{c_1+\cdots+c_n}{n}\ <\ \frac{c_n}{2},
+\]
+and the reverse strict inequality holds for $n=1,2,3,4,5$.

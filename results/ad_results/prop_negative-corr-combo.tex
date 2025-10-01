@@ -1,0 +1,42 @@
+﻿\begin{proposition}\label{prop:negative-corr-combo}
+Let $p$ be sampled uniformly from the two-element library $\{p_1,p_2\}$. For each $p$, let $C_p$ be an event and let $F(p)$ be any feature variable; define $\kappa_\perp(p):=\mathbb P(C_p\mid F(p))\in[0,1]$ and $J^{\mathrm{combo}}(p):=S_p\,\mathbf 1_{C_p}$, where $S_p\ge 0$ is the synergy amplitude realized when $C_p$ occurs. Then there exist choices of $F$ and deterministic nonnegative amplitudes $S_p$ (depending only on $F(p)$ and $C_p$) for which $\mathrm{corr}(\kappa_\perp, J^{\mathrm{combo}})<0$. Consequently, a universally positive correlation $\mathrm{corr}(\kappa_\perp, J^{\mathrm{combo}})>0$ need not hold.
+\end{proposition}
+
+\begin{proof}
+Let $\mathcal L=\{p_1,p_2\}$ and suppose that for each $p\in\mathcal L$ we have a feature value $F(p)$ and an event $C_p$ with
+\[
+\kappa_\perp(p):=\mathbb P(C_p\mid F(p))\in[0,1].
+\]
+Define $J^{\mathrm{combo}}(p):=S_p\,\mathbf 1_{C_p}$ with $S_p\ge 0$ chosen deterministically from $(F(p),C_p)$ by
+\[
+S_p:=\begin{cases}\mu(F(p)),& C_p=1,\\ 0,& C_p=0,\end{cases}
+\]
+for a nonnegative function $\mu$ on the range of $F$. Then
+\[
+\mathbb E\big[J^{\mathrm{combo}}(p)\mid F(p)\big]=\mathbb P(C_p\mid F(p))\,\mathbb E\big[S_p\mid F(p),C_p{=}1\big]=\kappa_\perp(p)\,\mu(F(p)).
+\]
+Choose the deterministic specifications
+\[
+\big(\kappa_\perp(p_1),\ \mu(F(p_1))\big)=\Big(\tfrac{9}{10},\ \tfrac{1}{10}\Big),\qquad \big(\kappa_\perp(p_2),\ \mu(F(p_2))\big)=\Big(\tfrac{1}{10},\ 10\Big).
+\]
+Let $X:=\kappa_\perp(p)$ and $Y:=J^{\mathrm{combo}}(p)$ under the uniform draw of $p\in\mathcal L$ and the internal randomness of $(C_p,S_p)$ conditional on $F(p)$. Writing $\mathcal F:=\sigma(F)$, the variable $X$ is $\mathcal F$-measurable, hence
+\[
+\operatorname{Cov}(X,Y)=\operatorname{Cov}\big(X,\,\mathbb E[Y\mid \mathcal F]\big)=\operatorname{Cov}\big(X,\,\mu(F)\,X\big).
+\]
+Compute the moments:
+\[
+\mathbb E[X]=\tfrac{1}{2}\Big(\tfrac{9}{10}+\tfrac{1}{10}\Big)=\tfrac{1}{2},\qquad \mathbb E\big[\mathbb E[Y\mid \mathcal F]\big]=\tfrac{1}{2}\Big(\tfrac{9}{100}+1\Big)=\tfrac{109}{200},
+\]
+\[
+\mathbb E[XY]=\mathbb E\big[\mu(F)X^2\big]=\tfrac{1}{2}\Big(\tfrac{1}{10}\cdot\tfrac{81}{100}+10\cdot\tfrac{1}{100}\Big)=\tfrac{181}{2000}.
+\]
+Therefore
+\[
+\operatorname{Cov}(X,Y)=\mathbb E[XY]-\mathbb E[X]\,\mathbb E[Y]=\tfrac{181}{2000}-\tfrac{1}{2}\cdot\tfrac{109}{200}=-\tfrac{364}{2000}<0.
+\]
+Moreover, $\operatorname{Var}(X)>0$ (since $X$ takes two distinct values) and $\operatorname{Var}(Y)\ge \operatorname{Var}(\mathbb E[Y\mid \mathcal F])>0$ (because $\mathbb E[Y\mid \mathcal F]$ takes the distinct values $\tfrac{9}{100}$ and $1$). Hence
+\[
+\mathrm{corr}(X,Y)=\frac{\operatorname{Cov}(X,Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}}<0,\quad\text{as claimed.}\qedhere
+\]
+Thus, even with a uniform two-element library and deterministic nonnegative amplitudes $S_p$ (depending only on $F(p)$ and $C_p$), one can have $\mathrm{corr}(\kappa_\perp, J^{\mathrm{combo}})<0$, so a universally positive correlation need not hold.
+\end{proof}

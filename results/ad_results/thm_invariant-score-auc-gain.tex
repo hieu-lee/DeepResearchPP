@@ -1,0 +1,102 @@
+﻿\begin{theorem}[Invariant score with external AUC gain]\label{thm:invariant-score-auc-gain}
+There exist a subset \(\tilde G\subset\mathcal{G}\) and a score \(S_{\tilde G}\) that is distributionally invariant across the skin and blood domains such that, for predicting \(\mathrm{EASI}{-}75\) on dupilumab,
+\[
+\mathrm{AUC}_{\text{external}}(S_{\tilde G})\;\ge\;\mathrm{AUC}_{\text{external}}(S_G)+\delta\quad\text{for some }\delta>0,
+\]
+while maintaining \(\mathrm{corr}_{\text{Spearman}}(S_{\tilde G},\Delta\mathrm{EASI})\neq 0\).
+\end{theorem}
+
+\begin{proof}
+Let \(D\in\{\text{skin},\text{blood}\}\) denote the tissue domain, \(Y\in\{0,1\}\) the indicator of achieving EASI-75 on dupilumab, and \(\Delta\mathrm{EASI}\in\mathbb{R}\) the improvement. Consider the following concrete probabilistic model (all random variables continuous except \(Y\)).
+
+Choose a nonempty gene subset \(\tilde G\subset\mathcal G\) and summarize its cross-tissue expression by a one-dimensional score \(T:=T(X_{\tilde G})\in\mathbb{R}\). For each domain \(d\in\{\text{skin},\text{blood}\}\) assume
+\[
+T\mid(Y{=}1,D{=}d)\sim\mathcal N(\mu_{T,d},1),\qquad 
+T\mid(Y{=}0,D{=}d)\sim\mathcal N(-\mu_{T,d},1),\qquad \mu_{T,d}>0,
+\]
+so that larger \(T\) within each domain favors response. Introduce a spurious coordinate \(V\) (measured on \(G:=\tilde G\cup\{v\}\)) that aligns with \(Y\) in skin but flips in blood:
+\[
+\begin{aligned}
+&V\mid(Y{=}1,D{=}\text{skin})\sim\mathcal N(\mu_V,1),&& V\mid(Y{=}0,D{=}\text{skin})\sim\mathcal N(-\mu_V,1),\\
+&V\mid(Y{=}1,D{=}\text{blood})\sim\mathcal N(-\mu_V,1),&& V\mid(Y{=}0,D{=}\text{blood})\sim\mathcal N(\mu_V,1),\quad \mu_V>0,
+\end{aligned}
+\]
+with \((T,V)\) conditionally independent given \((Y,D)\).
+
+Define a non-invariant score that exploits \(V\):
+\[
+S_G:=T+\lambda V,\qquad \lambda>0.
+\]
+
+Construct an invariant score using only \(\tilde G\) by domain-wise calibration. For each \(d\), let \(F_d\) be the unconditional CDF of \(T\mid D{=}d\) (the \(Y\)-mixture in domain \(d\)), and set
+\[
+S_{\tilde G}:=g_D(T):=\Phi^{-1}\big(F_D(T)\big),
+\]
+where \(\Phi\) is the standard normal CDF. Since \(U:=F_d(T)\mid D{=}d\sim\mathrm{Unif}(0,1)\) (the mixture is absolutely continuous), it follows that \(S_{\tilde G}\mid D{=}d\sim\mathcal N(0,1)\) for every \(d\). Thus \(S_{\tilde G}\) is distributionally invariant across skin and blood, and each \(g_d\) is strictly increasing.
+
+External AUCs are evaluated in blood (\(D{=}\text{blood}\)). For any continuous score, \(\mathrm{AUC}=\mathbb P(S_+>S_-)\) with \(S_+\overset{d}{=}S\mid Y{=}1\) and \(S_-\overset{d}{=}S\mid Y{=}0\) independent. Because \(S_{\tilde G}=g_{\text{blood}}(T)\) with \(g_{\text{blood}}\) strictly increasing,
+\[
+\begin{aligned}
+\mathrm{AUC}_{\text{external}}(S_{\tilde G})
+&= \mathbb P\big(g_{\text{blood}}(T_+)>g_{\text{blood}}(T_-)\big)\\
+&= \mathbb P(T_+>T_-)\\
+&= \Phi\!\left(\frac{\mu_{T,\text{blood}}-(-\mu_{T,\text{blood}})}{\sqrt{1+1}}\right)
+= \Phi(\sqrt{2}\,\mu_{T,\text{blood}}) > \tfrac12.
+\end{aligned}
+\]
+For \(S_G=T+\lambda V\) evaluated in blood,
+\[
+S_+\sim\mathcal N(\mu_{T,\text{blood}}-\lambda\mu_V,\,1+\lambda^2),\quad S_-\sim\mathcal N(-\mu_{T,\text{blood}}+\lambda\mu_V,\,1+\lambda^2),
+\]
+so
+\[
+\begin{aligned}
+\mathrm{AUC}_{\text{external}}(S_G)
+&=\Phi\!\left(\frac{(\mu_{T,\text{blood}}-\lambda\mu_V)-(-\mu_{T,\text{blood}}+\lambda\mu_V)}{\sqrt{(1+\lambda^2)+(1+\lambda^2)}}\right)\\
+&=\Phi\!\left(\frac{\sqrt{2}\,(\mu_{T,\text{blood}}-\lambda\mu_V)}{\sqrt{1+\lambda^2}}\right).
+\end{aligned}
+\]
+Choosing \(\lambda\mu_V>\mu_{T,\text{blood}}\) makes the argument negative, hence \(\mathrm{AUC}_{\text{external}}(S_G)<\tfrac12\). Therefore, for
+\[
+\delta:=\Phi(\sqrt{2}\,\mu_{T,\text{blood}})-\Phi\!\left(\tfrac{\sqrt{2}\,(\mu_{T,\text{blood}}-\lambda\mu_V)}{\sqrt{1+\lambda^2}}\right)>0,
+\]
+we have \(\mathrm{AUC}_{\text{external}}(S_{\tilde G})\ge \mathrm{AUC}_{\text{external}}(S_G)+\delta\).
+
+It remains to ensure nonzero Spearman correlation with clinical improvement. In blood, set
+\[
+\Delta\mathrm{EASI}=\beta T+\xi,\qquad \beta\neq 0,\; \xi\perp T,\; \xi\sim\mathcal N(0,\sigma^2).
+\]
+We use the following lemma.
+
+\begin{lemma}[Rank-correlation under independent noise]\label{lem:rank-corr-noise}
+Let \(Y:=\beta T+\xi\) with \(\beta\ne0\), \(T\) continuous, and \(\xi\perp T\) with a strictly positive density everywhere (e.g., Gaussian). Then the Spearman correlation \(\rho_s(T,Y)\) has the sign of \(\beta\) and is nonzero.
+\end{lemma}
+
+\begin{proof}[Proof of Lemma \ref{lem:rank-corr-noise}]
+It suffices to treat \(\beta>0\); the case \(\beta<0\) follows by replacing \(T\) with \(-T\). Let \(F_T\) and \(F_Y\) be the CDFs of \(T\) and \(Y\), and set \(U:=F_T(T)\), \(V:=F_Y(Y)\). For continuous \(T\) and \(Y\), \(U,V\sim\mathrm{Unif}(0,1)\) and \(\rho_s(T,Y)=12\,\mathrm{Cov}(U,V)\). Because \(\xi\) has a strictly positive density, \(Y=\beta T+\xi\) has an everywhere positive density: for every \(y\),
+\[
+ f_Y(y)=\mathbb E\big[f_\xi(y-\beta T)\big]>0,
+\]
+so \(F_Y\) is strictly increasing. For any fixed \(x\in\mathbb R\), define \(g_x(t):=F_Y(\beta t+x)\), which is strictly increasing in \(t\). Let \(T'\) be an i.i.d. copy of \(T\), independent of everything. Using \(2\,\mathrm{Cov}(A,B)=\mathbb{E}[(A-A')(B-B')]\) for i.i.d. copies,
+\[
+2\,\mathrm{Cov}(U,V\mid\xi{=}x)=\mathbb{E}\big[(F_T(T)-F_T(T'))\,(g_x(T)-g_x(T'))\big].
+\]
+Since \(F_T\) is nondecreasing and \(g_x\) strictly increasing, the integrand is almost surely nonnegative and strictly positive with probability 1 (because \(T\) is continuous so \(\mathbb P(T\neq T')=1\) and \(g_x(T)\neq g_x(T')\) whenever \(T\neq T'\)). Hence \(\mathrm{Cov}(U,V\mid\xi{=}x)>0\) for every \(x\), and therefore \(\mathrm{Cov}(U,V)>0\). Consequently \(\rho_s(T,Y)=12\,\mathrm{Cov}(U,V)>0\).
+\end{proof}
+
+Finally, \(S_{\tilde G}=g_{\text{blood}}(T)\) is a strictly increasing function of \(T\) in the external (blood) domain, and for any strictly increasing \(h\),
+\[
+F_{h(T)}(h(t))=\mathbb{P}(h(T)\le h(t))=\mathbb{P}(T\le t)=F_T(t),
+\]
+so Spearman correlation is invariant under strictly increasing transforms of either variable. Therefore,
+\[
+\rho_s(S_{\tilde G},\Delta\mathrm{EASI}\mid D{=}\text{blood})=\rho_s(T,\Delta\mathrm{EASI}\mid D{=}\text{blood})\neq 0\quad\text{by Lemma \ref{lem:rank-corr-noise}}.
+\]
+Collecting the conclusions, there exist \(\tilde G\subset\mathcal G\) and a domain-invariant score \(S_{\tilde G}\) such that, for predicting EASI-75 on dupilumab in the external (blood) domain,
+\[
+\begin{aligned}
+\mathrm{AUC}_{\text{external}}(S_{\tilde G}) &\ge \mathrm{AUC}_{\text{external}}(S_G)+\delta\quad(\delta>0),\\
+\mathrm{corr}_{\text{Spearman}}(S_{\tilde G},\Delta\mathrm{EASI}\mid D{=}\text{blood}) &\ne 0.\;\qedhere
+\end{aligned}
+\]
+\end{proof}

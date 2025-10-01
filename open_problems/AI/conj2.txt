@@ -1,0 +1,13 @@
+\begin{definition}
+Let a $K$-class classifier have last-layer features $h(x)\in\mathbb R^d$ and class means $\mu_c:=\frac1{n_c}\sum_{y=c} h(x)$.
+Let $W\in\mathbb R^{K\times d}$ be the last-layer weight matrix for a balanced dataset.
+Define \emph{within-class covariance} $\Sigma_W$ of features and \emph{between-class} matrix $M:=[\mu_1,\dots,\mu_K]\in\mathbb R^{d\times K}$.
+An \emph{ETF} (equiangular tight frame) in $\mathbb R^d$ is a set of $K$ vectors with equal norms and constant pairwise inner products.
+\end{definition}
+
+\textbf{Conjecture (Neural Collapse on train \emph{and} test).}
+In the terminal training phase of deep classifiers with cross-entropy, as training loss $\to0$:
+(i) within-class variability collapses, $\Sigma_W\to0$;
+(ii) class means collapse to a centered simplex ETF;
+(iii) last-layer weights align with class means; and
+(iv) the same structure emerges on the \emph{test} distribution. (Items (ii)–(iv) remain open generally.)

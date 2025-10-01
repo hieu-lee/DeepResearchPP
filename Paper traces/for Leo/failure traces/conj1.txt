@@ -1,0 +1,6 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function.
+Write $C:=\{n\in\mathbb N:\ n\ \text{is cyclic}\}$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Goldbach analog for cyclics).}\ Every even integer $n>2$ can be expressed as a sum of two cyclic numbers, i.e., $\exists\,c_1,c_2\in C$ with $n=c_1+c_2$.

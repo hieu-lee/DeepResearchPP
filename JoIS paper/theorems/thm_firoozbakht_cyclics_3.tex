@@ -1,0 +1,83 @@
+\begin{theorem}[Firoozbakht analog for cyclics 3 (resolves Conj.~41 of \cite{Cohen2025})]\label{thm:firoozbakht_cyclics_3}
+For each \(k\) there exists \(N(k)\) such that for all \(n>N(k)\), \(c_n^{1/(n+k)}>c_{n+1}^{1/(n+k+1)}\).
+\end{theorem}
+
+\begin{proof}
+Let $L(x):=\log_3 x=\log\log\log x$ for $x\ge e^{e^e}$ and let
+$$C(x):=\#\{m\le x: \gcd(m,\varphi(m))=1\}.$$
+By Pollack's refinement of Erdos' asymptotic \cite{Pollack2022}, there exist absolute constants $X_0\ge e^{e^e}$ and $A_0>0$ such that for all $x\ge X_0$,
+$$
+C(x)=e^{-\gamma}x\Bigl(\frac1{L(x)}-\frac{\gamma}{L(x)^2}+\frac{q}{L(x)^3}+R(x)\Bigr),\qquad q=\gamma^2+\frac{\pi^2}{12},\quad |R(x)|\le \frac{A_0}{L(x)^4}.
+$$
+Define the smooth comparison functions
+$$
+F_\pm(x):=e^{-\gamma}x\Bigl(\frac1{L(x)}-\frac{\gamma}{L(x)^2}+\frac{q}{L(x)^3}\pm\frac{A_0}{L(x)^4}\Bigr)\qquad(x\ge X_0),
+$$
+so that for $x\ge X_0$,
+$$
+F_-(x)\le C(x)\le F_+(x).
+$$
+
+1) Uniform lower bound for $F_-'$. Write $\ell:=L(x)$ and $G(\ell):=\ell^{-1}-\gamma\ell^{-2}+q\ell^{-3}-A_0\ell^{-4}$. Since $L'(x)=(x\log x\,\log_2 x)^{-1}$,
+$$
+F_-'(x)=e^{-\gamma}\Bigl[G(\ell)+x\,G'(\ell)L'(x)\Bigr].
+$$
+Because $G'(\ell)=-\ell^{-2}+O(\ell^{-3})$, there exist $X_1\ge X_0$ and $C_1>0$ such that for all $x\ge X_1$,
+$$
+\bigl|x\,G'(\ell)L'(x)\bigr|\le \frac{C_1}{\ell^2\log x\,\log_2 x}.
+$$
+Moreover $G(\ell)=\ell^{-1}+O(\ell^{-2})$. As $\ell\to\infty$ and $\log x\,\log_2 x\to\infty$, enlarging $X_1$ if needed we obtain
+$$
+F_-'(x)\ge e^{-\gamma}\Bigl(\frac{1}{2L(x)}\Bigr)\qquad(x\ge X_1).\tag{1}
+$$
+In particular $F_-$ is strictly increasing on $[X_1,\infty)$ and, since $F_-(x)\gg x/L(x)$, one has $F_-(x)\to\infty$ as $x\to\infty$.
+
+2) One-step growth via level-crossing of $F_-$. Fix $n$ with $c_n\ge X_1$ and set $y:=c_n$, so $C(y)=n$ and $F_-(y)\le n$. Because $F_-$ is continuous, strictly increasing, and unbounded, there is a unique $\Delta(y)\ge0$ such that
+$$
+F_-(y+\Delta(y))=n+1.
+$$
+Then $C(y+\Delta(y))\ge F_-(y+\Delta(y))=n+1$, hence the first point where $C$ reaches $n+1$ (namely $c_{n+1}$) lies in $(y,\,y+\Delta(y)]$. Thus
+$$
+0<c_{n+1}-c_n\le \Delta(y).
+$$
+By the mean value theorem there exists $\xi\in[y,\,y+\Delta(y)]$ with
+$$
+F_-(y+\Delta(y)) - F_-(y)=F_-'(\xi)\,\Delta(y).
+$$
+Because $F_-(y+\Delta(y))=n+1\ge n\ge F_-(y)$, the left-hand side is $\ge1$, so by (1)
+$$
+\Delta(y)\le \frac{1}{F_-'(\xi)}\le 2e^{\gamma}L(\xi).\tag{2}
+$$
+As $L(t)=o(t^{\varepsilon})$ for any fixed $\varepsilon>0$, there exists $X_2\ge X_1$ such that $2e^{\gamma}L(t)\le t/4$ for all $t\ge X_2$. Suppose $y\ge X_2$. If $\Delta(y)\ge y$, then from (2) we get $\Delta(y)\le(y+\Delta(y))/4$, i.e. $3\Delta(y)\le y$, a contradiction. Hence $\Delta(y)<y$, so $y+\Delta(y)\le2y$ and, by monotonicity of $L$ and the elementary bound for $t\ge e^{e^e}$,
+$$
+L(y+\Delta(y))\le L(2y)\le L(y)+\log 2\le 2L(y).
+$$
+Combining with (2) yields
+$$
+0<c_{n+1}-c_n\le\Delta(y)\le 4e^{\gamma}L(y)=4e^{\gamma}L(c_n)\qquad(n\text{ large}).\tag{3}
+$$
+
+3) A coarse upper bound for $L(c_n)/c_n$. From $C\le F_+$ and, for large $\ell=L(x)$, the estimate $\ell^{-1}-\gamma\ell^{-2}+q\ell^{-3}+A_0\ell^{-4}\le 2\ell^{-1}$, we obtain
+$$
+C(x)\le \frac{2e^{-\gamma}x}{L(x)}\qquad(x\ge X_3)
+$$
+for some $X_3\ge X_2$. Evaluating at $x=c_n\ge X_3$ gives
+$$
+\frac{L(c_n)}{c_n}\le \frac{2e^{-\gamma}}{n}.\tag{4}
+$$
+
+4) Bounding the logarithmic increment. From (3) and (4), using $\log(1+u)\le u$,
+$$
+\log\frac{c_{n+1}}{c_n}\le \frac{c_{n+1}-c_n}{c_n}\le 4e^{\gamma}\frac{L(c_n)}{c_n}\le \frac{8}{n}\qquad(n\text{ large}).\tag{5}
+$$
+
+5) Conclusion. Let $a_n:=\log c_n$. Since $c_n\ge n$, we have $a_n\ge\log n$. Fix $k\in\mathbb N$. Choose $N(k)$ so large that for all $n\ge N(k)$: (i) $n\ge2k$, (ii) $c_n\ge X_3$, and (iii) $\log n>16$. Then by (5), for all such $n$,
+$$
+(n+k)(a_{n+1}-a_n)\le \frac{n+k}{n}\cdot 8\le 16<\log n\le a_n.
+$$
+This is equivalent to
+$$
+\frac{\log c_n}{n+k}>\frac{\log c_{n+1}}{n+k+1},
+$$
+i.e. $c_n^{1/(n+k)}>c_{n+1}^{1/(n+k+1)}$. As $k$ was arbitrary, the claim follows. 
+\end{proof}

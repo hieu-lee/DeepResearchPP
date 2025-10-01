@@ -1,0 +1,8 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd(n,\varphi(n))=1$. Let $C$ be the set of all cyclics and, for $n\in\mathbb N$, let $(c_n)_{n\ge1}$ be the increasing enumeration of $C$.
+\end{definition}
+\bigskip
+\textbf{Conjecture (Legendre analog for cyclics).}\ For every $n\in\mathbb N$, there exists a cyclic $c$ with
+\[
+n^2<c<(n+1)^2.
+\]

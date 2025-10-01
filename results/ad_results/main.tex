@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=1in]{geometry}
+\numberwithin{equation}{section}
+% Global typesetting tweaks to reduce overfull/underfull boxes
+\tolerance=2000
+\emergencystretch=4em
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Limits of Monotonicity, Robust Selection, and Dosing Optimality in AD:\\ A Unified Mathematical Treatment with Applications to IL-13/IL-22, Microbiome, and Fairness under Shift}
+\author{\normalsize Anonymous}
+\date{September 27, 2025}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\begin{abstract}
+We develop a unified mathematical treatment of several phenomena that arise when choosing, personalizing, and dosing biologic therapies for atopic dermatitis (AD). Our results span three domains that are often analyzed in isolation: (i) statistical structure and limits of biomarker-based decision rules (e.g., logistic link invariances, threshold geometry, and failures of eventual positivity or monotonicity), (ii) pharmacokinetic/pharmacodynamic (PK/PD) dosing optimality and trade-offs (e.g., fixed-regimen optimality at exposure-only objectives, non-concave Pareto frontiers for efficacy vs adverse events, and regimes where pulsed exposure can match or exceed continuous exposure at lower total dose), and (iii) robustness and fairness under distribution shift and group stratification (e.g., impossibility theorems for ranking gains and post-hoc calibration, AUC gaps from tail geometry, and invariance constraints on scores).
+Motivated by the IL-13 and IL-22 axes that underlie modern AD therapeutics\,\cite{SimpsonNEJM2016,FezakinumabJAAD2018} and by the role of the skin microbiome and colonization\,\cite{HuangBleach2011}, we present sharp conditions under which simple thresholds are provably insufficient or fragile, clarify when rectangular policies cannot match Bayes rules, and identify settings where dosing equalizers exist or not. On the robustness side, we connect classical distribution shift\,\cite{DatasetShift2008,BenDavidEtAl2010}, fairness trade-offs\,\cite{KleinbergMullainathanRaghavan2017,HardtEquality2016}, and distributionally robust optimization\,\cite{EsfahaniKuhn2018} to clinical selection and monitoring tasks. Across the paper, each narrative claim is paired with a precise proposition or theorem, yielding a consolidated toolkit that can be specialized to concrete AD use-cases while making the limits of what can be achieved transparent.
+\end{abstract}
+
+\section{Introduction}
+Biologics that modulate type 2 inflammation have transformed atopic dermatitis (AD) care. Dupilumab, which blocks IL-4R$\alpha$ (and thereby IL-4/IL-13 signaling), improved EASI and pruritus endpoints in two large phase 3 trials\,\cite{SimpsonNEJM2016}. Parallel efforts targeting IL-22 (e.g., fezakinumab) explored clinical benefits in biomarker-defined subgroups\,\cite{FezakinumabJAAD2018}. In practice, clinicians and developers face three intertwined challenges: (1) how to design reliable biomarker thresholds and selection rules; (2) how to choose or adapt dosing to balance efficacy and adverse events under basic PK/PD structure; and (3) how to maintain robustness and equity as populations and environments shift.
+
+This paper provides a unified mathematical treatment of these challenges. On biomarker selection and rule design, we prove invariance and non-invariance statements for logistic models and show that simple rectangular thresholds can be provably suboptimal, even when increasing-differences and monotonicity heuristics appear to support them. On dosing, we identify regimes where fixed regimens maximize exposure-only objectives, illuminate when the efficacy vs safety Pareto frontier fails to be strictly concave, and give conditions under which pulsed exposure matches continuous exposure at dramatically lower total dose. On robustness and fairness, we quantify what can and cannot be guaranteed under covariate shift and post-hoc calibration, relate score constraints to AUC behavior, and connect to distributionally robust and invariant modeling\,\cite{DatasetShift2008,BenDavidEtAl2010,EsfahaniKuhn2018,ArjovskyIRM2019,HardtEquality2016}.
+
+Empirically, our scope is motivated by two broad observations. First, the axes IL-13 and IL-22 play distinct roles across AD endotypes, and microbiome features such as \emph{Staphylococcus aureus} colonization interact with disease severity and flare risk\,\cite{HuangBleach2011}. Second, deployment settings are rarely static: exposures (e.g., air quality), adherence, and referral patterns induce shift between development and deployment cohorts\,\cite{DatasetShift2008}. We therefore focus on structural results that are portable across data regimes, yet specific enough to falsify common but overly optimistic assumptions.
+
+\paragraph{Contributions.} We synthesize and prove a suite of results that (a) formalize invariance and threshold geometry for logistic-link models; (b) exhibit failures of monotonicity and eventual positivity in clinically plausible settings; (c) clarify limits of rectangular policies and ROC geometry; (d) give PK/PD optimality and non-concavity results, including pulse vs continuous exposure comparisons; and (e) state impossibility theorems and invariance-driven constraints under shift and fairness criteria. Each item is stated as a self-contained proposition or theorem with minimal assumptions, enabling direct reuse.
+
+\section{Related Work}
+\textbf{Therapeutics and biomarkers in AD.} Phase 3 trials established the efficacy of dupilumab for moderate-to-severe AD\,\cite{SimpsonNEJM2016}. IL-22 blockade has shown signals in specific strata\,\cite{FezakinumabJAAD2018}. Other anti-IL-13 agents (lebrikizumab, tralokinumab) have demonstrated efficacy signals across Phase II/III programs, including TREBLE and the Phase 3 ECZTRA series\,\cite{LebrikizumabTREBLE2018,LebrikizumabJAMA2020,TralokinumabBJD2020,TralokinumabECZTRA12BJD2021,TralokinumabECZTRA3BJD2021}. Microbiome-targeted adjuncts, including anti-colonization strategies, have demonstrated reductions in severity in selected settings\,\cite{HuangBleach2011}. Our biomarker results complement this line of work by characterizing when thresholding and ranking rules can be relied upon and when they cannot.
+
+\textbf{Microbiome background.} Colonization with \textit{Staphylococcus aureus} is common in AD and correlates with disease severity; antiseptic regimens and decolonization strategies are often considered as adjuncts. Evidence supports dilute bleach baths and other decolonization measures in select settings\,\cite{HuangBleach2011}, and broader reviews summarize the roles of \textit{S. aureus} toxins, biofilms, and host barrier interactions in AD pathophysiology\,\cite{StaphInADChapter2008}. Our mechanistic results (e.g., pH-dependent basin shrinkage and stability considerations) conceptually align with these observations by formalizing how shifts in antimicrobial potency or colonization pressure can alter long-run skin state.
+
+\textbf{PK/PD and dosing principles.} Basic exposure--response formulations motivate fixed and pulsed regimens under one-compartment kinetics. Our results formalize when fixed regimens can be optimal for exposure-only objectives and when efficacy--safety trade-offs break strict concavity, implying that scalarized objectives may miss Pareto-efficient regimens. These findings connect to classical optimization (e.g., supermodularity\,\cite{Topkis1998}) and to robustness considerations.
+
+\textbf{Distribution shift, robustness, and fairness.} Dataset shift and covariate shift have long been recognized in machine learning\,\cite{DatasetShift2008,BenDavidEtAl2010}. Fairness trade-offs show that incompatible desiderata prevent universal optimality across groups\,\cite{KleinbergMullainathanRaghavan2017,HardtEquality2016}. Distributionally robust optimization provides tools for worst-case guarantees over Wasserstein neighborhoods\,\cite{EsfahaniKuhn2018}, while invariance principles aim for predictors stable across environments\,\cite{ArjovskyIRM2019}. We adapt these ideas to AD selection and monitoring, highlighting formal limits and attainable guarantees.
+
+\section{Main Results: Statements}
+For completeness and reproducibility, we include the formal statements as separate files. We organize them by theme.
+
+\subsection*{Logistic and threshold foundations}
+\input{prop_logit-equal-or.tex}
+\input{thm_logit-cutoff-invariance.tex}
+\input{prop_logit-threshold.tex}
+\input{prop_il13-cutoff-monotone.tex}
+
+\subsection*{Monotonicity limits and threshold geometry}
+\input{prop-no-eventual-positivity.tex}
+\input{prop_monotonicity-fails.tex}
+
+\subsection*{Duality and ROC geometry}
+\input{thm_dual-upper-nongraph.tex}
+\input{thm_dual-dominance-upset.tex}
+\input{thm_bayes-rect-gap.tex}
+\input{thm_rectangular-noadvantage.tex}
+\input{thm_impossible-thresholds.tex}
+
+\subsection*{PK/PD optimality and dosing}
+\input{lem_no-strict-max.tex}
+\input{thm_pkpd-fixed-optimal.tex}
+\input{thm_pkpd-nonconcave-pareto.tex}
+\input{thm_pulse-vs-full-exposure.tex}
+\input{thm_pulse-superiority.tex}
+\input{thm_trough-nonidentifiability.tex}
+\input{thm_constant-unique-max.tex}
+\input{thm_constant-optimality.tex}
+
+\subsection*{Modeling, invariance, and fairness}
+\input{thm-no-ranking-gain.tex}
+\input{thm_orthogonal-score.tex}
+\input{prop_negative-corr-combo.tex}
+\input{thm_invariant-score-auc-gain.tex}
+\input{thm_auc-no-margin-wasserstein.tex}
+\input{thm_extval-auc-gap.tex}
+
+\subsection*{Domain shift and post-hoc limits}
+\input{thm_impossibility-covshift.tex}
+\input{thm_posthoc-impossibility.tex}
+
+\subsection*{Nonmonotonic optimality and equalizers}
+\input{thm-nonmonotone-optimality.tex}
+\input{thm-monotone-dosing-equalizer.tex}
+
+\subsection*{Mechanistic and microbiome effects}
+\input{thm_ph-basin-shrink.tex}
+\input{prop_eh-not-globally-stable.tex}
+\input{thm_staph-suppresses-easi.tex}
+\input{thm-threshold-mediated-effect.tex}
+\input{thm-nie-share-increase.tex}
+\input{thm_biomarker-adaptive-superior.tex}
+\input{thm_simpson-reversal.tex}
+\input{prop_non-superadditivity-il13.tex}
+\input{prop-nonmonotone-m0.tex}
+{\makeatletter\def\label#1{}\makeatother\input{thm_pulse-vs-full-exposure.tex}}
+
+\input{bib.tex}
+
+\end{document}

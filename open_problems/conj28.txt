@@ -1,0 +1,22 @@
+
+\begin{definition}
+Let \mathbb{N} denote the set of positive integers. Let \varphi(n) be Euler's totient function and let \gcd(\cdot,\cdot) be the greatest common divisor.
+A positive integer m is called \emph{cyclic} if and only if \gcd\!\bigl(m,\varphi(m)\bigr)=1. Define the set of cyclic integers
+\[\mathcal{C}:=\{m\in\mathbb{N}: \gcd(m,\varphi(m))=1\},\]
+and let \(c_1<c_2<\cdots\) be the increasing enumeration of \(\mathcal{C}\).
+Let \(\mathcal{P}\) be the set of prime numbers and let \(p_1<p_2<\cdots\) be its increasing enumeration. Let \(\gamma\) denote the Euler--Mascheroni constant.
+For a set S, write \(\#S\) for its cardinality.
+\end{definition}
+
+\begin{definition}
+For the increasing cyclics \((c_m)\), define:
+- A \emph{twin cyclic pair} as a consecutive pair \((c_m,c_{m+1})\) with \(c_{m+1}-c_m=2\).
+- A \emph{cousin cyclic pair} as a consecutive pair with \(c_{m+1}-c_m=4\).
+- A \emph{sexy cyclic pair} as a consecutive pair with \(c_{m+1}-c_m=6\).
+For \(n\in\mathbb{N}\), the number of such pairs between consecutive cubes \(n^3\) and \((n+1)^3\) is the number of indices m such that \(n^3<c_m<c_{m+1}\le (n+1)^3\) and the corresponding gap condition holds.
+\end{definition}
+
+\bigskip
+
+\textbf{Conjecture 32 (Twin cyclics between consecutive cubes).}
+At least two twin cyclic pairs between \(n^3\) and \((n+1)^3\); more generally, at least k beyond a threshold.

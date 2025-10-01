@@ -1,0 +1,45 @@
+﻿\begin{theorem}[No advantage of group-aware rectangular thresholds]\label{thm:rectangular-noadvantage}
+Strict improvement by group-aware rectangular thresholds is not guaranteed, even when groups differ. More strongly: for any finite set of groups with mixing weights $(w_g)_g$, arbitrary joint laws $F_g$ of $(L_0,M_0)$, fixed thresholds $(\tau_L,\tau_M)$, and group scales $c_g\ge0$, if the incremental efficacy takes the common rectangular step form
+\[
+\Delta_g(l,m)=c_g\,\mathbf 1_{\{l\ge\tau_L,\ m\ge\tau_M\}},
+\]
+then the best group-aware and the best group-blind rectangular policies achieve the same expected efficacy:
+\[
+\sup_{\Pi_{\mathrm{aware}}}\mathbb E[\Delta\mathrm{EASI}]=\sup_{\Pi_{\mathrm{blind}}}\mathbb E[\Delta\mathrm{EASI}].
+\]
+In particular, there exists a two-group data-generating process with groups that differ in the joint distribution of $(L_0,M_0)$ for which no group-aware rectangular policy strictly improves efficacy over the best group-blind rectangular policy.
+\end{theorem}
+
+\begin{proof}
+Define rectangular policies as follows. A group-aware rectangular policy selects $T^+$ for group $g$ iff $(L_0,M_0)\in R_g(\ell_g,m_g):=[\ell_g,\infty)\times[m_g,\infty)$; a group-blind rectangular policy uses a common rectangle $R(\ell,m)$ for all groups. For group $g$, write
+\[
+\Phi_g(\ell,m):=\mathbb E[\Delta\mathrm{EASI}\mid \pi_g(\ell,m),g]
+= \int_{R_g(\ell,m)} \Delta_g(l,m)\,\mathrm dF_g(l,m).
+\]
+Under the rectangular step-form efficacy $\Delta_g(l,m)=c_g\,\mathbf 1_{\{l\ge\tau_L,\ m\ge\tau_M\}}$, this reduces to
+\[
+\Phi_g(\ell,m)=c_g\,\mathbb P_g\big(L_0\ge\max\{\ell,\tau_L\},\ M_0\ge\max\{m,\tau_M\}\big).
+\]
+\emph{Group-aware optimum.} For each fixed $g$, the map $(\ell,m)\mapsto \Phi_g(\ell,m)$ is maximized by minimizing the arguments of the maxima, i.e., by choosing any $\ell_g\le\tau_L$ and $m_g\le\tau_M$, which yields
+\[
+\sup_{\ell_g,m_g}\Phi_g(\ell_g,m_g)=c_g\,\mathbb P_g(L_0\ge\tau_L,\ M_0\ge\tau_M).
+\]
+Therefore
+\[
+\sup_{\Pi_{\mathrm{aware}}}\mathbb E[\Delta\mathrm{EASI}]=\sum_g w_g\,\sup_{\ell_g,m_g}\Phi_g(\ell_g,m_g)
+=\sum_g w_g\,c_g\,\mathbb P_g(L_0\ge\tau_L,\ M_0\ge\tau_M).
+\]
+\emph{Group-blind optimum.} For any blind rectangle $R(\ell,m)$, the expected improvement equals
+\[
+\sum_g w_g\,\Phi_g(\ell,m)=\sum_g w_g\,c_g\,\mathbb P_g\big(L_0\ge\max\{\ell,\tau_L\},\ M_0\ge\max\{m,\tau_M\}\big).
+\]
+This is maximized by any choice with $\ell\le\tau_L$ and $m\le\tau_M$, yielding
+\[
+\sup_{\Pi_{\mathrm{blind}}}\mathbb E[\Delta\mathrm{EASI}]=\sum_g w_g\,c_g\,\mathbb P_g(L_0\ge\tau_L,\ M_0\ge\tau_M).
+\]
+Hence
+\[
+\sup_{\Pi_{\mathrm{aware}}}\mathbb E[\Delta\mathrm{EASI}]=\sup_{\Pi_{\mathrm{blind}}}\mathbb E[\Delta\mathrm{EASI}].\qedhere
+\]
+No distributional or independence conditions beyond measurability are required, and the result holds for any number of groups and any mixing weights. In particular, taking two groups with differing joint laws for $(L_0,M_0)$ yields the advertised counterexample to strict improvement by group-aware rectangular thresholds.
+\end{proof}

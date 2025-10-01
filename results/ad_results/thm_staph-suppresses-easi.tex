@@ -1,0 +1,25 @@
+﻿\begin{theorem}[Anti-staph suppresses EASI under deterministic responses]\label{thm:staph-suppresses-easi}
+There exists a deterministic specification of the response functions such that, letting
+\[
+\Delta_{\mathrm{staph}}(S_0):=\mathbb{E}[\Delta\mathrm{EASI}\mid \text{IL-13 only}{+}\text{anti-staph}, S_0]-\mathbb{E}[\Delta\mathrm{EASI}\mid \text{IL-13 only}, S_0],
+\]
+we have $\Delta_{\mathrm{staph}}(S_0)\le 0$ for all $S_0\ge 0$ (with strict inequality for all $S_0>0$) and $\dfrac{d}{dS_0}\Delta_{\mathrm{staph}}(S_0)<0$ for all $S_0\ge 0$.
+\end{theorem}
+
+\begin{proof}
+Define, for each baseline colonization level $S_0\ge 0$,
+\begin{equation*}
+\begin{aligned}
+\mathbb{E}[\Delta\mathrm{EASI}\mid \text{IL-13 only},S_0] &:= \phi(S_0):= 1 - e^{-S_0},\\
+\mathbb{E}[\Delta\mathrm{EASI}\mid \text{IL-13 only}{+}\text{anti-staph},S_0] &:= \psi(S_0):= \tfrac12\bigl(1-e^{-S_0}\bigr).
+\end{aligned}
+\end{equation*}
+These are deterministic, so the expectations equal their values. Let $\Delta_{\mathrm{staph}}(S_0):=\psi(S_0)-\phi(S_0)$. Then
+\begin{equation*}
+\Delta_{\mathrm{staph}}(S_0)= -\tfrac12\bigl(1-e^{-S_0}\bigr)\le 0\quad\text{for all }S_0\ge 0,
+\end{equation*}
+with strict inequality for all $S_0>0$, and
+\begin{equation*}
+\frac{d}{dS_0}\Delta_{\mathrm{staph}}(S_0)= -\tfrac12 e^{-S_0}<0\quad\text{for all }S_0\ge 0.\qedhere
+\end{equation*}
+\end{proof}

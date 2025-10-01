@@ -197,21 +197,37 @@ def main(argv: Optional[list[str]] = None) -> int:
     except Exception as e:
         solved, payload = False, f"System error before solving: {type(e).__name__}: {e}"
 
-    if not solved:
-        heading = "Problem is too difficult"
-        if args.json:
-            print(
-                json.dumps({"error": heading, "details": payload}, indent=2, ensure_ascii=False)
-            )
+    # If invoked with an input file (default mode), mirror the
+    # user-facing summary style of --open-problem for clarity.
+    if not args.json and args.in_file:
+        print("=== Single Proof Solver ===")
+        print(f"Status: {'solved' if solved else 'failed'}")
+        if args.model:
+            print(f"Model: {args.model}")
+
+        if solved:
+            print("\nProof:\n")
+            print(payload or "")
         else:
-            print(heading)
-
-    markdown = payload
-
-    if args.json:
-        print(json.dumps({"markdown": markdown}, indent=2, ensure_ascii=False))
+            print("\nProblem is too difficult")
+            if payload:
+                print("\nFeedback:\n" + str(payload))
     else:
-        print(markdown)
+        if not solved:
+            heading = "Problem is too difficult"
+            if args.json:
+                print(
+                    json.dumps({"error": heading, "details": payload}, indent=2, ensure_ascii=False)
+                )
+            else:
+                print(heading)
+
+        markdown = payload
+
+        if args.json:
+            print(json.dumps({"markdown": markdown}, indent=2, ensure_ascii=False))
+        else:
+            print(markdown)
 
     if args.out:
         if not solved:
@@ -220,6 +236,8 @@ def main(argv: Optional[list[str]] = None) -> int:
                 f.write(report)
         else:
             with open(args.out, "w", encoding="utf-8") as f:
-                f.write(markdown)
+                # When printing the open-problem style header for input files,
+                # the actual proof content written to file remains unchanged.
+                f.write(payload)
 
     return 0

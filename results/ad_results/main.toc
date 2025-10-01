@@ -1,0 +1,20 @@
+\contentsline {section}{\numberline {1}Introduction}{14}{section.1}%
+\contentsline {section}{\numberline {2}Preliminaries and Notation}{20}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Foundational logistic-link consequences}{20}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Monotonicity Limits and Threshold Geometry}{20}{section.3}%
+\contentsline {section}{\numberline {4}PK--PD Trade-offs and Dosing Optimization}{21}{section.4}%
+\contentsline {section}{\numberline {5}Selection, Ranking, and External Generalization}{21}{section.5}%
+\contentsline {section}{\numberline {6}Shift, Fairness, and Calibration}{22}{section.6}%
+\contentsline {section}{\numberline {7}Microbiome, pH, and Adjuncts}{22}{section.7}%
+\contentsline {section}{\numberline {8}Applications and Further Implications}{22}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Rectangular thresholding versus Bayes policies}{22}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Duty-cycled Anti22 designs}{22}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Invariant scoring and external validation}{28}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Related Work}{28}{section.9}%
+\contentsline {subsection}{\numberline {9.1}AD therapeutics and biomarkers}{28}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Microbiome, pH, and AMPs}{28}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Monotone comparative statics and threshold geometry}{28}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Domain shift, invariance, and robustness}{28}{subsection.9.4}%
+\contentsline {subsection}{\numberline {9.5}Fairness and calibration}{28}{subsection.9.5}%
+\contentsline {section}{\numberline {10}Main Results: Statements}{28}{section.10}%
+\contentsline {section}{\numberline {11}Conclusion}{29}{section.11}%

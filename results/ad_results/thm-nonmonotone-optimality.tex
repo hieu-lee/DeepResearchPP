@@ -1,0 +1,25 @@
+﻿\begin{theorem}[Nonmonotone optimality counterexample]\label{thm-nonmonotone-optimality}
+There exist a budget $q=\tfrac12$, a two-point distribution $\mu$ on a scalar covariate $X\in\{0,1\}$ with $\mu(\{0\})=\mu(\{1\})=\tfrac12$, and success probabilities $p_D, p_{\mathrm{Dual}}$ (equivalently, an uplift $u(x)=p_{\mathrm{Dual}}(x)-p_D(x)$ with $u(0)>u(1)$) such that no policy $\pi:\{0,1\}\to\{0,1\}$ that is nondecreasing in $x$ maximizes the population mean $\mathbb{P}(E75(24)=1)$ subject to the budget constraint $\mathbb{E}[\pi(X)]\le q$.
+\end{theorem}
+
+\begin{proof}
+Let $X\in\{0,1\}$ with $\mu(\{0\})=\mu(\{1\})=\tfrac12$ and take the budget $q=\tfrac12$. For $t\in\{D,\mathrm{Dual}\}$, write 
+\[
+ p_t(x)=\mathbb{P}(E75(24)=1\mid X=x,\,T=t),\qquad u(x)=p_{\mathrm{Dual}}(x)-p_D(x).
+\]
+Take $p_D\equiv 0$ and choose $1\ge \alpha>\beta\ge 0$ with $p_{\mathrm{Dual}}(0)=\alpha$ and $p_{\mathrm{Dual}}(1)=\beta$, so $u(0)=\alpha$ and $u(1)=\beta$.
+
+Any policy $\pi:\{0,1\}\to\{0,1\}$ yields objective
+\[
+\mathbb{E}\big[p_D(X)+u(X)\,\pi(X)\big]=\tfrac12\big(\alpha\,\pi(0)+\beta\,\pi(1)\big),
+\]
+under the budget
+\[
+\mathbb{E}[\pi(X)]=\tfrac12\big(\pi(0)+\pi(1)\big)\le \tfrac12,
+\]
+which is equivalent to $\pi(0)+\pi(1)\le 1$.
+
+Because $\alpha>\beta$, the budget-constrained maximizer over all policies sets $\pi(0)=1$ and $\pi(1)=0$, achieving value $\tfrac12\alpha$.
+
+If $\pi$ is nondecreasing in the scalar $x$ (i.e., $\pi(0)\le \pi(1)$), the budget feasibility $\pi(0)+\pi(1)\le 1$ restricts $\pi$ to the two possibilities: $\pi\equiv 0$ (value $0$) or $\pi=\mathbf{1}_{\{1\}}$ (value $\tfrac12\beta$). Neither attains the optimal value $\tfrac12\alpha$. Hence no nondecreasing policy maximizes the population mean success probability subject to the budget constraint. \qedhere
+\end{proof}

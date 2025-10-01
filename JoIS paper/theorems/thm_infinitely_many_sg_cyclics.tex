@@ -1,0 +1,92 @@
+\begin{theorem}[Infinitely many SG cyclics (resolves Conj.~36 of \cite{Cohen2025})]\label{thm:infinitely_many_sg_cyclics}
+There are infinitely many \(c\in\mathcal{C}\) with \(2c+1\in\mathcal{C}\).
+\end{theorem}
+
+\begin{proof}
+Fix a large real parameter $x$ and set
+$$y:=\exp\bigl((\log\log x)^{1/2}\bigr).$$
+Write $P^-(n)$ for the least prime divisor of $n$ (with $P^-(1)=\infty$). Recall Szele's characterization \cite{Szele1947}: an integer $n$ is cyclic if and only if $n$ is squarefree and for all distinct primes $p,q\mid n$ we have $p\nmid(q-1)$.
+
+Step 1 (simultaneous roughness via CRT). For a prime $r\le y$, the conditions $r\nmid n$ and $r\nmid(2n+1)$ exclude the residue classes $n\equiv0\pmod r$ and, for odd $r$, $n\equiv t_r\pmod r$ where $t_r$ satisfies $2t_r\equiv-1\pmod r$. Thus, for $r=2$ we exclude one class, and for odd $r\le y$ we exclude two classes. Put $w(2)=1$ and $w(r)=2$ for odd $r$. Let
+$$M:=\prod_{r\le y} r,\qquad R:=\prod_{r\le y}(r-w(r)).$$
+By the Chinese remainder theorem, among any complete residue system modulo $M$ exactly $R$ residues satisfy all local exclusions. Hence, for $x\ge1$,
+$$\#\mathcal S_0(x,y)=\Bigl\lfloor\frac{x}{M}\Bigr\rfloor R+O(R)
+= x\prod_{r\le y}\Bigl(1-\frac{w(r)}{r}\Bigr)+O\!\left(\prod_{r\le y}(r-w(r))\right).$$
+Since $\theta(y)=\sum_{p\le y}\log p\sim y$ and $y=o(\log x)$, we have $\log M\sim y=o(\log x)$, so $M=o(x)$; thus the $O(R)$ term is $o\bigl(x\prod_{r\le y}(1-w(r)/r)\bigr)$. Therefore
+$$\#\mathcal S_0(x,y)\sim x\prod_{r\le y}\Bigl(1-\frac{w(r)}{r}\Bigr)=\frac{1}{2}\,x\prod_{3\le r\le y}\Bigl(1-\frac{2}{r}\Bigr).$$
+Using Mertens-type estimates (e.g., \cite{Apostol1976}), namely $\log(1-2/p)=-2/p+O(1/p^2)$ and $\sum_{p\le y}1/p=\log\log y+O(1)$, we get
+$$\prod_{3\le r\le y}\Bigl(1-\frac{2}{r}\Bigr)=\frac{c+o(1)}{(\log y)^2}$$
+for some absolute $c>0$. Hence
+$$\#\mathcal S_0(x,y)\asymp \frac{x}{(\log y)^2}\asymp \frac{x}{\log\log x}.$$
+By construction, $n\in\mathcal S_0(x,y)$ if and only if $P^-(n)>y$ and $P^-(2n+1)>y$.
+
+Step 2 (squarefreeness for $n$ and $2n+1$). Let
+$$\mathcal S_1(x,y):=\{\,n\le x:\ \exists\ p>y\text{ prime with }p^2\mid n\text{ or }p^2\mid(2n+1)\,\}.$$
+For a fixed prime $p>y$, we have $\#\{n\le x: p^2\mid n\}\le x/p^2$. Also $2n+1\equiv0\pmod{p^2}$ has at most one solution modulo $p^2$ (for odd $p$; for $p=2$ it has none), hence
+$$\#\{n\le x: p^2\mid(2n+1)\}\le \Bigl\lfloor\frac{x}{p^2}\Bigr\rfloor+1\le \frac{x}{p^2}+1,$$
+but the last "$+1$" can occur only when $p^2\le 2x+1$. Therefore
+\[
+\#\mathcal S_1(x,y)\le \sum_{p>y}\frac{x}{p^2}+\sum_{\substack{p>y\ p^2\le 2x+1}}\Bigl(\frac{x}{p^2}+1\Bigr)
+\ll x\sum_{p>y}\frac{1}{p^2}+\pi\!\bigl(\sqrt{2x+1}\bigr)
+\ll \frac{x}{y}+\frac{\sqrt{x}}{\log x}.
+\]
+Since $y=\exp\bigl((\log\log x)^{1/2}\bigr)$, both $x/y$ and $\sqrt{x}/\log x$ are $o\bigl(x/(\log y)^2\bigr)$; thus
+$$\#\mathcal S_1(x,y)=o\!\left(\frac{x}{(\log y)^2}\right).$$
+
+Step 3 (excluding the internal divisibility obstruction for $n$). Let $\mathcal B_n$ be the set of $n\le x$ for which there exist primes $p,q>y$ with $p\mid(q-1)$ and $pq\mid n$. Then
+$$\#\mathcal B_n\le \sum_{p>y}\ \sum_{\substack{q\le x/p\ q\equiv1\ (\bmod p)}} \Bigl\lfloor\frac{x}{pq}\Bigr\rfloor\ll x\sum_{p>y}\frac{1}{p}\sum_{\substack{q\le x/p\ q\equiv1\ (\bmod p)}}\frac{1}{q}.$$
+By the Brun--Titchmarsh inequality and partial summation (e.g., \cite{MV2007,IK2004}),
+$$\sum_{\substack{q\le X\ q\equiv1\ (\bmod p)}}\frac{1}{q}\ll \frac{\log\log X}{\varphi(p)}\ll \frac{\log\log X}{p}$$
+uniformly in $X\ge2$, hence
+$$\#\mathcal B_n\ll x\sum_{p>y}\frac{\log\log(x/p)}{p^2}\ll x\cdot\frac{\log\log x}{y}=o\!\left(\frac{x}{(\log y)^2}\right).$$
+
+Step 4 (excluding the internal divisibility obstruction for $2n+1$). Define $\mathcal B_{2n+1}$ as the set of $n\le x$ for which there exist primes $p,q>y$ with $p\mid(q-1)$ and $pq\mid(2n+1)$. For fixed $p,q$, the congruence $2n+1\equiv0\pmod{pq}$ has $\ll x/(pq)+1$ solutions $n\le x$. Therefore
+\[
+\#\mathcal B_{2n+1}\ll x\sum_{p>y}\frac{1}{p}\sum_{\substack{q\le 2x+1\ q\equiv1\ (\bmod p)}}\frac{1}{q}\; +\; \sum_{\substack{p>y\ p\le 2x+1}}\!\pi(2x+1; p,1)=:S_1+S_2.
+\]
+For $S_1$, the same Brun-Titchmarsh-partial summation bound as in Step 3 gives $S_1\ll x(\log\log x)/y=o\bigl(x/(\log y)^2\bigr)$.
+
+For $S_2$, set $X:=2x+1$. We split the sum at $X/e$:
+$$S_2=\sum_{\substack{p>y\ p\le X/e}}\!\pi(X;p,1)+\sum_{X/e<p\le X}\!\pi(X;p,1)=:T_1+T_2.$$
+For $T_1$, by the Brun--Titchmarsh inequality (valid for $p<X$; see, e.g., \cite{MV2007,IK2004}),
+$$\pi(X;p,1)\le \frac{2X}{\varphi(p)\,\log(X/p)}\le \frac{4X}{p\,\log(X/p)}\quad(p\ge3),$$
+and the $p=2$ term is harmless. Partition the range $p\le X/e$ into bins $X/e^{j+1}<p\le X/e^{j}$ for integers $1\le j\le \lfloor\log X\rfloor-1$. On each bin, $\log(X/p)\asymp j$, so
+$$\sum_{X/e^{j+1}<p\le X/e^{j}} \frac{1}{p\,\log(X/p)}\ll \frac{1}{j}\sum_{X/e^{j+1}<p\le X/e^{j}}\frac{1}{p}
+\ll \frac{1}{j}\Bigl(\log\log\frac{X}{e^{j}}-\log\log\frac{X}{e^{j+1}}+O\!\Bigl(\frac{1}{\log X}\Bigr)\Bigr).$$
+\begin{flushleft}
+Summing over $j$ and using the telescoping together with $\sum_{j\le \log X} \frac{1}{j(\log X-j)}\ll (\log\log X)/(\log X)$,
+$$\sum_{p\le X/e}\frac{1}{p\,\log(X/p)}\ll \frac{\log\log X}{\log X}.$$
+\end{flushleft}
+Hence
+$$T_1\ll X\cdot\frac{\log\log X}{\log X}.$$
+For $T_2$, note that $p>X/e$ implies $\lfloor X/p\rfloor\le e$. Since $\pi(X;p,1)\le \lfloor X/p\rfloor$, we get
+$$T_2\le \sum_{X/e<p\le X}\Bigl\lfloor\frac{X}{p}\Bigr\rfloor\le \sum_{k=1}^{\lfloor e\rfloor}\!k\,\bigl(\pi(X/k)-\pi(X/(k+1))\bigr)\ll \sum_{k=1}^{\lfloor e\rfloor}\!\frac{X/k}{\log(X/k)}\ll \frac{X}{\log X}.$$
+Combining the two ranges,
+$$S_2=T_1+T_2\ll X\frac{\log\log X}{\log X}=o\!\left(\frac{X}{(\log y)^2}\right)\quad\text{since }(\log y)^2=\log\log X.$$
+Thus $\#\mathcal B_{2n+1}=o\bigl(x/(\log y)^2\bigr)$.
+
+\medskip
+\noindent\textit{Lemma (aggregated parameters).} With $y=\exp\sqrt{\log\log x}$ one has, for some absolute $c_0>0$ and all sufficiently large $x$,
+\[
+ \#\mathcal S_0(x,y)\ \ge\ c_0\,\frac{x}{(\log y)^2},\qquad
+ \#\mathcal S_1(x,y)\ \ll\ \frac{x}{y}+\frac{\sqrt{x}}{\log x}\ =\ o\!\left(\frac{x}{(\log y)^2}\right),
+\]
+and
+\[
+ \#\mathcal B_n\ \ll\ x\,\frac{\log\log x}{y}\ =\ o\!\left(\frac{x}{(\log y)^2}\right),\qquad
+ \#\mathcal B_{2n+1}\ \ll\ x\,\frac{\log\log x}{\log x}\ =\ o\!\left(\frac{x}{(\log y)^2}\right).
+\]
+In particular, $\#\mathcal G(x)\gg x/(\log y)^2\asymp x/\log\log x$.
+
+\noindent\textit{Proof.} Combine the bounds proved in Steps 1--4 and note that $(\log y)^2=\log\log x$.
+
+Step 5 (conclusion). Set
+$$\mathcal G(x):=\mathcal S_0(x,y)\setminus\bigl(\mathcal S_1(x,y)\cup\mathcal B_n\cup\mathcal B_{2n+1}\bigr).$$
+By Steps 1--4 and the lemma,
+$$\#\mathcal G(x)\ge \#\mathcal S_0(x,y)-\#\mathcal S_1(x,y)-\#\mathcal B_n-\#\mathcal B_{2n+1}\gg \frac{x}{(\log y)^2}\asymp \frac{x}{\log\log x}.$$
+For each $n\in\mathcal G(x)$, all prime divisors of $n$ and of $2n+1$ exceed $y$, these integers are squarefree, and there is no pair of distinct primes $p,q$ dividing $n$ (respectively $2n+1$) with $p\mid(q-1)$. By Szele's characterization, both $n$ and $2n+1$ are cyclic. Hence every $n\in\mathcal G(x)$ is a Sophie Germain cyclic.
+
+It follows that, for all sufficiently large $x$,
+$$C_{\mathrm{SG}}(x)\ge \#\mathcal G(x)\gg \frac{x}{\log\log x},$$
+so there are infinitely many Sophie Germain cyclics. 
+\end{proof}

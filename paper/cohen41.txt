@@ -1,0 +1,2179 @@
+Conjectures about Primes and Cyclic Numbers
+
+Joel E. Cohen1
+The Rockefeller University
+1230 York Avenue, Box 20
+New York, NY 10065
+USA
+cohen@rockefeller.edu
+
+Abstract
+
+A positive integer n is defined to be cyclic if and only if every group of size n is
+cyclic. Equivalently, the number n is cyclic if and only if n is relatively prime to the
+number of positive integers less than n that are relatively prime to n. Because every
+prime number is cyclic, it is natural to ask whether a (proved or conjectured) prop-
+erty of primes extends to cyclic numbers. I review proved or conjectured properties
+of primes (including some new conjectures about primes) and propose analogous con-
+jectures about cyclic numbers. Using the 28,488,167 cyclic numbers less than 108, I
+test the conjectures about cyclic numbers and disprove the cyclic analog of the second
+conjecture about primes of Hardy and Littlewood. Proofs or disproofs of the remaining
+conjectures are invited.
+
+1
+
+Introduction
+
+I propose some conjectures about cyclic numbers C := (c1, c2, . . .) (sequence [37, A003277]
+in the On-Line Encyclopedia of Integer Sequences (OEIS)) based on analogous proved or
+conjectured properties of prime numbers P := (p1, p2, . . .) (A000040). I test the conjectures
+about cyclic numbers (or, for brevity, cyclics) using the 28,488,167 cyclics less than 108. I
+also test some new conjectures about prime numbers (or, for brevity, primes) using the
+50,847,534 primes less than 109. I invite proofs, disproofs, further numerical confirmations,
+counterexamples, and additional conjectures.
+
+1Author’s other affiliations: Departments of Statistics, Columbia University & University of Chicago.
+
+1
+
+2311Article 25.4.7Journal of Integer Sequences, Vol. 28 (2025),236147A natural number (positive integer) n ∈ N := {1, 2, 3, . . .} is cyclic if and only if there
+exists only one group of size n, up to isomorphism. If gcd is the greatest common divisor
+and φ(n) is Euler’s totient function (the number of positive integers less than n that are
+relatively prime to n, A000010), then, according to Szele [50], the number n ∈ N is cyclic if
+and only if gcd(n, φ(n)) = 1.
+
+I use Szele’s condition to compute which n ∈ N are cyclic numbers. My first 104 computed
+cyclic numbers exactly match the first 104 cyclic numbers computed independently by T. D.
+Noe in A003277.
+
+Michel Lagneau [37, A003277, November 18, 2012] asserted without proof that n ∈ N
+is cyclic if and only if φ(n)φ(n) ≡ 1 mod n. Richard P. Stanley (personal communication,
+January 20 2025) gave an elegant short proof of Lagneau’s condition. I quote it with his
+permission. First, assume that n is not cyclic, so gcd(n, φ(n)) = d > 1. Then φ(n)φ(n)
+is divisible by d so cannot be congruent to 1 mod n. On the other hand, assume that n
+is cyclic. Euler’s generalization of Fermat’s little theorem implies that kφ(n) ≡ 1 mod n
+whenever gcd(k, n) = 1. Putting k = φ(n) completes the proof.
+
+Alexei Kourbatov (personal communications, May 24 2025 and June 1 2025) pointed
+out that Lagneau’s condition can be evaluated using the well-known algorithm [35, p. 71,
+algorithm 2.143] for modular exponentiation. Whether using Szele’s criterion (as I do here)
+or Lagneau’s criterion for a number to be cyclic, the most computationally expensive step is
+finding φ(n).
+
+The sequence C of cyclics begins (1, 2, 3, 5, 7, 11, 13, 15, 17, 19, 23, 29, 31, 33, 35, 37, . . .).
+Cyclics C are the union of primes P and the composite numbers n ∈ N such that n and
+φ(n) are relatively prime or coprime (A050384, e.g., 1, 15, 33, 35, 51, 65, 69, 77, 85, 87, 91,
+95, 115, 119, 123, 133, 141, 143, 145, 159, . . .). The only cyclic that is a square is c1 = 1.
+The only cyclic that is even is c2 = 2. Consequently, the only cyclic of the form n(n − 1) for
+n ∈ N is c2 = 2 with n = 2, and no cyclic is of the form n(n + 1) for n ∈ N, because both
+n(n − 1) and n(n + 1) are even.
+
+For an increasing integer sequence a := (a(1), a(2), a(3), . . .), the counting function of
+a evaluated at a positive real number x is the number of elements of a that are less than or
+equal to x. For example, the counting function π(·) of primes P satisfies π(10) = 4. The
+prime number theorem [21, 51] gives that π(x) ∼ x/ log x as x → ∞. Let
+
+C(x) :=
+
+(cid:88)
+
+1
+
+m≤x
+m cyclic
+
+(1)
+
+be the counting function of cyclic numbers, that is, the number of cyclic numbers that do
+not exceed positive real x (A061091). For n = 1, . . . , 20, C(n) = 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6,
+7, 7, 8, 8, 9, 9, 10, 10. Erd˝os [15] proved that
+
+C(x) ∼
+
+x
+eγ log log log x
+
+as x → ∞.
+
+(2)
+
+Here γ ≈ 0.5772156649 . . . is the Euler-Mascheroni constant and eγ ≈ 1.78107241799 . . . .
+
+2
+
+Pollack [40] gave an asymptotic series expansion
+
+C(x) ∼
+
+x
+eγ log log log x
+
+(cid:18)
+
+1 −
+
+γ
+log log log x
+
+(cid:19)
+
++ · · ·
+
+as x → ∞
+
+(3)
+
+with additional terms. I shall use just these first two terms.
+
+Cyclics are much more abundant than primes asymptotically because limx→∞ π(x)/C(x) =
+0. Hence, asymptotically, almost all cyclics are composite. John Campbell and I [4] observed
+that, since C(cn) = n by definition, (2) implies that
+
+cn ∼ eγn log log log n as n → ∞,
+
+lim
+n→∞
+
+lim
+x→∞
+
+lim
+x→∞
+
+= 1,
+
+cn+1
+cn
+x
+cC(x)
+log C(x)
+log x
+
+= 1,
+
+= 1.
+
+(4)
+
+(5)
+
+The observation that cyclics are asymptotically much more abundant than primes mo-
+tivates investigating which (proved or conjectured) properties of primes depend on their
+asymptotic scarcity relative to cyclics, and which properties of primes carry over (exactly or
+asymptotically) to the more abundant cyclics.
+
+Another infinite increasing integer sequence that contains all primes is N. But N does
+not share an elementary property that P and C share, namely, that the only even element of
+the sequence is 2. Similarly, while P contains no squares and C contains exactly one square,
+N includes infinitely many squares. Other infinite increasing integer sequences that share
+important properties with P and C remain to be investigated.
+
+Campbell and I [4] proved two analogies between primes and cyclics. First, under the
+pn log pn) as n → ∞ [10].
+Riemann hypothesis, the nth prime gap satisfies pn+1 − pn = O(
+More precisely, under the Riemann hypothesis, for every pn > 3, pn+1 − pn < 22
+pn log pn
+25
+[5]. We [4, Theorem 2] proved that, under the Riemann hypothesis, the first difference of
+consecutive cyclics satisfies cn+1 − cn = o (cid:0)√
+(cid:1). Second, if mn(P) is the mean and
+vn(P) is the variance of the first n primes, then asymptotically vn(P) ∼ (1/3)(mn(P))2 as
+n → ∞ [6]. We [4, Theorem 1] proved, without the Riemann hypothesis, that the mean
+mn(C) and the variance vn(C) of the first n cyclics satisfy the same asymptotic relationship,
+vn(C) ∼ (1/3)(mn(C))2 as n → ∞.
+
+pn log pn
+
+√
+
+√
+
+This project of generalizing from primes to cyclics is not guaranteed to succeed. After
+proposing in section 2 conjectures that numerical calculations have so far failed to reject, I
+give in section 3 a counterexample to show that the analog for cyclics of the second conjecture
+[22] of Hardy and Littlewood fails. This counterexample provides a further small, indirect
+hint in support of the belief of Hensley and Richards [25] that the second conjecture of Hardy
+and Littlewood for primes is false.
+
+Because P ⊂ C, if infinitely many primes have property X, then infinitely many cyclics
+j = ∞ immediately implies
+
+have property X. For example, Euler’s proof that limn→∞
+
+j=1 p−1
+
+(cid:80)n
+
+3
+
+(cid:80)n
+
+j=1 c−1
+
+j = ∞. But if every prime has property X, it may be true or false,
+that limn→∞
+depending on property X, that every cyclic has property X. Conversely, if infinitely many
+cyclics have property X, it may be true or false, depending on property X, that infinitely
+many primes have property X. But if every cyclic has property X, then every prime has
+property X.
+
+Consequently, when a conjecture about primes has been extensively verified numerically,
+if that conjecture immediately implies the corresponding conjecture about cyclics, there is
+no need, and I do not bother, to test numerically the analogous conjecture about cyclics. I
+test numerically only those conjectures about cyclics not immediately implied by properties
+of primes that are proved or conjectured and numerically supported.
+
+A helpful referee pointed out that many additional questions could be asked about cyclics.
+For example, the referee asked, are the cyclics equidistributed over arithmetic progressions
+of a prescribed modulus? How does the sum of all cyclics less than or equal to positive real
+x behave as a function of x? The latter question leads to the first and only theorem of this
+paper, which reports, for a fixed positive integer k, the sum of the kth power of all cyclics
+less than or equal to a positive real x as a function of x.
+Theorem 1. Fix k ∈ N. For n ∈ N, if c1, . . . , cn ∈ C are the first n cyclic numbers, then
+
+1 + · · · + ck
+ck
+
+n ∼
+
+nck
+n
+k + 1
+
+∼
+
+nk+1ekγ(log log log n)k
+k + 1
+
+as x → ∞.
+
+(6)
+
+In particular, c1 + · · · + cn ∼ ncn/2 ∼ n2eγ log log log n/2.
+
+For positive real x, as x → ∞, the sum of the kth power of all cyclics less than or equal
+
+to x is asymptotic to
+
+C(x)ck
+k + 1
+
+C(x)
+
+∼
+
+C(x)xk
+k + 1
+
+∼
+
+xk+1
+(k + 1)eγ log log log x
+
+(cid:18)
+
+1 −
+
+γ
+log log log x
+
+(cid:19)
+
+,
+
+(7)
+
+using (3). In particular, the sum of all cyclics less than or equal to positive real x is asymp-
+totic to
+
+C(x)x
+2
+
+∼
+
+x2
+2eγ log log log x
+
+(cid:18)
+
+1 −
+
+(cid:19)
+
+γ
+log log log x
+
+.
+
+(8)
+
+Proof. Campbell and I [4, Theorem 1] showed that
+
+n−1(ck
+
+1 + · · · + ck
+
+n) ∼
+
+ck
+n
+k + 1
+
+as x → ∞.
+
+Hence, using (4), ck
+= nk+1ekγ(log log log n)k/(k + 1), proving (6).
+
+1 + · · · + ck
+
+n ∼ nck
+
+n/(k + 1) ∼ n(eγn log log log n)k/(k + 1)
+
+Replacing n in (6) by C(x) and using (5) to approximate cC(x) yields (8).
+
+In general, xC(x)/2 > ncn/2 because in general x > cn while C(x) = n. Figure 1 shows
+that xC(x)/2 and ncn/2 closely approximate the exact sum of cyclics, and the asymptotic
+approximation on the right side of (8) consistently falls below the exact sum of cyclics and
+the other two approximations.
+
+4
+
+Figure 1: For m = 1, 2, . . . , 20 and x = m × 5 × 106, the abscissa of each plotted point is
+the exact sum of cyclics less than or equal to x. The ordinate of each point compares the
+exact sum of cyclics less than or equal to x (solid black line, with abscissa = ordinate) with
+three approximations: ncn/2 (red × marker); xC(x)/2 (blue + marker); and the asymptotic
+approximation on the right side of (8) (open green circle).
+
+2 Conjectures
+
+2.1 Landau’s list and Legendre’s relatives
+
+In 1912, Landau [31] presented four historic conjectures about primes. Extensively verified
+numerically, these conjectures are generally believed to be true but unproved as of 2025.
+Many unconfirmed and unrefuted claims to have proved one or several of Landau’s conjec-
+tures have been published or posted but I am not aware that such a claimed proof has been
+independently confirmed.
+
+If true, each of Landau’s four conjectures about primes immediately implies the conjecture
+about cyclics that follows it below. But the conjecture about cyclics may be true even if the
+corresponding Landau conjecture about primes is false. Here are Landau’s four conjectures
+about primes and analogous conjectures about cyclics.
+I include a few novel conjectures
+about cyclics suggested by these analogs of Landau’s conjectures.
+
+5
+
+2.1.1 Landau’s problem 1
+
+First, Goldbach conjectured that every even n ∈ N greater than 2 is a sum of two primes.
+
+Conjecture 2 (Goldbach analog for cyclics). Every even n ∈ N greater than 2 is a sum of
+two cyclics.
+
+On seeing Conjecture 2 in a prior draft of this paper, Carl Pomerance (personal com-
+munication, March 5 2025) [41] proved that every sufficiently large even n is a sum of two
+cyclics. I quote his result with his permission. Let G(n) be the number of pairs of cyclics
+c1, c2 such that c1 + c2 = n. Then if n is even, Pomerance [41] proved,
+
+G(n) ∼
+
+(cid:18)
+
+(cid:89)
+
+1 −
+
+p>2
+
+(cid:19)
+
+1
+(p − 1)2
+
+·
+
+2n
+(eγ log log log n)2 ·
+
+(cid:89)
+
+p|n
+2<p<log log n
+
+p − 1
+p − 2
+
+as n → ∞.
+
+2.1.2 Landau’s problem 2
+
+Second in Landau’s list, the twin prime conjecture states that there are infinitely many
+primes p such that p + 2 is also a prime. Here p and p + 2 are called twin primes.
+
+Conjecture 3 (twin cyclics analog). There are infinitely many cyclics c ∈ C such that c + 2
+is also cyclic.
+
+On seeing Conjecture 3 in a prior draft of this paper, Carl Pomerance (personal communi-
+cation, March 5 2025) [41] proved a much stronger result, which I quote with his permission.
+For positive real x, let C2(x) be the number of cyclics c ≤ x such that c + 2 is also cyclic.
+Then as x → ∞,
+
+C2(x) ∼ 2
+
+(cid:89)
+
+p>2
+
+(cid:0)1 − (p − 1)−2(cid:1) x(eγ log log log x)−2.
+
+(9)
+
+The right side of (9) approaches infinity as x → ∞, proving Conjecture 3.
+
+It is well known that the only prime p such that p, p + 2, p + 4 are all primes is p = 3,
+because if p > 3, one of p, p + 2, p + 4 must be divisible by 3. Cyclics are different. The
+composite cyclics (A050384) include multiple triplets, such as 141, 143, 145, and 213, 215,
+217, and 319, 321, 323, and 391, 393, 395.
+
+Conjecture 4 (cyclic triplets). There are infinitely many composite cyclics c ∈ C such that
+c, c + 2, c + 4 are all composite cyclic.
+
+Carl Pomerance (personal communication, March 5 2025) [41] proved a related result,
+which I quote with his permission: there are infinitely many cyclic triplets c, c + 2, c + 4
+(not necessarily all composite cyclics, as in Conjecture 4), and their counting function is of
+order x(log log log x)−5/2(log x)−1/2 as x → ∞. As Carl Pomerance pointed out (personal
+
+6
+
+communication, March 24 2025), since the number of primes up to x is of order x/ log x,
+which is much smaller, asymptotically most of these triplets consist of three composites.
+
+Further, the cyclics (whether prime or composite) include multiple quintuplets with suc-
+cessive gaps equal to 2, such as 11, 13, 15, 17, 19, and 29, 31, 33, 35, 37, and 65, 67, 69, 71,
+73, and 83, 85, 87, 89, 91, and 137, 139, 141, 143, 145, and 209, 211, 213, 215, 217, and 263,
+265, 267, 269, 271.
+
+Conjecture 5 (cyclic quintuplets). There are infinitely many cyclics c ∈ C such that c, c +
+2, c + 4, c + 6, c + 8 are all cyclic.
+
+Carl Pomerance (personal communication, March 5 2025) [41] proved a general result
+which implies, for example, that infinitely many all-cyclic 8-tuples have the form n, n +
+2, n + 4, n + 6, n + 8, n + 10, n + 12, n + 14 but there are no all-cyclic 9-tuples with the
+additional term n + 16 because one of these nine numbers is divisible by 9, therefore not
+cyclic.
+
+2.1.3 Landau’s problem 3
+
+Third in Landau’s list, Legendre [33] conjectured that for every n ∈ N, there exists a prime
+p ∈ P such that n2 < p < (n + 1)2. Legendre’s claimed proof was based on a prior claim
+that was false. Several claims to prove Legendre’s conjecture have been published or posted
+but I am not aware that any has been independently confirmed.
+
+Conjecture 6 (Legendre analog for cyclics). For every n ∈ N, there exists a cyclic c ∈ C
+such that n2 < c < (n + 1)2.
+
+A cyclic c such that n2 < c < (n + 1)2 exists for all 1 ≤ n ≤ 9998. The use of strict
+
+inequality in Conjecture 6 is justified because no cyclic other than 1 is a square.
+
+Desboves [12, Theorem 2, p. 290] conjectured that for every n ∈ N, there exist two primes
+p, p′ such that n2 < p < p′ < (n + 1)2. Desboves asserted that if Legendre’s conjecture is
+true, then his conjecture follows. The converse is obvious. I confirmed Desboves’ conjecture
+numerically for the 50,847,534 primes less than 109. If true, Desboves’ conjecture immedi-
+ately implies Conjecture 7 about cyclics. But Conjecture 7 may be true even if Desboves’
+conjecture is false.
+
+Conjecture 7 (Desboves analog for cyclics). For every n ∈ N, there exist two cyclics c, c′ ∈ C
+such that n2 < c < c′ < (n + 1)2.
+
+For every positive integer n ≤ 3161, there exist c, c′ ∈ C such that n2 < c < c′ < (n + 1)2.
+The next conjectures generalize Legendre’s and Desboves’s conjectures to k > 2 primes
+
+and cyclics.
+
+For n ∈ N, let NP(n) := #{p ∈ P | p ∈ (n2, (n + 1)2)} be the number of primes in the
+interval (n2, (n + 1)2) (A014085 apart from an initial 0). For example, in the first 25 intervals
+(n2, (n + 1)2), n = 1, . . . , 25, the numbers of primes are, respectively, 2, 2, 2, 3, 2, 4, 3, 4, 3,
+
+7
+
+5, 4, 5, 5, 4, 6, 7, 5, 6, 6, 7, 7, 7, 6, 9, 8. For example, NP(6) = 4 because four primes, 37,
+41, 43, 47, are between 62 = 36 and 72 = 49.
+
+In a prior draft of this paper, I conjectured that NP(n) is asymptotic (as n → ∞) to a
+regularly varying function of n with positive index not exceeding 1. Recall that a regularly
+varying function [16, 47, 27] maps the positive half line x > 0 into the positive half line and
+takes the form x (cid:55)→ xρℓ(x). The exponent ρ of x is a real number, commonly called the
+index of the regularly varying function, and ℓ(x) is a slowly varying function of x, that is,
+for every λ > 0, limx→∞ ℓ(λx)/ℓ(x) = 1. A regularly varying function generalizes a power
+function x (cid:55)→ xρ.
+
+On seeing this conjecture, Pierre Deligne (personal communication, March 6 2025) refined
+my conjecture to a much more specific, heuristically plausible conjecture, which I quote with
+his permission. Deligne observed that the length of the interval (n2, (n + 1)2) is asymptotic
+to 2n and the probability that an integer in this interval is prime is asymptotic to 1/ log(n2),
+so the number of primes in (n2, (n + 1)2) should be asymptotic to 2n/ log(n2) = n/ log n.
+Deligne commented, “Of course with no way to prove it.”
+
+Conjecture 8 (Deligne’s conjecture: primes in intervals between successive squares). As
+n → ∞, the number NP(n) of primes in the interval (n2, (n + 1)2) satisfies NP(n) ∼ n/ log n.
+
+Figure 2 (left) plots NP(n) for n = 1, . . . , 31621 (blue dots) and the asymptotic approxi-
+
+mation n/ log(n) (red line). The results support Deligne’s Conjecture 8 for primes.
+
+Imitating Deligne’s heuristic argument for primes, the length of the interval (n2, (n + 1)2)
+is asymptotic to 2n. The probability that an integer in this interval is cyclic should be
+proportional to C((n + 1)2)/(n + 1)2, which by (3) is asymptotic to
+
+1
+eγ log log log((n + 1)2)
+
+(cid:18)
+
+1 −
+
+γ
+log log log((n + 1)2)
+
+(cid:19)
+
+.
+
+Hence as n → ∞, the number of cyclics in (n2, (n + 1)2) should be asymptotic to
+
+2n
+eγ log log log((n + 1)2)
+
+(cid:18)
+
+1 −
+
+γ
+log log log((n + 1)2)
+
+(cid:19)
+
+∼
+
+2n
+eγ log log log(n)
+
+(cid:18)
+
+1 −
+
+γ
+log log log(n)
+
+(cid:19)
+
+.
+
+(10)
+
+This heuristic argument is not a proof of the following conjecture.
+
+Conjecture 9 (cyclics in intervals between successive squares). As n → ∞, the number
+Nc(n) := #{c ∈ C | c ∈ (n2, (n + 1)2)} of cyclics in the interval (n2, (n + 1)2) is asymptotic
+to (10).
+
+In my numerical calculations, the ratio of Nc(n) to the corresponding function of n in
+(10) declines slowly toward 1 as n increases, despite the increase in Figure 2 (right) in the
+arithmetic difference between Nc(n) and the corresponding function of n in (10).
+
+Let Lp be the OEIS sequence A349997, defined as “Numbers k such that the number of
+primes in any [i.e., every] interval [j2, (j + 1)2], j > k, is not less than the number of primes
+in the interval [k2, (k + 1)2].” Let Lp(n) be the nth element of Lp in increasing order.
+
+8
+
+Figure 2: (left) The number NP(n) of primes in the interval (n2, (n + 1)2) (blue dots) for
+n = 1, . . . , 31621 and a conjectured asymptotic approximation n/ log(n) (red curve). (right)
+The number Nc(n) of cyclics in the interval (n2, (n + 1)2) (blue dots) for n = 1, . . . , 9998,
+and a conjectured asymptotic approximation (10) (red line).
+
+Conjecture 10 (k-fold Legendre for primes). For primes, Lp = {1, 7, 11, 17, 18, 26, 27, 32,
+46, 50, 56, 58, 85, 88, 92, 137, 143, 145, . . .}.
+
+For example, Lp(2) = 7 means that Np(7) = 3 (i.e., three primes 53, 59, 61 lie between
+72 and 82) and (conjecturally, based on available computations) for every j > 7, Np(j) ≥ 3.
+Hugo Pfoertner tabulated 2414 (conjectural) values of Lp at OEIS A349997 without re-
+porting the number of primes he considered. These numerical values are conjectural because
+they depend on an infinite sequence of primes not accessible to computation and not yet ana-
+lyzed mathematically. Pfoertner’s 2414 values appear (Figure 3 left) to be well approximated
+by anb with a ≈ 0.257, b ≈ 1.9475.
+
+Conjecture 11 (asymptotic k-fold Legendre for primes). As n → ∞, Lp(n) is asymptotic
+to a regularly varying function with index b that satisfies 3/2 < b ≤ 2.
+
+The counting function of the sequence Lp(·) is defined for each m ∈ N as (cid:80)
+
+Lp(n)≤m 1.
+Because Lp(·) and its counting function are asymptotically inverses, a mathematical conse-
+quence of Conjecture 11 is that the counting function of Lp(·) is asymptotic to a regularly
+varying function with index 1/2 ≤ 1/b < 2/3 [47, pp. 21–27] [27, section 8, pp. 16–17]. Define
+
+9
+
+Figure 3: (left) The sequence Lp (A349997, black dots), and the power function (blue curve)
+fitted by least squares. (middle) The counting function of Lp (black dots) and the power
+function (blue curve) fitted by least squares. (right) Variance function of Lp (black dots)
+and a power function (blue curve) fitted by least squares.
+
+mp(n) and vp(n) to be, respectively, the mean and the variance of Lp(1), Lp(2), . . . , Lp(n).
+Then applying [8, Theorem 1] to Conjecture 11 gives vp(n) ∼ mp(n)2/(cid:0)(1/b)(1/b + 2)(cid:1) =
+b2mp(n)2/(1 + 2b).
+
+The estimated exponent b ≈ 1.9475 of the power law fitted to Lp (Figure 3 left) by least
+squares predicts that the counting function of Lp will be asymptotic to a power law with
+exponent 1/b ≈ 0.5135. The power law fitted by least squares to the counting function of
+Lp has exponent 0.5115 (Figure 3 middle), different by only 0.002.
+
+The variance function of Lp is defined as the function (0, ∞) (cid:55)→ (0, ∞) from the mean
+of the first n elements of Lp to the variance of the first n elements of Lp, for all n ∈ N. I
+estimated the variance function (Figure 3 right) using the first 25 elements of Lp, then the first
+50, then the first 75, and so on in successively longer intervals, each embedded in the next,
+up to the first 2400 elements. The exponent 1/b of an asymptotic regularly varying counting
+function (Figure 3 middle) predicts that the asymptotic variance function (cumulative) will
+be a power function with exponent 2 and coefficient 1/(cid:0)(1/b)(1/b + 2)(cid:1) = b2/(1 + 2b). The
+power law fitted by least squares to the variance function has exponent approximately 1.9831
+(Figure 3 right), not greatly different from the predicted value 2. The estimated coefficient
+is approximately 0.9676, while 1/(cid:0)(1/b)(1/b + 2)(cid:1) ≈ 0.7748.
+
+Since all primes are cyclics, if there are k or more primes in (n2, (n + 1)2), then there are
+
+10
+
+k or more cyclics in (n2, (n + 1)2).
+
+Analogous to Lp, define Lc as numbers k such that the number of cyclics in every interval
+[j2, (j + 1)2], j > k, is not less than the number of cyclics in the interval [k2, (k + 1)2]. Using
+the identical algorithm used to calculate Lp for primes, with cyclics replacing primes as
+the input, I calculated 769 values of Lc based on the 28,488,167 cyclics less than 108. For
+example, as the first 25 cyclics are 1, 2, 3, 5, 7, 11, 13, 15, 17, 19, 23, 29, 31, 33, 35, 37,
+41, 43, 47, 51, 53, 59, 61, 65, 67, the seven intervals [1, 4], [4, 9], . . ., [49, 64] contain Nc(n) =
+2, 2, 3, 3, 4, 4, and 4 cyclics, and no later intervals in these calculations have fewer than 4
+cyclics. Consequently, I conjecture that Lc(1) = 1, Lc(2) = 3, Lc(3) = 5. At greater length,
+I conjecture:
+
+Conjecture 12 (k-fold Legendre for cyclics). For cyclics, Lc = (1, 3, 5, 8, 11, 14, 15, 16, 19,
+21, 27, 29, 33, 38, 39, 46, 47, 51, 58, 61, 62, 66, 82, 86, 90, 104, 105, 108, 110, 118, 126, 127, 129, 131,
+138, 141, 149, 152, 159, 161, 167, 170, 172, 174, 180, 182, 185, 187, . . .).
+
+Figure 4: (left) The sequence Lc (black dots) and the power function (blue curve) fitted by
+least squares. (middle) The counting function of Lc (black dots) and the power function
+(blue curve) fitted by least squares. (right) The variance function (black dots) of Lc and a
+power function (blue curve) fitted by least squares.
+
+Figure 4 (left) indicates that a power function approximates closely the calculated values
+of Lc for cyclics. The counting function of Lc (middle) and the variance function of Lc (right)
+are also well approximated by power functions.
+
+11
+
+Conjecture 13 (asymptotic k-fold Legendre for cyclics). As n → ∞, Lc(n) is asymptotic
+to a regularly varying function with index that satisfies 1 ≤ b ≤ 2.
+
+2.1.4 Landau’s problem 4
+
+Fourth in Landau’s list, the near-square conjecture states that infinitely many primes p ∈ P
+satisfy p = n2+1 for some n ∈ N. These primes (A002496) are one variety of the “near-square
+primes.” Hardy and Littlewood [22] conjectured a still unproved asymptotic expression for
+the counting function of classes of primes including near-square primes. Western [55, p.
+109, table] compared the conjectured asymptotic formula of Hardy and Littlewood with
+the numerically evaluated counting function of near-square primes using a list [11, pp. 238–
+239] by Cunningham of the values of n < 15000 such that p = n2 + 1 is a near-square
+prime. I programmed the computation and found, unexpectedly, that every one of Western’s
+15 tabulated values of the counting function of near-square primes is one less than the
+corresponding value I obtained. The discrepancy is due to Cunningham’s omission [11, p.
+238] of n = 1 for the first near-square prime, 12 + 1 = 2.
+
+Golubew [20, pp. 10–12] tabulated the values of n ∈ [1, 10000] such that n2 + 1 ∈ P
+(including n = 1, unlike Cunningham) and conjectured [20, p. 13] that, for every m ∈ N, the
+interval (m4, (m + 1)4) contains at least one near-square prime p = n2 + 1 for some n ∈ N.
+I confirmed Golubew’s conjecture using the 50,847,534 prime numbers less than 109, which
+include 2379 near-square primes, the last being 999444997 = 316142 +1 (Figure 5, top right).
+Not every interval between successive cubes (m3, (m + 1)3) for m ∈ N contains at least one
+near-square prime (Figure 5, top left). For example, the interval (93 = 729, 103 = 1000)
+contains no near-square prime.
+
+The 28,488,167 cyclics less than 108 include 3,786 near-square cyclics equal to n2 + 1 for
+some n ∈ N, beginning with 2, 5, 17, 37, 65, 101, 145, 197, 257, 401, 485, 577, 677, 785, 901,
+1157, 1297, 1601, 1765, 1937, 2117, 2501, 2917, 3137, 3365, 3601, 3845, 4097, 4357, 5477,
+5777, 6085, 6401, 7057, 7397, 7745, 8101, 8465, 8837, 9217, 9605, 10001, 10817, 11237, 11665,
+12101, 12545, 12997, 13457, 14401, 14885, 15377, 15877, 16385, 16901, 17957, 18497, 19045,
+19601, 20165, 20737, 21317, 21905, 22501, 23717, 24337, 24965, 25601, 26897, 27557, 28901,
+30977, 31685, 32401, 33857, 34597, 35345, 36101, 37637, 38417, 40001, 41617, 42437, 43265,
+44101, 45797, 46657, 48401, 49285, 50177, 51077, 52901, 54757, 55697, 56645, 57601, 59537,
+60517, 62501, 63505 and ending with 99880037 = 99942 + 1 and 99, 920, 017 = 99962 + 1.
+
+Conjecture 14 (near-square analog for cyclics). Infinitely many cyclics c ∈ C satisfy c =
+n2 + 1 for some n ∈ N.
+
+After seeing Conjecture 14 in an earlier draft, Carl Pomerance (personal communication,
+June 2 2025) conjectured that n2 − 1 is cyclic for infinitely many n. He suggested that the
+conjecture is plausible because all prime factors of n2 − 1 are at most n + 1.
+
+Conjecture 15 (near-square analog of Golubew for cyclics). For every m ∈ N, the interval
+(m3, (m + 1)3) contains at least one near-square cyclic c = n2 + 1 for some n ∈ N. For every
+
+12
+
+m ∈ N, the interval (m4, (m + 1)4) contains at least two near-square cyclics c = n2 + 1, c′ =
+n′2 + 1 for some n < n′ ∈ N.
+
+Figure 5: (top row) The number of near-square primes p = m2 + 1 in each interval (left)
+(n3, (n + 1)3) and (right) (n4, (n + 1)4). (bottom row) The number of near-square cyclics
+c = m2 + 1 in each interval (left) (n3, (n + 1)3) and (right) (n4, (n + 1)4).
+
+2.2 Oppermann’s conjecture
+
+Oppermann [38, p. 174], in an unpublished lecture on March 9 1877, conjectured that for
+every n > 1, there exist two primes p, p′ such that n2 − n < p < n2 < p′ < n2 + n. Several
+claims to prove Oppermann’s conjecture have been published or posted but I am not aware
+that any has been independently confirmed.
+
+The heuristic approach of Deligne’s conjecture 8 suggests that, asymptotically as n → ∞,
+each number in the interval [n2 − n, n2] has probability 1/ log(n2) of being prime, hence the
+number of primes in [n2 − n, n2] should be asymptotic to n/(2 log(n)). The same argument
+and conjectured conclusion hold for the number of primes in [n2, n2 + n]. These suggestions
+make plausible the following conjecture:
+
+Conjecture 16 (counting Oppermann primes). As n → ∞, the number of primes in [n2 −
+n, n2] is asymptotic to n/(2 log n) and the number of primes in [n2, n2 + n] is also asymptotic
+to n/(2 log n).
+
+13
+
+If true, Conjecture 16 would imply the following:
+
+Conjecture 17 (k-fold Oppermann conjecture for primes). For every k ∈ N, there exists
+N (k) ∈ N such that for all n > N (k), there exist at least k primes in [n2−n, n2] and another at
+least k primes in [n2, n2 + n]. In particular, N (2) = 16, N (3) = 36, N (4) = 46, N (5) = 76,
+N (6) = N (7) = 79, N (8) = 85, N (9) = 118, N (10) = 136, N (11) = N (12) = 155,
+N (13) = 188.
+
+Oppermann’s conjecture corresponds to N (1) = 1.
+
+Remark 18. Oppermann’s conjecture for primes implies Legendre’s conjecture for primes.
+Specifically, if (a) for every n ∈ N, n > 1, there exists p ∈ P such that n(n − 1) < p < n2,
+or (b) for every n ∈ N, there exists p′ ∈ P such that n2 < p′ < n(n + 1), or (c) both (a) and
+(b) hold, then (d) for every n ∈ N, there exists p ∈ P such that n2 < p < (n + 1)2.
+
+Proof. Since (n − 1)2 < n(n − 1) for all n > 1, (a) implies (d). Since n(n + 1) < (n + 1)2 for
+all n ∈ N, (b) implies (d).
+Conjecture 19 (Oppermann analog for cyclics). For every n > 1, there exist c, c′ ∈ C such
+that n2 − n < c < n2 < c′ < n2 + n. The number of cyclics in [n2 − n, n2] is asymptotic to
+
+n
+eγ log log log(n2)
+
+(cid:18)
+
+1 −
+
+γ
+log log log(n2)
+
+(cid:19)
+
+∼
+
+n
+eγ log log log(n)
+
+(cid:18)
+
+1 −
+
+γ
+log log log(n)
+
+(cid:19)
+
+.
+
+(11)
+
+The number of cyclics in the interval [n2, n2 + n] is asymptotic to
+
+n
+eγ log log log(n(n + 1))
+
+(cid:18)
+
+1 −
+
+γ
+log log log(n(n + 1))
+
+(cid:19)
+
+∼
+
+n
+eγ log log log(n)
+
+(cid:18)
+
+1 −
+
+γ
+log log log(n)
+
+(cid:19)
+
+.
+
+(12)
+
+The sum of (11) and (12) is asymptotic to (10), and (11) is asymptotic to (12). For
+
+n ∈ N such that n ≥ 4, one has (11) < (12).
+
+For the primes less than 109, for each n = 2, . . . , 31622, Figure 6 (left) plots n/(2 log n)
+and the minimum of the numbers of primes in the two intervals [n2 − n, n2] and [n2, n2 + n].
+For the cyclics less than 108, Figure 6 (right) compares the asymptotic expression in (11)
+(red curve) with the minimum of the numbers of cyclics in the two intervals [n2 − n, n2] and
+[n2, n2 + n] (blue dot).
+
+If true, Conjecture 19 would imply the following:
+
+Conjecture 20 (k-fold Oppermann conjecture for cyclics). For every k ∈ N, there exists
+N (k) ∈ N such that for all n > N (k), there exist at least k cyclic numbers in the interval
+[n2 − n, n2] and another at least k prime numbers in the interval [n2, n2 + n]. In particular,
+N (2) = 4, N (3) = 7, N (4) = 13, N (5) = 16, N (6) = 18, N (7) = 21, N (8) = 25, N (9) = 31,
+N (10) = N (11) = 32, N (12) = 40, N (13) = 44.
+
+Numerically, there exist c, c′ ∈ C such that n2 − n < c < n2 < c′ < n2 + n for each
+1 < n ≤ 9998. For n = 2, 3, . . . , 25, the lesser of the number of cyclics in (n2 − n, n2) and
+the number of cyclics in (n2, n2 + n) is 1, 1, 2, 1, 2, 2, 2, 3, 3, 3, 3, 4, 3, 5, 5, 4, 6, 5, 6, 7, 6,
+7, 9, 7, and 7. All computed later elements in this sequence are 8 or larger.
+
+14
+
+Figure 6: (left) For the primes less than 109, the minimum of the numbers of primes in the
+two intervals [n2 − n, n2] and [n2, n2 + n] is shown by a blue dot for every tenth value of n
+to avoid having the blue dots overwrite the red curve. The red curve plots n/(2 log n), n =
+(right) For the cyclics less than 108, for each n = 20, 21, 22, . . . , 9999, a
+2, . . . , 31622.
+blue dot shows the minimum of the numbers of cyclics in the two intervals [n2 − n, n2] and
+[n2, n2 + n]. The red line shows the asymptotic expression in (11).
+
+2.3 Brocard’s and Desboves’ conjectures
+
+Brocard [3] conjectured in 1904 that there are at least four primes between the squares of
+two successive primes, provided that the first prime be greater than 3. However, between
+the squares 9 and 25 of 3 and 5, respectively, there are more than four primes, namely, 11,
+13, 17, 19, 23, so Brocard’s proviso should be replaced by requiring that the first prime be
+greater than 2. Several claims to prove Brocard’s conjecture have been published or posted
+but I am not aware that any has been independently confirmed.
+Remark 21. Desboves’ conjecture [12] that for every n ∈ N, there exist p, p′ ∈ P such that
+n2 < p < p′ < (n + 1)2 implies Brocard’s (adjusted) conjecture [3] that there are at least
+four primes between the squares of two successive primes greater than 2. More generally, if
+p, p′ are two primes both greater than 2, then Desboves’ conjecture [12] implies that there
+are at least 2(|p′ − p|) primes between p2 and p′2.
+
+Proof. As 2 is the only even prime, every pair of consecutive primes except 2 and 3 is
+If p > 2 and p′ = p + 2 are twin primes and
+separated by at least one even number.
+
+15
+
+p < m < p′, m ∈ N, then, by Desboves’ conjecture, there are at least two primes between
+p2 and m2. Again by Desboves’ conjecture, there are at least two primes between m2 and
+p′2. So there are at least four primes between p2 and p′2. All other pairs 2 < p < p′ of
+consecutive primes have more than one intervening even number and one or more intervening
+odd numbers between them, and each of those intervening numbers contributes two or more
+primes to the count of primes between p2 and p′2.
+
+For k ∈ N, k ≥ 4, define B(k) to be the smallest n ∈ N such that, for all m ∈ N with
+m ≥ n, there are always at least k primes between p2
+m+1. For example, Brocard’s
+conjecture asserts that B(4) = 2. (This 2 points to the second prime, p2 = 3, not to the first
+n+1 for n ≤ 104; see
+prime 2.) T. D. Noe calculated the number of primes between p2
+A050216. Based on Noe’s calculations, I conjecture the following.
+
+m and p2
+
+n and p2
+
+Conjecture 22 (k-fold Brocard for primes). Let B(4) = 2, B(5) = 2, B(6) = 3, B(7) =
+B(8) = B(9) = 5, B(10) = B(11) = 7, B(12) = B(13) = B(14) = B(15) = B(16) =
+10, B(17) = B(18) = B(19) = B(20) = 13. Then for k = 4, . . . , 20 and for every n ∈ N such
+that n ≥ B(k), there exist at least k primes between p2
+n+1. More generally, for every
+k ∈ N, there exists B(k) ∈ N such that for every n ∈ N with n ≥ B(k), there exist at least
+k primes between n2 and (n + 1)2.
+
+n and p2
+
+Conjecture 23 (Brocard analog for cyclics). For every n > 2, there exist at least six cyclics
+c ∈ C such that c2
+
+n < c < c2
+
+n+1.
+
+There are two cyclics c2 = 2, c3 = 3 in the open interval (c2
+2 = 4, c2
+
+2 = 4). There are two
+cyclics c4 = 5, c5 = 7 in (c2
+4 = 25) are 11, 13,
+15, 17, 19, and 23. For n = 1, . . . , 25, the number of cyclics c ∈ C such that c2
+n+1
+is 2, 2, 6, 8, 25, 16, 17, 21, 22, 56, 102, 36, 36, 45, 49, 96, 52, 113, 125, 65, 206, 80, 152,
+83, 84. For 3 ≤ n ≤ 1009 (with c1009 = 3157), there are at least six cyclics c ∈ C such that
+n < c < c2
+c2
+
+3 = 9). The six cyclics in (c2
+
+n < c < c2
+
+3 = 9, c2
+
+1 = 1, c2
+
+n+1.
+
+If the k-fold Brocard conjecture for primes is true, then it is immediate that for k =
+4, . . . , 20 and for every n ∈ N such that n ≥ B(k), there exist at least k cyclics between
+n and p2
+p2
+n+1, since all primes are cyclics. The following analog for cyclic numbers is not an
+obvious consequence of the k-fold Brocard conjecture for primes, and may hold true even if
+Conjecture 22 is false.
+
+Conjecture 24 (k-fold Brocard analog for cyclics). For every k ∈ N, there exists C(k) ∈ N
+such that for every n ∈ N with n ≥ C(k), there exist at least k cyclic numbers c such that
+c2
+n < c < c2
+
+n+1.
+
+Numerically, C(2) = 1, i.e., for every n ≥ 1 computed here, there exist at least 2 cyclic
+
+numbers c such that c2
+
+n < c < c2
+
+n+1.
+
+16
+
+2.4 Schinzel’s conjectures
+
+√
+
+√
+
+Schinzel [49, p. 155, Conjecture P1] conjectured in 1961 that, for real numbers x ≥ 117,
+x. When x is evaluated only at primes, the
+there is at least one prime between x and x +
+exceptional cases (among the primes less than 109, in my computations) where there is no
+prime between pn and pn +
+pn are p2 = 3, p4 = 7, p6 = 13, p9 = 23, p11 = 31, and p30 = 113.
+A stronger conjecture by Schinzel [49, p. 156] is that, for real number x ≥ 8, there is at least
+one prime between x and x + (log x)2. When x is evaluated only at primes, the exceptional
+cases (among the primes less than 109) where there is no prime between pn and pn + (log pn)2
+are p1 = 2, p2 = 3, and p4 = 7. With their different lower bounds, both conjectures have
+been confirmed numerically for x ≤ 4.44 × 1012. Conjecture P1 implies Conjecture P of
+Sierpi´nski [49, p. 153]. Both of Schinzel’s conjectures have obvious analogs for cyclics and
+one analog not so obvious. I verified these conjectures for the cyclics less than 108.
+
+Conjecture 25 (Schinzel Conjecture P1 analog for cyclics). For every n ∈ N,
+
+cn+1 ≤ cn +
+
+√
+
+cn
+
+except for c3 = 3, c5 = 7, and c11 = 23.
+
+Conjecture 26 (Schinzel conjecture for log2 analog for cyclics). For every n ∈ N,
+
+cn+1 ≤ cn + (log cn)2
+
+except for c1 = 1, c2 = 2, c3 = 3, and c5 = 7.
+
+Conjecture 27 (Schinzel-type conjecture for 2 × log analog for cyclics). For every n ∈ N,
+
+cn+1 ≤ cn + 2 log cn
+
+except for c1 = 1 and c5 = 7.
+
+2.5 Golubew’s conjectures
+
+Noting Legendre’s conjecture for primes, Golubew [19, p. 85] conjectured in 1957 that for
+n ∈ N, there is at least one pair of twin primes p, p + 2 between n3 and (n + 1)3. Further,
+he conjectured that, for n ∈ N, there is at least one quartet of primes p, p + 2, p + 6, p + 8
+between n5 and (n + 1)5. For n = 1, . . . , 25, I find that the number of pairs of twin primes
+between n3 and (n + 1)3 is 2, 2, 3, 3, 5, 5, 4, 6, 5, 11, 9, 12, 11, 12, 17, 17, 16, 19, 16, 18,
+24, 22, 17, 22, and 26. For n = 1, . . . , 103 − 1 such that (n + 1)3 ≤ 109, I find numerically
+that the number of pairs of twin primes between n3 and (n + 1)3 is never less than two.
+As examples, if n = 1, then (3, 5) and (5, 7) are two pairs of twin primes between 1 and
+(n + 1)3 = 8; and if n = 2, then (11, 13) and (17, 19) are two pairs of twin primes between
+8 and 27. Moreover, I find 3 or more pairs of twin primes between n3 and (n + 1)3 for all
+3 ≤ n ≤ 999, 4 or more pairs of twin primes between n3 and (n + 1)3 for all 5 ≤ n ≤ 999, 5
+
+17
+
+or more pairs of twin primes between n3 and (n + 1)3 for all 8 ≤ n ≤ 999, 6 or more pairs
+of twin primes between n3 and (n + 1)3 for all 10 ≤ n ≤ 999, and so on.
+
+Golubew [19, p. 84, Table 2] tabulated the number of pairs of twin primes between n3
+and (n + 1)3 for n = 1, . . . , 80. I confirmed his counts with five exceptions, which I believe
+to be his errors. I list the five cases in which I challenge his results with three numbers: n,
+his count of twin primes between n3 and (n + 1)3, and my count of twin primes between n3
+and (n + 1)3. These five cases are: 25, 27, 26; 26, 31, 32; 70, 109, 119; 74, 130, 131; 80, 160,
+161.
+
+Conjecture 28 (number of twin primes between consecutive cubes). For every n ∈ N,
+the number of pairs of twin primes between n3 and (n + 1)3 is never less than two. More
+generally, for every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least
+k pairs of twin primes between n3 and (n + 1)3. Specifically, N (1) = N (2) = 1, N (3) = 3,
+N (4) = 5, N (5) = 8, N (6) = N (7) = N (8) = N (9) = 10, N (10) = 11, N (11) = 13,
+N (12) = N (13) = N (14) = N (15) = N (16) = 15, and N (17) = 20.
+
+Two consecutive primes p, p′ are defined [56, p. 336] to be cousin primes if |p − p′| = 4
+and defined to be sexy primes if |p − p′| = 6. By these definitions, 3 and 7 are not cousin
+primes and 11 and 17 are not sexy primes because they are not consecutive. Every other
+pair of primes p, p′ with |p − p′| = 4 is consecutive, hence cousin. Many other pairs of primes
+p, p′ with |p − p′| = 6 are not consecutive, hence not sexy. For n = 1, . . . , 25, I find that the
+number of pairs of cousin primes between n3 and (n + 1)3 is 0, 2, 2, 5, 3, 5, 8, 3, 11, 7, 12,
+7, 15, 14, 13, 10, 19, 13, 20, 21, 22, 23, 24, 28, and 31. For n = 1, . . . , 25, I find that the
+number of pairs of sexy primes between n3 and (n + 1)3 is 0, 0, 3, 2, 5, 6, 7, 11, 7, 15, 11,
+12, 19, 15, 20, 21, 30, 27, 29, 33, 30, 37, 43, 36, and 52. These numbers and all the following
+counts of cousin primes between successive cubes suggest the following conjectures:
+
+Conjecture 29 (number of cousin primes between consecutive cubes). For n ∈ N with
+n > 1, the number of pairs of cousin primes between n3 and (n + 1)3 is never less than two.
+More generally, for every k ∈ N, there exists N (k) ∈ N such that, for all n ≥ N (k), there
+are at least k pairs of cousin primes between n3 and (n + 1)3. Specifically, N (1) = N (2) = 2,
+N (3) = 8, N (4) = N (5) = N (6) = N (7) = 9, N (8) = N (9) = N (10) = 12.
+
+Conjecture 30 (number of sexy primes between consecutive cubes). For n ∈ N with n > 2,
+the number of pairs of sexy primes between n3 and (n + 1)3 is never less than two. (While 3
+pairs of sexy primes occur between 33 and 43, only 2 pairs of sexy primes occur between 43 and
+53.) More generally, for every k ∈ N, there exists N (k) ∈ N such that, for all n ≥ N (k), there
+are at least k pairs of sexy primes between n3 and (n + 1)3. Specifically, N (1) = N (2) = 3,
+N (3) = N (4) = N (5) = 5, N (6) = 6, N (7) = 7, N (8) = N (9) = N (10) = N (11) = 11.
+
+Conjecture 31 (asymptotic k-fold primes between consecutive cubes). As n → ∞, the
+numbers of pairs of twin primes, cousin primes, and sexy primes between consecutive cubes
+n3 and (n + 1)3 are asymptotic to regularly varying functions of n with indices between 3/2
+and 2, and the indices for twin primes and cousin primes are identical.
+
+18
+
+Figure 7: (left) Each dot represents, on the vertical axis, the number of pairs of consecutive
+primes pm, pm+1 in the interval between n3 and (n + 1)3 for the value of n on the horizontal
+axis. Gaps pm+1 − pm = 2, 4, 6 correspond to twin (blue dots), cousin (red dots), and sexy
+(yellow dots) primes. Black curves show power functions anb fitted by least squares. For twin
+primes (gap = 2), a = 0.079, b = 1.689. For cousin primes (gap = 4), a = 0.0804, b = 1.686.
+For sexy primes (gap = 6), a = 0.124, b = 1.708. (right) Each dot represents, on the vertical
+axis, the number of pairs of consecutive cyclics cm, cm+1 in the interval between n3 and (n+1)3
+for the value of n on the horizontal axis. Gaps cm+1 − cm = 2, 4, 6 correspond to twin (blue
+dots), cousin (red dots), and sexy (yellow dots) cyclics. Black curves show power functions
+anb fitted by least squares. For twin cyclics (gap = 2), a = 0.5493, b = 1.950. For cousin
+cyclics (gap = 4), a = 0.3187, b = 1.983. For sexy cyclics (gap = 6), a = 0.1051, b = 2.034.
+
+Figure 7 (left) supports Conjecture 31 numerically.
+Turning from primes to cyclics: twin cyclics, cousin cyclics, and sexy cyclics are pairs of
+consecutive cyclics with first difference 2, 4, and 6, respectively. For n = 1, . . . , 25, I find
+that the numbers of pairs of twin cyclics between n3 and (n + 1)3 are 2, 4, 7, 13, 17, 22, 32,
+41, 44, 57, 70, 80, 99, 107, 122, 132, 142, 171, 189, 220, 221, 239, 271, 292, and 310. For
+n = 1, . . . , 25, I find that the numbers of pairs of cousin cyclics between n3 and (n + 1)3
+are 0, 1, 3, 8, 8, 14, 15, 22, 29, 37, 36, 51, 50, 69, 71, 95, 92, 97, 120, 129, 142, 149, 177,
+175, and 194. For n = 1, . . . , 25, I find that the numbers of pairs of sexy cyclics between n3
+and (n + 1)3 are 0, 0, 1, 0, 2, 4, 7, 7, 9, 8, 13, 13, 19, 17, 16, 23, 38, 44, 36, 42, 46, 58, 54,
+67, and 70. These numbers and all the following counts of cyclics between successive cubes
+(n3, (n + 1)3) suggest the following:
+
+19
+
+Conjecture 32 (number of twin cyclics between consecutive cubes). For every n ∈ N, the
+number of pairs of twin cyclics between n3 and (n + 1)3 is never less than two. For every
+k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs of
+twin cyclics between n3 and (n + 1)3. Specifically, N (1) = N (2) = 1, N (3) = N (4) = 2,
+N (4) = N (5) = N (6) = N (7) = 3, N (8) = N (9) = N (10) = N (11) = N (12) = N (13) = 4.
+
+Conjecture 33 (number of cousin cyclics between consecutive cubes). For n ∈ N with
+n > 1, the number of pairs of cousin cyclics between n3 and (n + 1)3 is never less than one.
+For every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs
+of cousin cyclics between n3 and (n + 1)3. Specifically, N (1) = 2, N (2) = N (3) = 3, N (4) =
+N (5) = N (6) = N (7) = N (8) = 4, N (9) = N (10) = N (11) = N (12) = N (13) = N (14) = 6.
+
+Conjecture 34 (number of sexy cyclics between consecutive cubes). For n ∈ N with n ≥ 5,
+the number of pairs of sexy cyclics between n3 and (n + 1)3 is never less than two. For
+every k ∈ N, there exists N (k) ∈ N such that for all n ≥ N (k) there are at least k pairs
+of sexy cyclics between n3 and (n + 1)3. Specifically, N (1) = N (2) = 5, N (3) = N (4) = 6,
+N (5) = N (6) = N (7) = 7, N (8) = 10, N (9) = N (10) = N (11) = N (12) = N (13) = 11.
+
+Conjecture 35 (asymptotic k-fold cyclics between consecutive cubes). As n → ∞, the
+numbers of twin cyclics, cousin cyclics, and sexy cyclics between consecutive cubes n3 and
+(n + 1)3 are asymptotic to regularly varying functions of n with indices between 1 and 5/2.
+
+2.6 Sophie Germain primes and cyclics
+
+In approaching a proof of Fermat’s Last Theorem, Sophie Germain considered (as a very
+special case of much more general hypotheses) pairs of primes (p, 2p + 1) such as (3, 7) and
+(5, 11). A prime p such that 2p+1 is prime is called a Sophie Germain prime (or an SG prime),
+and the prime 2p + 1 is called a safe or auxiliary prime. Identifying the first appearance
+historically of SG primes is challenging because much of Germain’s work was never published,
+appeared in correspondence, is mentioned in the work of other mathematicians, or was
+published anonymously or pseudonymously [32].
+
+It is conjectured but unproved that there are infinitely many SG primes. For positive
+real x, let πSG(x) be the counting function of SG primes, i.e., the number of SG primes less
+than or equal to x. It is conjectured but not proved [48, p. 123] that, as x → ∞, we have
+
+
+
+πSG(x) ∼
+
+2
+
+
+
+
+
+p(p − 2)
+(p − 1)2
+
+x
+(log x)2 .
+
+(cid:89)
+
+{p∈P|p>2}
+
+If there are infinitely many SG primes, then Conjecture 36 is true, but Conjecture 36
+
+may be true even if there are only finitely many SG primes.
+
+Define a cyclic c ∈ C to be a Sophie Germain cyclic (or an SG cyclic) if 2c + 1 ∈ C.
+
+Conjecture 36 (infinitely many SG cyclics). There are infinitely many Sophie Germain
+cyclics.
+
+20
+
+After seeing Conjecture 36 in a draft of this paper, Carl Pomerance (personal commu-
+nication, May 24 2025) announced that he can prove that the number of Sophie Germain
+cyclics less than x is asymptotic to cx(eγ log log log x)−2 for an appropriate c > 0, and hence
+that Conjecture 36 is true.
+
+Let σn be the nth SG cyclic. The first 25 SG cyclics are 1, 2, 3, 5, 7, 11, 15, 17, 23, 29,
+33, 35, 41, 43, 47, 51, 53, 59, 61, 65, 69, 71, 79, 83, 89. For example, σ7 = 15 is an SG cyclic
+because 2 × 15 + 1 = 31 ∈ P is cyclic, although 31 itself is not an SG cyclic, as the following
+list shows. The first 25 cyclics that are not SG cyclics are 13, 19, 31, 37, 67, 73, 77, 85, 87,
+91, 97, 101, 103, 109, 115, 137, 139, 145, 157, 163, 177, 181, 187, 193, 199. For example,
+2 × 13 + 1 = 27.
+
+It is well known that every SG prime except SG prime 3 is congruent to 2 mod 3, for if
+an SG prime p were congruent to 1 mod 3, then 2p + 1 would be congruent to 3 mod 3, i.e.,
+composite, contradicting the assumption that p is an SG prime. The SG cyclics are different.
+
+Conjecture 37 (SG cyclics mod 3). As the number of SG cyclics grows without limit,
+the number of SG cyclics congruent to j mod 3, j = 1, 2, 3, grows without limit, and the
+limiting fraction of SG cyclics congruent to 1 mod 3 equals the limiting fraction of SG cyclics
+congruent to 3 mod 3.
+
+After seeing an earlier version of Conjecture 37, Carl Pomerance (personal communica-
+tion, May 24 2025) announced that he can show that the fractions of SG cyclics congruent
+to j mod 3 approach the limits w1 = w3 = 0 and w2 = 1.
+
+Based on the first 3,441,316 SG cyclics, the proportions of SG cyclics congruent to 1,
+2, and 3 mod 3 are approximately 0.1360, 0.7252, 0.1388. Based on the first 6,882,632 SG
+cyclics (twice as many), the proportions of SG cyclics congruent to 1, 2, and 3 mod 3 are
+approximately 0.1342, 0.7290, 0.1368.
+
+Conjecture 38 (Desboves analog for SG cyclics). For every n ∈ N, there exists at least two
+SG cyclics in (n2, (n + 1)2).
+
+For n = 1, . . . , 7070, every interval (n2, (n + 1)2) contains at least two SG cyclics. For
+example, for n = 1, . . . , 25, the number of SG cyclics in each interval (n2, (n + 1)2) is 2, 2, 2,
+2, 3, 3, 4, 4, 3, 3, 6, 5, 4, 7, 6, 5, 8, 9, 6, 10, 7, 8, 7, 8, 9.
+
+2.7 Firoozbakht’s and related conjectures
+
+Firoozbakht conjectured in 1982 that, if pn is the nth prime starting from p1 = 2, then
+(pn)1/n decreases strictly as n ∈ N increases [44]. Firoozbakht’s conjecture has been verified
+numerically for all primes less than 264 ≈ 1.844 × 1019 [52].
+
+Ribenboim [43, p. 185] dated this conjecture, communicated to him by the author, “from
+
+about 1992,” but Kourbatov [29] gives what appears to be the correct date, 1982 [44].
+
+Campbell and I [4] first stated Conjectures 39–41 of Firoozbakht type concerning cyclic
+numbers and tested them using only the cyclics not exceeding 4×106. Here I test Conjectures
+39–41 plus two new Conjectures 42 and 43 using the cyclics less than 108.
+
+21
+
+Conjecture 39 (Firoozbakht analog for cyclics 1). For every positive integer n excluding
+n = 1, 2, 3 and 5, we have
+
+n > c1/(n+1)
+c1/n
+
+n+1
+
+.
+
+The four exceptions are 1 < 21/2, 21/2 < 31/3, 31/3 < 51/4, and 71/5 < 111/6.
+
+Conjecture 40 (Firoozbakht analog for cyclics 2). For every positive integer n > 1, we
+have
+
+c1/(n−1)
+n
+
+> c1/n
+n+1.
+
+If 11/0 = 1∞ := 1, then the only exception is c1 = 1 < c1
+
+2 = 2.
+
+Conjecture 41 (Firoozbakht analog for cyclics 3). For every k∈ N, there exists a least
+m∈ N, call it N (k), such that, for all n > N (k), we have
+
+c1/(n+k)
+n
+
+> c1/(n+k+1)
+n+1
+
+.
+
+In particular, if k = 1 or k = 2, then N (k) = 5; and if k = 3 or k = 4, then N (k) = 11.
+
+For the primes among the cyclic numbers, Conjecture 39 is stronger (gives tighter inequal-
+6 = 111/6 ≈
+5 = 111/5 ≈
+
+ities) than Firoozbakht’s conjecture [4]. For example, Conjecture 39 gives c1/6
+7 = 131/7 ≈ 1.4426 whereas Firoozbakht’s conjecture gives p1/5
+1.4913 > c1/7
+1.6154 > p1/6
+6 = 131/6 ≈ 1.5334.
+
+Conjecture 42 (Firoozbakht analog for cyclics 4). For every k∈ {0} ∪ N, define
+
+Then
+
+¯c(k) := max
+n∈N
+
+c1/(n+k)
+n
+
+.
+
+¯c(0) ≈ 1.4953 > ¯c(1) ≈ 1.4085, > ¯c(2) ≈ 1.3495, > ¯c(3) ≈ 1.3053, > ¯c(4) ≈ 1.2710 > . . . .
+
+Conjecture 43 (Firoozbakht analog for SG cyclics). For every n ∈ N excluding n = 1, 2, 3
+and 5, we have
+
+n > σ1/(n+1)
+σ1/n
+The four exceptions are 1 < 21/2, 21/2 < 31/3, 31/3 < 51/4, and 71/5 < 111/6, exactly as in
+Conjecture 39.
+
+n+1
+
+.
+
+I confirmed Conjecture 43 for the first 6,882,632 SG cyclics.
+
+22
+
+2.8 Andrica and related conjectures
+
+Andrica [1] conjectured that, for all n ∈ N, we have ∆
+pn < 1. Visser [52]
+verified Visser’s stronger version (quoted below) of Andrica’s conjecture for all primes less
+than 264 ≈ 1.84 × 1019. Several claims to prove Andrica’s conjecture have been published or
+posted but I am not aware that any has been independently confirmed.
+
+pn+1 −
+
+pn :=
+
+√
+
+√
+
+√
+
+Conjecture 44 (Andrica analog for cyclics). For all n ∈ N, ∆
+
+√
+
+cn := (cn+1)1/2 −(cn)1/2 < 1.
+
+Ribenboim [43, p. 191] observed that the conjecture
+
+√
+(
+
+lim
+n→∞
+
+pn+1 −
+
+√
+
+pn) = 0
+
+(13)
+
+would imply Andrica’s conjecture. An editor [18, p. 61] remarked that “it is a difficult and
+as yet unsolved problem whether” (13) is true. No originator of conjecture (13) is given in
+[18, 43]. Wolf [57] gives an impressive heuristic argument for the truth of (13).
+
+Figure 8 provides numerical support for conjecture (13) and for Conjecture 46 below with
+t = 1/2, which is the analogous conjecture for cyclics. I also verified Andrica’s conjecture for
+primes less than 109 and its analog Conjecture 46 (with t = 1/2) for cyclics less than 108.
+n for real t ∈ (0, 1/2]. Because d2(cid:0)(p + g)t − pt(cid:1)/dg dt =
+(g + p)t/(g + p) + t(g + p)t−1 log(g + p) > 0 for g > 0, t > 0, and p > 1, the difference
+n+1 − pt
+pt
+
+n is an increasing function of t and of pn+1 − pn.
+
+Conjecture 45 deals with pt
+
+n+1 − pt
+
+Conjecture 45 (generalized analog for primes). For real t ∈ (0, 1/2], we have
+
+lim
+n→∞
+
+(pt
+
+n+1 − pt
+
+n) = 0.
+
+Conjecture 45 obviously implies (13).
+
+Conjecture 46 (generalized analog for cyclics). For real t ∈ (0, 1/2], we have
+
+lim
+n→∞
+
+(ct
+
+n+1 − ct
+
+n) = 0.
+
+(14)
+
+(15)
+
+Visser [53, p. 182] conjectured that, except for n ∈ {2, 4, 6, 9, 11, 30} corresponding to
+
+pn ∈ {3, 7, 13, 23, 31, 113},
+
+√
+
+∆
+
+pn :=
+
+√
+
+pn+1 −
+
+√
+
+pn <
+
+1
+2
+
+.
+
+A generalization of the obvious analog for cyclics is as follows:
+
+Conjecture 47 (Visser analog for cyclics). For a fraction ϵ ∈ (0, 1/2), there exists N (ϵ) ∈ N
+such that, for all n > N (ϵ), we have
+
+√
+
+∆
+
+cn :=
+
+√
+
+cn+1 −
+
+√
+
+cn < ϵ.
+
+(16)
+
+23
+
+√
+
+√
+
+√
+
+√
+
+√
+
+pn :=
+
+pn+1 −
+
+pn for n = 1, . . . , 1000 and
+Figure 8: (above) The values (blue dots) of ∆
+the reverse cumulative maximum (red line), that is, the cumulative maximum starting from
+p1. The decrease of the reverse cumulative maximum as
+p1000 and working back to ∆
+∆
+pn in the direction of 0 as n increases. (below) The
+n increases displays the approach of ∆
+√
+values (blue dots) of ∆
+cn for n = 1, . . . , 1000 and the reverse cumulative
+cn+1 −
+maximum of ∆
+cn for cyclics (red line). The grey line reproduces the reverse cumulative
+maximum for primes. The grey line for primes is never less than the red line for cyclics in
+these examples.
+
+cn :=
+
+√
+
+√
+
+√
+
+√
+
+In particular, except for n ∈ {3, 5, 11} corresponding to cn ∈ {3, 7, 23},
+
+√
+
+∆
+
+cn :=
+
+√
+
+cn+1 −
+
+√
+
+cn <
+
+1
+2
+
+(17)
+
+and except for n ∈ {1, 3, 4, 5, 10, 11, 21, 70} corresponding to cn ∈ {1, 3, 5, 7, 19, 23, 53, 199},
+
+√
+
+∆
+
+cn :=
+
+√
+
+cn+1 −
+
+√
+
+cn <
+
+1
+3
+
+.
+
+(18)
+
+Kosyak, Moree, Sofos, and Zhang (hereafter KMSZ) conjectured [28, p. 216, Eq. (2)] (see
+
+also [36]) that if n ≥ 31 (so pn ≥ 127), then
+
+pn+1 − pn <
+
+√
+
+pn + 1.
+
+A generalization of this conjecture consistent with the primes less than 109 is as follows:
+
+24
+
+Conjecture 48 (generalized KMSZ for primes). For finite positive or negative integer k,
+there exists N (k) ∈ N such that, for all n > N (k) (strict inequality), we have
+
+pn+1 − pn <
+
+√
+
+pn + k.
+
+(19)
+
+In particular, for k ∈ [−20, −17], N (k) = 263; for k ∈ [−16, −3], N (k) = 217; for k = −2,
+N (k) = 34; for k ∈ [−1, +3], N (k) = 30 (k = 1 is the KMSZ conjecture); and for k ≥ 4,
+N (k) = 0, i.e., (19) holds for all n ∈ N.
+
+An analogous conjecture is consistent with the cyclics less than 108.
+
+Conjecture 49 (generalized KMSZ for cyclics). For finite positive or negative integer k,
+there exists N (k) ∈ N such that, for all n > N (k) (strict inequality), we have
+
+cn+1 − cn <
+
+√
+
+cn + k.
+
+(20)
+
+In particular, for k = −20, −19, −18, . . . , −1, 0, +1, the corresponding 22 values of N (k) are
+N (k) = 216, 208, 176, 176, 159, 141, 127, 120, 109, 98, 83, 70, 70, 70, 70, 70, 23, 21, 21, 11, 11, 11,
+and for k ≥ 2, N (k) = 0, i.e., (20) holds for all n ∈ N.
+
+As mentioned in the Introduction, Carneiro et al.
+pn log pn.
+
+hypothesis, for every pn > 3, pn+1 − pn < 22
+25
+
+√
+
+[5] proved that, under the Riemann
+
+Conjecture 50 (Carneiro analog for cyclics). For every cn > 3, we have
+
+cn+1 − cn <
+
+√
+
+cn log cn.
+
+22
+25
+
+(21)
+
+The conjectured upper bounds on prime gaps in Conjecture 48 and on cyclic gaps in
+Conjecture 49 and Conjecture 50 are very likely far from the best possible upper bounds.
+For example, for the primes less than 109, maxn(pn+1 − pn) = 282 (the gap following prime
+pn + 4 ≈ 31626.7755. Similarly, for
+436273009) while, for the next to last of these primes,
+the cyclics less than 108, maxn(cn+1 − cn) = 24 while, for the next to last of these cyclics,
+√
+cn + 2 ≈ 10001.9998. It seems worth exploring further generalizations of (19) and (20)
+
+√
+
+obtained by replacing the square root on the right sides by an exponent ϵ ∈ (0, 1/2).
+
+Conjecture 51 (Carneiro analog for SG cyclics). For every SG cyclic σn > 3, we have
+
+σn+1 − σn <
+
+√
+
+σn log σn.
+
+22
+25
+
+(22)
+
+I confirmed Conjecture 51 for the first 6,882,632 SG cyclics.
+
+25
+
+2.9 Rosser, Dusart and related conjectures
+
+The prime number theorem [21, 51] is equivalent to pn ∼ n log n. Rosser [45] proved that, for
+all n ∈ N, pn > n log n. Dusart [14] proved that, for all n > 1, pn > n(log n + log log n − 1).
+By analogy with Rosser’s and Dusart’s inequalities for primes, I conjecture, using (4) for
+cyclics, the following:
+
+Conjecture 52 (Rosser analog for cyclics). For all n > 1,
+
+cn > eγn log log log n;
+
+Conjecture 53 (Dusart analog for cyclics). For all n > 1,
+
+cn > eγn(log log log n + log log log log n).
+
+(23)
+
+(24)
+
+Conjectures 44, 46, 47, 49, 50, 52, and 53 are consistent with all numerically evaluated
+
+cn ∈ (1, 108).
+
+After seeing Conjectures 52 and 53 in a draft of this paper, Carl Pomerance (personal
+
+communication, June 3 2025) computed that
+
+cn = eγn(log log log n + γ + o(1))
+
+(which refines (4)). So Conjecture 52 holds for n sufficiently large and Conjecture 53 fails for
+n sufficiently large. The numerical results in this paper fail to distinguish between Conjecture
+52 and Conjecture 53 because log log log log 108 ≈ 0.0670 < γ ≈ 0.5772.
+
+2.10 Additive and multiplicative inequalities
+Extending the Bertrand-Chebyshev theorem that 2pn > pn+1 for all n ∈ N, Ishikawa [26,
+Theorem 1], Gallot et al. [17, Lemma 10], and I [9, Theorem 2] proved independently, and
+with different proofs, that if n > 1, then pn + pn+1 > pn+2. When n = 1, equality holds:
+p1 + p2 = p3 = 5.
+
+Conjecture 54 (Ishikawa analog for cyclics). For all n > 2,
+
+cn + cn+1 > cn+2.
+
+When n = 1 or n = 2, equality holds: c1 + c2 = c3 = 3 and c2 + c3 = c4 = 5.
+
+Conjecture 55 (Ishikawa analog for SG cyclics). For all n > 2,
+
+σn + σn+1 > σn+2.
+
+26
+
+(25)
+
+(26)
+
+I verified this conjecture for the first 6,882,632 SG cyclics. When n = 1 or n = 2, equality
+
+holds: σ1 + σ2 = σ3 = 3 and σ2 + σ3 = σ4 = 5.
+
+More generally [9, Theorem 1], if b1, . . . , bg are g > 1 nonnegative integers (not necessarily
+distinct), and d1, . . . , dh are h positive integers (not necessarily distinct), with 1 ≤ h < g,
+then there exists a positive integer N such that, for all n ≥ N , we have
+
+pn−b1 + pn−b2 + · · · + pn−bg > pn+d1 + · · · + pn+dh.
+
+A concrete example [9] is pn + pn+1 + pn+2 > pn+3 + pn+4, proved for all n ≥ N = 8.
+Analogously, for cyclic numbers, I make the following conjecture:
+
+Conjecture 56 (sum-3-versus-sum-2 analog for cyclics). For all n > 9,
+
+LHS(n) := cn + cn+1 + cn+2 > RHS(n) := cn+3 + cn+4.
+
+(27)
+
+For n = 1, 2, 3, 4, 5, 8, 9, I find numerically that LHS(n) < RHS(n). For n = 6, 7 and all
+
+computed values of n > 9, I find numerically that LHS(n) > RHS(n).
+
+According to Ribenboim [43, p. 185], Dusart [13] proved Mandl’s conjecture that (p1 +
+p2 + · · · + pn)/n ≤ pn/2 for all n > 8. The inequality also holds for n = 7. In all the examples
+I know, the inequality is strict wherever the weak inequality holds.
+
+Conjecture 57 (Dusart-Mandl analog for cyclics). For all n > 5,
+
+c1 + c2 + · · · + cn
+n
+
+<
+
+cn
+2
+
+.
+
+The opposite strict inequality holds for n = 1, 2, 3, 4, 5.
+
+Conjecture 58 (Dusart-Mandl analog for SG cyclics). For all n > 5,
+
+σ1 + σ2 + · · · + σn
+n
+
+<
+
+σn
+2
+
+.
+
+I verified this conjecture for the first 6,882,632 SG cyclics. The opposite strict inequality
+
+holds for n = 1, 2, 3, 4, 5.
+
+Panaitopol [39] and I [7] proved independently a multiplicative inequality for primes: if
+m ∈ N, n ∈ N, and m ≤ n, then pm·n < pmpn unless (m, n) = (3, 4) or (m, n) = (4, 4), in
+which cases the reverse strict inequality holds.
+Conjecture 59 (Panaitopol analog for cyclics). If m ∈ N, n ∈ N, and 3 ≤ m ≤ n, then
+cm·n < cmcn unless (m, n) = (3, 3) or (m, n) = (5, h) for h = 5, 6, 7, 8, 9, 10, in which cases
+the reverse strict inequality holds.
+
+Vrba [54] conjectured (in 2010, according to Kourbatov [30]) that
+
+lim
+n→∞
+
+pn
+
+(cid:16)(cid:81)n
+
+j=1 pj
+
+(cid:17)1/n = e.
+
+(28)
+
+S´andor and Verroken [46] in 2011 and independently Kourbatov [30] in 2016 proved (28).
+Hassani [23, 24] and Kourbatov [30] bounded the approach of pn/((cid:81)n
+j=1 pj)1/n to e. Kour-
+batov [30] gave a short proof and calculated higher-order terms in a series expansion.
+
+27
+
+Conjecture 60 (Vrba analog for cyclics).
+
+lim
+n→∞
+
+cn
+
+(cid:16)(cid:81)n
+
+j=1 cj
+
+(cid:17)1/n = e.
+
+For n = 28488167, I calculate cn = 99999997 and cn/((cid:81)n
+approximation to e ≈ 2.7183. To circumvent numerical overflow of (cid:81)n
+I computed cn/((cid:81)n
+
+j=1 cj)1/n by means of the equivalent exp{log cn − ((cid:80)n
+
+j=1 cj)1/n ≈ 2.7362, not a bad
+j=1 cj in this calculation,
+j=1 log cj)/n}.
+
+Hassani [23, Theorem 1.1] also proved that
+
+lim
+n→∞
+
+(p1 + · · · + pn)/n
+(p1 × · · · × pn)1/n =
+
+e
+2
+
+.
+
+Conjecture 61 (Hassani analog for cyclics).
+
+lim
+n→∞
+
+(c1 + · · · + cn)/n
+(c1 × · · · × cn)1/n =
+
+e
+2
+
+.
+
+For n = 28488167, I calculate
+
+(c1 + · · · + cn)/n
+(c1 × · · · × cn)1/n ≈ 1.3638,
+
+e
+2
+
+≈ 1.3591.
+
+If Conjectures 60 and 61 are true, then dividing the former equality by the latter equality
+
+yields an equality Campbell and I [4, Theorem 1] proved:
+
+lim
+n→∞
+
+cn
+(c1 + · · · + cn)/n
+
+= 2.
+
+Thus the difference between (c1 + c2 + · · · + cn)/n and cn/2, which appear in an inequality
+in Conjecture 57, is proved to vanish asymptotically as n → ∞.
+
+Analogs of Conjectures 60 and 61 for SG cyclics, replacing cn by σn, are obvious and are
+
+numerically plausible.
+
+2.11 Sequence of absolute difference sequences: Proth, Gilbreath
+
+Define {a(n) | n ∈ {0} ∪ N} to be a sequence of absolute difference sequences (here-
+after, SADS) if, for each n ∈ {0} ∪ N, a(n) = (a1(n), a2(n), a3(n), . . .) is an infinite se-
+quence of real numbers such that, for all n ∈ N and all m ∈ N, we have am(n) =
+|am(n − 1) − am+1(n − 1)|.
+In more detail, starting from an arbitrary initial real se-
+quence a(0) := (a1(0), a2(0), a3(0), . . . , am(0), am+1(0), . . .), the next sequence is a(1) :=
+(|a1(0) − a2(0)|, |a2(0) − a3(0)|, . . . , |am(0) − am+1(0)|, . . .), and the elements of each succes-
+sive sequence a(n) give the absolute values of the first differences of elements of the preceding
+sequence.
+
+28
+
+Proth [42] in 1878 computed numerically the behavior of a SADS starting from the
+first seven primes (he included 1 as the first prime, which I ignore) and observed that
+every successor sequence begins with 1. For example, a1(1) = |3 − 2| = 1 and a1(2) =
+||3 − 2| − |5 − 3|| = |1 − 2| = 1, and so on. He suggested that a1(n) = 1 for all n ∈ N.
+The journal editor, Eug`ene Catalan, in a gentle concluding footnote, asked (my translation):
+“Are not the theorems of M. Proth that one has just read rather postulates?” [≪Est-ce que
+les th´eor`emes de M. Proth, qu’on vient de lire, ne sont pas, plutˆot, des postulata?≫] I take
+Proth’s suggestion as a conjecture, generally known as N. L. Gilbreath’s conjecture [43, pp.
+191-192]. The Proth-Gilbreath conjecture has been verified for the primes less than 1013.
+
+Conjecture 62 (Proth-Gilbreath analog for cyclics). A SADS starting from the cyclic num-
+bers C after omitting c1 = 1 has 1 as the first element of every successor sequence.
+
+I verified this conjecture for 1 million successor sequences of the cyclic numbers following
+
+but not including c1 = 1.
+
+Conjecture 63 (Proth-Gilbreath analog for SG cyclics). A SADS starting from the SG
+cyclics after omitting σ1 = 1 has 1 as the first element of every successor sequence.
+
+I verified this conjecture for 1 million successor sequences of the SG cyclics following but
+
+not including σ1 = 1.
+
+3 Second Hardy and Littlewood conjecture: cyclic ana-
+
+log is false
+
+The second conjecture of Hardy and Littlewood [22] states that π(m + n) ≤ π(m) + π(n) for
+all integers 2 ≤ m ≤ n.
+
+Conjecture 64 (Hardy and Littlewood analog for SG primes). The counting function of
+SG primes obeys πSG(m + n) ≤ πSG(m) + πSG(n) for all 2 ≤ m ≤ n.
+
+I verified Conjecture 64 for all 2 ≤ m ≤ 910664, m ≤ n ≤ 999997.
+Using the counting function C(·) (1) of cyclic numbers, an analog for cyclics of the second
+
+conjecture of Hardy and Littlewood, starting from 1 ≤ m ≤ n, is as follows:
+
+Conjecture 65 (Hardy and Littlewood analog for cyclics). For all integers 1 ≤ m ≤ n,
+C(m + n) ≤ C(m) + C(n).
+
+This conjecture is false. Let m = 209 = c71, so C(209) = 71. Let n = 389 = c128, so
+C(389) = 128. Then C(m + n) = C(598) = 200 because c200 = 595 < 598 < c201 = 599.
+Thus C(m + n) = C(598) = 200 > C(m) + C(n) = 71 + 128 = 199. Counterexamples like
+this one are abundant.
+
+To the extent that analogies between primes and cyclics are valid, this counterexample
+gives a further small hint to support the belief of Hensley and Richards [25] that the second
+conjecture of Hardy and Littlewood [22] about primes is false.
+
+29
+
+Conjecture 66 (Hardy and Littlewood analog for Sophie Germain cyclics). For all integers
+1 ≤ m ≤ n, Cσ(m + n) ≤ Cσ(m) + Cσ(n).
+
+The counterexample to Conjecture 65 for cyclics, m = 209 = σ46, n = 389 = σ83 is not a
+counterexample to Conjecture 66 for SG cyclics because σ120 = 593 < 598 < σ121 = 599 and
+therefore Cσ(209 + 389) = Cσ(598) = 120 < Cσ(209) + Cσ(389) = 46 + 83 = 129.
+
+For m = 1, . . . , 106 and n = m, . . . , 106, I found no counterexamples to Conjecture 66 for
+
+SG cyclics. It remains open.
+
+4 Acknowledgments
+
+My enthusiastic thanks to John M. Campbell for introducing me to cyclic numbers and
+for our collaboration [4]; Barry Mazur (personal communication, November 17 2024) for
+proposing the essential idea of sequence B(·), closely related to the sequence L(·); Pierre
+Deligne (personal communication, March 6 2025) for improving a conjecture in a previous
+draft with his Conjecture 8; Carl Pomerance (personal communications, March 10 2025)
+[41], after seeing a previous draft, for proving, improving, partially proving, or disproving
+Conjectures 2, 3, 4, 36, 37, 52, and 53; Alexei Kourbatov for a citation [44] to the correct
+date of Firoozbakht’s conjecture and suggesting evaluation of Lagneau’s condition by mod-
+ular exponentiation [35]; Alexei Kourbatov, Pieter Moree, Elchin Hasanalizade, and Marek
+Wolf for making me aware of relevant works [29, 17, 28, 39, 36, 56, 57]; Richard P. Stanley
+for permission to quote his proof that the conditions of Szele [50] and Lagneau [37, A003277,
+November 18, 2012] are equivalent; Chris Higgins, Eric Weisstein, and the Wolfram content
+team for providing the exact citation [3] and access to Brocard’s conjecture; Mehdi Has-
+sani for an informative exchange; Adam C. Green (personal communication, May 29 2025),
+Archivist, Trinity College Library, Cambridge, for information about Alfred Edward West-
+ern; and Roseanne Benjamin for help during this work. I thank the reviewer of a previous
+draft for several helpful comments, including a question that led to Theorem 1.
+
+References
+
+[1] D. Andrica, Note on a conjecture in prime number theory, Stud. Univ. Babe¸s–Bolyai
+
+Math. 31 (4) (1986), 44–48,
+
+[2] N. H. Bingham, C. M. Goldie, and J. L. Teugels, Regular Variation, Encyclopedia of
+
+Mathematics and its Applications, Vol. 27, Cambridge University Press, 1987.
+
+[3] H. Brocard, Response to Problem 2181. L’interm´ediaire des math´ematiques 11 (1904),
+
+149.
+
+[4] J. Campbell and J. E. Cohen, Cyclic numbers and gaps, Integers 25 (2025), Paper A23.
+
+30
+
+[5] E. Carneiro, M. B. Milinovich and K. Soundararajan, Fourier optimization and prime
+
+gaps, Comment. Math. Helv. 94 (2019), 533–568.
+
+[6] J. E. Cohen, Statistics of primes (and probably twin primes) satisfy Taylor’s law from
+
+ecology, Amer. Statist. 70 (2016), 399–404.
+
+[7] J. E. Cohen, Multiplicative inequalities for primes and the prime counting function,
+
+Integers 22 (2022), Paper A106.
+
+[8] J. E. Cohen, Integer sequences with regularly varying counting functions have power-law
+
+variance functions, Integers 23 (2023), Paper A87.
+
+[9] J. E. Cohen, Generalizations of Bertrand’s postulate to sums of any number of primes,
+
+Math. Mag. 96 (2023), 428–432.
+
+[10] H. Cram´er, Some theorems concerning prime numbers, Ark. Mat. Astron. Fys. 15
+
+(1921), 1–33.
+
+[11] Alan J. C. Cunningham, Binomial Factorisations, Giving Extensive Congruence-Tables
+
+and Factorisation-Tables, Vol. 1. Francis Hodgson, 1923.
+
+[12] H. A. Desboves, Sur un th´eor`eme de Legendre et son application `a la recherche de
+limites qui comprennent entre elles des nombres premiers. Nouv. Ann. Math. 14 (1855),
+281–295.
+
+[13] P. Dusart, Autour de la fonction qui compte le nombre de nombres premiers, Ph.D.
+
+thesis, Universit´e de Limoges, 1998.
+
+[14] P. Dusart, The kth prime is greater than k(log k + log log k − 1) for k ≥ 2, Math. Comp.
+
+68 (1999), 411–415.
+
+[15] P. Erd˝os, Some asymptotic formulas in number theory, J. Indian Math. Soc. (N.S.) 12
+
+(1948), 75–78.
+
+[16] W. Feller, An Introduction to Probability Theory and its Applications. Vol. II, John
+
+Wiley & Sons, 1971.
+
+[17] Y. Gallot, P. Moree, and H. Hommersom, Value distribution of cyclotomic polynomial
+
+coefficients, Unif. Distrib. Theory 6 (2011), 177–206.
+
+[18] S. W. Golomb et al., Limits of differences of square roots, Problem E2506, Amer. Math.
+
+Monthly 83 (1976), 60–61.
+
+[19] W. A. Golubew, Abzahlung von “Vierlingen” und “F¨unflingen” bis zu 5000000 und von
+“Sechslingen” von 0 bis 14000000, Anz. Osterr. Akad. Wiss. Math. Nat. Kl. 94 (1957),
+82–87.
+
+31
+
+[20] W. A. Golubew, Primzahlen der Form x2 + 1, Anz. Osterr. Akad. Wiss. Math. Nat. Kl.
+
+95 (1958), 9–13.
+
+[21] J. Hadamard, Sur la distribution des z´eros de la fonction ζ(s) et ses cons´equences
+
+arithm´etiques, Bull. Soc. Math. France 24 (1896), 199–220.
+
+[22] G. H. Hardy and J. E. Littlewood, Some problems of ‘Partitio Numerorum.’ III. On the
+
+expression of a number as a sum of primes, Acta Math. 44 (1923), 1–70.
+
+[23] M. Hassani, On the ratio of the arithmetic and geometric means of the prime numbers
+
+and the number e, Int. J. Number Theory 9 (2013), 1593–1603.
+
+[24] M. Hassani, On the arithmetic-geometric means of positive integers and the number e,
+
+Appl. Math. E-Notes, 14 (2014), 250–255.
+
+[25] D. Hensley and I. Richards, Primes in intervals, Acta Arith., 25 (1974), 375–391.
+
+[26] H. Ishikawa, ¨Uber die Verteilung der Primzahlen, Scientific Reports Tokyo Bunrika
+
+Daigaku, A 2 (1934), 27–40.
+
+[27] P. Kevei, Regularly varying functions, April 2019. Available at https://math.
+
+u-szeged.hu/~kevei/tanitas/1819regvar/RegVar_notes.pdf.
+
+[28] Alexandre Kosyak, Pieter Moree, Efthymios Sofos, and Bin Zhang, Cyclotomic polyno-
+mials with prescribed height and prime number theory, Mathematika 67 (2021), 214–
+234.
+
+[29] A. Kourbatov, Upper bounds for prime gaps related to Firoozbakht’s conjecture,
+J. Integer Sequences 18 (2015), Article 15.11.2. Corrections in Arxiv preprint
+arXiv:1506.03042v4 [math.NT], March 12 2019, available at https://arxiv.org/abs/
+1506.03042v4.
+
+[30] A. Kourbatov, On the geometric mean of the first n primes, Arxiv preprint
+arXiv:1603.00855 [math.NT], March 2 2016, available at https://arxiv.org/abs/
+1603.00855.
+
+[31] Edmund Landau, Gel¨oste und ungel¨oste Probleme
+
+aus der Theorie der
+Primzahlverteilung und der Riemannschen Zetafunktion. Jahresber. Deutsch. Math.-
+Ver. 21 (1912), 208–228.
+
+[32] R. Laubenbacher and D. Pengelley, Voici ce que j’ai trouv´e: Sophie Germain’s grand
+
+plan to prove Fermat’s last theorem. Historia Math. 37 (2010), 641–692.
+
+[33] A.-M. Legendre, Essai sur la th´eorie des nombres, 2nd ed., Courcier, 1808.
+
+[34] MATLAB, Version 24.2.0.2740171 (R2024b) Update 1, MathWorks Inc., https://www.
+
+mathworks.com.
+
+32
+
+[35] A. J. Menezes, P. C. van Oorschot, and S. A. Vanstone, Handbook of Applied Cryptog-
+
+raphy, Taylor and Francis , 1996.
+
+[36] P. Moree and E. Sofos, Hasse pairs and Andrica’s conjecture. Appendix A, pp. 19–22, of:
+E. Agathocleous, A. Joux, and D. Taufer, Elliptic curves over Hasse pairs, Max-Planck-
+Institut f¨ur Mathematik, Preprint Series 2024 (14), June 27 2024. Available at https:
+//archive.mpim-bonn.mpg.de/id/eprint/5072/1/mpim-preprint_2024-14.pdf.
+
+[37] OEIS Foundation Inc., The On-Line Encyclopedia of Integer Sequences, 2025, https:
+
+//oeis.org.
+
+[38] L. Oppermann, Om vor Kundskab om Primtallenes Maengde mellem givne Graendser,
+Oversigt over det Kongelige Danske Videnskabernes Selskabs Forhandlinger og dets
+Medlemmers Arbejder (1882), 169–179.
+
+[39] L. Panaitopol, On the inequality papb > pab. Bull. Math. Soc. Sci. Math. Roumanie N.S.
+
+41 (1998), 135–139.
+
+[40] P. Pollack, Numbers which are orders only of cyclic groups, Proc. Amer. Math. Soc.
+
+150 (2022), 515–524.
+
+[41] C. Pomerance, Patterns for cyclic numbers, Unpublished manuscript submitted for pub-
+lication, March 12 2025, https://math.dartmouth.edu/~carlp/cyclic.pdf. Revi-
+sion June 3 2025, https://math.dartmouth.edu/~carlp/cyclicrev.pdf. Paper 247,
+https://math.dartmouth.edu/~carlp/.
+
+[42] F. Proth, Sur la s´erie des nombres premiers, Nouv. Corresp. Math. 4 (1878), 236–240.
+
+[43] P. Ribenboim, The Little Book of Bigger Primes, 2d ed., Springer, New York, 2004.
+
+[44] C. Rivera, Conjecture 30. The Firoozbakht Conjecture, https://www.primepuzzles.
+in: The prime puzzles and problems connection.
+net/conjectures/conj_030.htm,
+https://www.primepuzzles.net/ppp.htm. The Puzzlers: Farideh Firoozbakht (1962–
+2019), https://www.primepuzzles.net/thepuzzlers/Firoozbakht.htm.
+
+[45] J. B. Rosser, The n-th prime is greater than n log n, Proc. London Math. Soc. 45 (1939),
+
+21–44.
+
+[46] J. S´andor and A. Verroken, On a limit involving the product of prime numbers, Notes
+
+Number Theory Discrete Math. 17 (2) (2011), 1–3.
+
+[47] E. Seneta, Regularly Varying Functions, Springer-Verlag, 1976.
+
+[48] V. Shoup, A Computational Introduction to Number Theory and Algebra, 2d ed., Cam-
+
+bridge University Press, 2009.
+
+33
+
+[49] Wac(cid:32)law Sierpi´nski and Andrzej Schinzel, Elementary Theory of Numbers, Mathematical
+Library, Vol. 31. 2d English ed., revised and enlarged by Andrzej Schinzel. Elsevier
+North-Holland, Amsterdam, and PWN Polish Scientific Publishers, 1988.
+
+[50] T. Szele, ¨Uber die endlichen Ordnungszahlen, zu denen nur eine Gruppe geh¨ort, Com-
+
+ment. Math. Helv. 20 (1947), 265–267.
+
+[51] Ch.-J. de la Vall´ee Poussin, Sur la fonction ζ(s) de Riemann et le nombre des nombres
+premiers inf´erieurs `a une limite donn´ee, M´em. couronn´es et autres M´em. publ. l’Acad.
+roy. de Belgique 59 (1899), 1–74.
+
+[52] Matt Visser, Verifying the Firoozbakht, Nicholson, and Farhadian conjectures up to the
+
+81st maximal prime gap, Mathematics 7 (2019), 691.
+
+[53] Matt Visser, Strong version of Andrica’s conjecture, Int. Math. Forum 14 (4) (2019),
+
+181–188.
+
+[54] Anton Vrba, Conjecture 67. Primes & e, in Problems & Puzzles: Conjectures, https:
+
+//www.primepuzzles.net/conjectures/conj_067.htm.
+
+[55] A. E. Western, Note on the number of primes of the form n2 + 1, Proc. Cambridge
+
+Philos. Soc. 21 (1922), 108–109.
+
+[56] M. Wolf, Random walk on the prime numbers, Physica A 250 (1998), 335–344.
+
+[57] M. Wolf, A note on the Andrica conjecture. Arxiv preprint arXiv:1010.3945 [math.NT],
+
+October 19 2010. Available at https://arxiv.org/abs/1010.3945.
+
+2020 Mathematics Subject Classification: Primary 11N25; Secondary 11N05, 11N37, 11N56,
+11N60, 11N69.
+Keywords:
+
+cyclic number, prime number, Landau’s problems.
+
+(Concerned with sequences A000010, A000040, A000720, A002496, A003277, A014085, A050216,
+A050384, A061091, and A349997.)
+
+Received January 5 2025; revised versions received May 22 2025; June 12 2025. Published
+in Journal of Integer Sequences, August 7 2025.
+
+Return to Journal of Integer Sequences home page.
+
+34
+
+

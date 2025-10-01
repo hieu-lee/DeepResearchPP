@@ -1,0 +1,19 @@
+
+\begin{definition}
+Let \mathbb{N} denote the set of positive integers. Let \varphi(n) be Euler's totient function and let \gcd(\cdot,\cdot) be the greatest common divisor.
+A positive integer m is called \emph{cyclic} if and only if \gcd\!\bigl(m,\varphi(m)\bigr)=1. Define the set of cyclic integers
+\[\mathcal{C}:=\{m\in\mathbb{N}: \gcd(m,\varphi(m))=1\},\]
+and let \(c_1<c_2<\cdots\) be the increasing enumeration of \(\mathcal{C}\).
+Let \(\mathcal{P}\) be the set of prime numbers and let \(p_1<p_2<\cdots\) be its increasing enumeration. Let \(\gamma\) denote the Euler--Mascheroni constant.
+For a set S, write \(\#S\) for its cardinality.
+\end{definition}
+
+\begin{definition}
+A \emph{Sophie Germain cyclic} is a cyclic integer \(c\in\mathcal{C}\) such that \(2c+1\in\mathcal{C}\). Let the increasing sequence of SG cyclics be \(\sigma_1<\sigma_2<\cdots\).
+Define the counting function of SG cyclics by \(C_{\mathrm{SG}}(x):=\#\{\,\sigma\le x : \sigma\text{ is an SG cyclic}\,\}\).
+\end{definition}
+
+\bigskip
+
+\textbf{Conjecture 36 (Infinitely many SG cyclics).}
+There are infinitely many \(c\in\mathcal{C}\) with \(2c+1\in\mathcal{C}\).

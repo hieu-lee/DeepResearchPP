@@ -1,0 +1,7 @@
+\begin{definition}
+Let $\mathcal N$ be a family of deep nets trained with mini-batch SGD.
+A \emph{heavy-tailed mechanistic feature} is one whose coefficients or singular values follow a power-law tail with exponent $\mu\in(0,2)$ across layers/scales.
+\end{definition}
+
+\textbf{Conjecture (Heavy-Tailed Mechanistic Universality).}
+Across model sizes and modalities, trained networks exhibit scale-stable heavy-tailed statistics in internal mechanisms (circuits/features), yielding cross-model universality classes that predict transfer and emergent behaviors. (Open; proposed and empirically explored, not proven.)

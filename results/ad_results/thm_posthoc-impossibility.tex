@@ -1,0 +1,34 @@
+﻿\begin{theorem}[Impossibility of safety-aware fairness via post-hoc calibration for stratified allocation]\label{thm:posthoc-impossibility}
+There exists a data-generating process with two demographic groups $g\in\{0,1\}$ and covariates $X=(L_0,M_0)$ such that, for any policy $\pi$ stratified on $X$ and any post-hoc calibration $\tilde \pi$ of $\pi$ (possibly randomized and depending on $g$ and $X$),
+\[
+\max_{g\in\{0,1\}}\Bigl\lvert\mathbb{E}[\mathrm{AEs}\mid \tilde\pi,g]-\mathbb{E}[\mathrm{AEs}\mid \tilde\pi]\Bigr\rvert=\tfrac12.
+\]
+Consequently, for any $\varepsilon<\tfrac12$ no post-hoc calibration attains group-level AE parity within $\varepsilon$, even though efficacy satisfies $\mathbb{E}[\Delta\mathrm{EASI}\mid \tilde\pi]=\mathbb{E}[\Delta\mathrm{EASI}\mid \pi]=0$.
+\end{theorem}
+
+\begin{proof}
+Assume, toward a contradiction, that a safety-aware fairness guarantee holds in general: given any stratified policy $\pi$ based on $X=(L_0,M_0)$, there exists a post-hoc calibration $\tilde\pi$ such that for some $\varepsilon<1/2$,
+\[
+\max_{g}\Bigl\lvert\mathbb{E}[\mathrm{AEs}\mid \tilde\pi,g]-\mathbb{E}[\mathrm{AEs}\mid \tilde\pi]\Bigr\rvert\le \varepsilon,
+\]
+while efficacy is preserved up to $o(\varepsilon)$.
+
+We construct a specific instance. Let the demographic group be $g\in\{0,1\}$ with $\mathbb{P}(g=0)=\mathbb{P}(g=1)=\tfrac12$. Define covariates $X:=(L_0,M_0)$ by $L_0:=g$ and $M_0:=0$ almost surely. Let the action set be $\mathcal{A}=\{a_1,a_2,a_3\}$. Define bounded, measurable potential-outcome regressions:
+\begin{itemize}
+  \item Efficacy is action-invariant and null: for all $a$ and all $X$, $U_a(X):=\mathbb{E}[\Delta\mathrm{EASI}\mid a,X]\equiv 0$.
+  \item Adverse events are action-invariant and depend only on $L_0$: for all $a$ and all $X$, $V_a(X):=\mathbb{E}[\mathrm{AEs}\mid a,X]\equiv L_0\in\{0,1\}$.
+\end{itemize}
+Let $\pi$ be any measurable policy stratified on $X$, and let $\tilde\pi$ be any post-hoc calibration of $\pi$, possibly randomized and depending on $g$ and $X$. Because $V_a(X)$ is action-invariant,
+\[
+\mathbb{E}[\mathrm{AEs}\mid \tilde\pi,g]=\mathbb{E}[V_{\tilde A}(X)\mid g]=\mathbb{E}[L_0\mid g]=g,
+\]
+so $\mathbb{E}[\mathrm{AEs}\mid \tilde\pi,g{=}0]=0$ and $\mathbb{E}[\mathrm{AEs}\mid \tilde\pi,g{=}1]=1$. Hence
+\[
+\mathbb{E}[\mathrm{AEs}\mid \tilde\pi]=\tfrac12\cdot 0+\tfrac12\cdot 1=\tfrac12,
+\]
+and therefore
+\[
+\max_{g\in\{0,1\}}\Bigl\lvert\mathbb{E}[\mathrm{AEs}\mid \tilde\pi,g]-\mathbb{E}[\mathrm{AEs}\mid \tilde\pi]\Bigr\rvert=\tfrac12.\ \qedhere
+\]
+This contradicts the assumed bound for any $\varepsilon<\tfrac12$. Meanwhile, efficacy preservation holds trivially since $U_a\equiv 0$, giving $\mathbb{E}[\Delta\mathrm{EASI}\mid \tilde\pi]=\mathbb{E}[\Delta\mathrm{EASI}\mid \pi]=0$. Thus, in this instance no post-hoc calibration can achieve the claimed AE parity for $\varepsilon<\tfrac12$, contradicting the assumed general guarantee.
+\end{proof}

@@ -1,0 +1,26 @@
+\begin{theorem}[Carneiro analog for cyclics (disproves Conj.~50 of \cite{Cohen2025})]\label{thm:carneiro_cyclics}
+For all $n$ with $c_n>3$, $c_{n+1}-c_n<\sqrt{c_n\,\log c_n}$.
+\end{theorem}
+
+\begin{proof}
+We disprove the statement by an explicit counterexample.
+
+Compute cyclic integers up to 11. By definition (Szele's criterion \cite{Szele1947}), $m$ is cyclic iff $\gcd(m,\varphi(m))=1$.
+- $8$: $\varphi(8)=4$, so $\gcd(8,4)=4\ne1$ (not cyclic).
+- $9$: $\varphi(9)=6$, so $\gcd(9,6)=3\ne1$ (not cyclic).
+- $10$: $\varphi(10)=4$, so $\gcd(10,4)=2\ne1$ (not cyclic).
+- $11$: prime, hence $\gcd(11,\varphi(11))=\gcd(11,10)=1$ (cyclic).
+
+Thus the consecutive cyclic integers around $7$ are $7$ and $11$, so $c_{n}=7$ and $c_{n+1}=11$ for some $n$, and
+$$
+ c_{n+1}-c_n=11-7=4.
+$$
+Now note that $\log 7<2$ (since $e^2\approx7.389>7$), hence
+$$
+ \sqrt{7\log 7}<\sqrt{14}<4.
+$$
+Therefore, for $c_n=7>3$ we have $c_{n+1}-c_n=4\not<\sqrt{c_n\,\log c_n}$, contradicting the conjectured inequality.
+
+Hence the conjecture is false. 
+\end{proof}
+

@@ -1,0 +1,74 @@
+﻿\begin{theorem}[Constant-rule optimality]\label{thm:constant-optimality}
+There exists a data-generating process with two groups $g\in\{0,1\}$ and baseline covariates $Z=(L_0,M_0)$ such that, for every family of (possibly group-aware) dosing rules $\{\delta_g(L_0,Z)\}$ and for each group $g$,
+\[
+\mathbb E\big[\mu(L_0,\delta_g(L_0,Z))\mid g\big] \le \sup_{c\in[0,1]} \mathbb E\big[\mu(L_0,c)\big],
+\]
+with equality if and only if $\delta_g\equiv c^*$ almost surely in that group, where $c^*$ attains $\sup_{c\in[0,1]} \mathbb E[\mu(L_0,c)]$. Consequently,
+\[
+\mathbb E\big[\Delta\mathrm{EASI}\mid\{\delta_g\}\big] \le \sup_{\delta\,\text{group-blind const}} \mathbb E\big[\Delta\mathrm{EASI}\big],
+\]
+with strict inequality unless $\delta_g\equiv c^*$ in every group. (No assumption on adverse events is needed; the claim is purely about efficacy.)
+\end{theorem}
+
+\begin{proof}
+We construct an instance and prove the claim groupwise.
+
+Feasible doses are $m\in[0,1]$, and groups are $g\in\{0,1\}$. Conditional on $g$, let $L_0\sim\mathrm{Unif}[0,1]$, identically distributed across groups. Let $Z=(L_0,M_0)$, where $M_0$ is arbitrary and may be used by dosing rules. Define efficacy
+\[
+\mu(L,m) := A(m) + \kappa\,C(m)\,L,
+\]
+with parameters $K>0$ and $\gamma\in(0,\tfrac14)$, where
+\[
+A(m):= -K\,(m-\tfrac12)^2,\qquad C(m):= \big(m-(\tfrac12+\gamma)\big)_+^{\,3}.
+\]
+Let $\overline{C}:=\sup_{m\in[0,1]} C(m)=(\tfrac12-\gamma)^3>0$, and choose $\kappa\in\bigl(0,\,K\gamma^2/\overline{C}\bigr)$.
+
+\medskip
+\noindent\emph{(1) Best group-blind constant.} For a constant dose $c\in[0,1]$ and $L\sim\mathrm{Unif}[0,1]$,
+\[
+F(c):=\mathbb E[\mu(L,c)]=A(c)+\tfrac{\kappa}{2}C(c).
+\]
+If $c\le \tfrac12+\gamma$, then $C(c)=0$ and $F(c)=A(c)\le A(\tfrac12)$, with equality only at $c=\tfrac12$. If $c>\tfrac12+\gamma$, then
+\[
+A(\tfrac12)-A(c)=K(c-\tfrac12)^2\ge K\gamma^2>\kappa\,\overline{C}\ge \kappa\,C(c),
+\]
+so
+\[
+A(\tfrac12)-F(c)=\big(A(\tfrac12)-A(c)\big)-\tfrac{\kappa}{2}C(c)>\tfrac{\kappa}{2}C(c)>0.
+\]
+Thus $\sup_{c\in[0,1]} F(c)$ is attained uniquely at $c^*=\tfrac12$ with value $F(c^*)=A(\tfrac12)$.
+
+\medskip
+\noindent\emph{(2) Arbitrary (possibly group-aware) dosing rules.} Let an arbitrary measurable dosing rule be given, possibly group-aware and depending on all of $Z$, written $\delta_g(L_0,M_0)\in[0,1]$. Fix $g$ and abbreviate $L=L_0$ and $m=\delta_g(L_0,M_0)$. Define
+\[
+B^+ := \{m>\tfrac12+\gamma\},\quad B^- := \{m<\tfrac12-\gamma\},\quad s:=\mathbb P(B^+\mid g),\; t:=\mathbb P(B^-\mid g).
+\]
+Since $A(\tfrac12)-A(m)=K(m-\tfrac12)^2\ge K\gamma^2\,\mathbf{1}_{B^+\cup B^-}$ and $C(m)=0$ off $B^+$,
+\begin{align*}
+\mathbb E[\mu(L,m)\mid g]
+&= \mathbb E[A(m)\mid g] + \kappa\,\mathbb E[C(m)L\mid g] \\
+&\le A(\tfrac12) - K\gamma^2\,\mathbb P(B^+\cup B^-\mid g) + \kappa\,\overline{C}\,\mathbb E[\mathbf{1}_{B^+}L\mid g] \\
+&\le A(\tfrac12) - K\gamma^2(s+t) + \kappa\,\overline{C}\,s \\
+&= A(\tfrac12) - K\gamma^2 t + (\kappa\,\overline{C} - K\gamma^2) s \\
+&\le A(\tfrac12),
+\end{align*}
+because $\kappa\,\overline{C} < K\gamma^2$. Moreover, equality can hold only if $s=t=0$, i.e., $m\in[\tfrac12-\gamma,\tfrac12+\gamma]$ almost surely, in which case $C(m)\equiv 0$ and
+\[
+\mathbb E[\mu(L,m)\mid g]=\mathbb E[A(m)\mid g]\le A(\tfrac12),
+\]
+with equality only when $m\equiv \tfrac12$ almost surely (since $A(\tfrac12)-A(m)=K(m-\tfrac12)^2$). Hence, for every group $g$,
+\[
+\mathbb E\big[\mu(L_0,\delta_g(L_0,M_0))\mid g\big]\le A(\tfrac12),
+\]
+with equality if and only if $\delta_g\equiv \tfrac12$ almost surely in that group.
+
+Averaging over groups yields
+\[
+\mathbb E\big[\mu(L_0,\delta_g(L_0,M_0))\big]\le A(\tfrac12)=\sup_{c\in[0,1]} F(c).
+\]
+By construction, $\mathbb E[\Delta\mathrm{EASI}\mid\{\delta_g\}] = \mathbb E[\mu(L_0,\delta_g(L_0,M_0))]$, and the inequality is strict unless $\delta_g\equiv c^*=\tfrac12$ in every group. Therefore,
+\[
+\mathbb E\big[\Delta\mathrm{EASI}\mid\{\delta_g\}\big] \le \sup_{c\in[0,1]} \mathbb E\big[\mu(L_0,c)\big] 
+= \sup_{\delta\,\text{group-blind const}} \mathbb E\big[\Delta\mathrm{EASI}\big].\qedhere
+\]
+\end{proof}

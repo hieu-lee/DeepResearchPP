@@ -1,0 +1,10 @@
+% Minimal ASCII-safe algorithm float to avoid UTF-8 warning
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{algorithm}[2025/09/22 Minimal algorithm float]
+\RequirePackage{float}
+\newfloat{algorithm}{tbp}{loa}
+\floatname{algorithm}{Algorithm}
+% Provide a no-op list command for compatibility
+\newcommand{\listofalgorithms}{\listof{algorithm}{List of Algorithms}}
+\endinput
+

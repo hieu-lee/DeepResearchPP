@@ -1,0 +1,1159 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[usenames]{color}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,
+linkcolor=webgreen,
+filecolor=webbrown,
+citecolor=webgreen]{hyperref}
+
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+
+\usepackage{color}
+
+
+\begin{document}
+
+\title{LaTeX Style Guide for the\\
+{\it Journal of Integer Sequences}\\
+\large Version 1.89}
+
+\date{}
+\author{}
+\maketitle
+
+	Authors of papers in the {\it Journal of Integer Sequences} should
+write their papers in English.  
+\textcolor{red}{If English is not your native language,
+please ask a native-speaking colleague or local native speaker to
+help proofread your paper.}    This will greatly improve your chances for
+acceptance.  Probably you can find a native speaker at your university, or
+an English language school in your town or city.
+If not, you might try contacting your local US, Canadian, or British Embassy.
+
+If you have no local access to a native speaker, you can (for a fee) have
+people read and edit your paper online.  For example, visit \newline
+\url{http://webshop.elsevier.com/languageservices/languageediting/} or
+\newline
+\url{http://www.edanzediting.com/}.
+
+Again, if English is not your first language, you may want to consult
+the book {\it Writing Mathematical Papers in English} by Jerzy Trzeciak,
+which can be ordered (for 8 Euros) from \url{http://www.ems-ph.org} \ .  
+Another good
+resource is Trzeciak's Dictionary of Mathematical English, available
+for free at \\
+\centerline{\url{https://www.impan.pl/en/publishing-house/for-authors/dictionary}\ .}
+
+If this is your first paper, or if you have simply not written many mathematical papers before, please read a guide on how to prepare mathematical papers
+{\it before\/} sending us your submission.
+One of the best is Steven G. Krantz, {\it A Primer of Mathematical
+Writing}, 2nd edition, 2017.  It can be ordered from the
+American Mathematical Society website.  If you do not wish to have the printed
+copy, an electronic copy is available at
+\url{https://arxiv.org/abs/1612.04888}.
+Other good resources include
+\begin{itemize}
+\item a booklet written by Donald Knuth et al., and
+available at \\ \url{http://jmlr.csail.mit.edu/reviewing-papers/knuth_mathematical_writing.pdf} 
+\item an article of Halmos, available at \\
+\url{http://www.domagoj-babic.com/uploads/ScholarlyStuff/Books/halmos.pdf} 
+\item an article by Jerzy Trzeciak, available at \\
+\url{https://www.impan.pl/wydawnictwa/dla-autorow/writing.pdf} \ .
+\end{itemize}
+
+Finally, we also recommend this (unfinished) advice of John Baez,
+available here: \\  \url{https://math.ucr.edu/home/baez/boring.pdf} \, .
+
+     Authors of papers in the {\it Journal of Integer
+Sequences} should prepare their papers in LaTeX.  We do {\it not\/}
+recommend use of
+add-on packages such as Scientific Workplace.  We do not accept submissions
+prepared with conversion tools, such as {\tt docx2latex}, as they do not
+provide high-quality output.   Output prepared with packages like {\tt lyx}
+is also likely to be of poor quality.
+
+Please observe the
+following guidelines.
+      The guidelines most frequently violated appear in
+\textcolor{red}{red}.  Please pay special attention to these.
+
+
+\section{LaTeX advice}
+
+     Please prepare your paper using the ``12pt'' option of latex, since this
+is what we will use when we publish your paper.  Do not use ``11pt''
+or ``10pt'', as this can cause problems formatting large equations when
+we switch to ``12pt''.
+
+     Use a single file for your latex source.  Do not spread your paper
+over multiple latex files or multiple directories.
+
+     Please do not submit papers that are based on the
+proprietary style files
+(e.g., {\tt mdpi.cls}) of other journals.  
+
+    Please avoid the use of special-purpose packages or
+macros whenever possible.
+\textcolor{red}{Strip
+your paper of references to all packages and definitions that you
+do not actually use.}  (Do {\it not\/} just comment them out.)
+\textcolor{red}{Remove all comments and commented-out lines (those with the symbol \%).}  There should be no occurrences of the symbol \% in your 
+latex source file.
+
+Do {\it not\/} use the {\tt MnSymbol} package, as it redefines basic
+signs like equality, sum, inequality in unattractive ways.
+
+{\bf It is probably worthwhile to download the latex file for a paper recently
+published in the journal and model your paper on it.}  (However,
+do {\it not\/} use the latex file for the instructions you are now
+reading as a model!)  If you experience problems with the packages
+we use (such as psfig), you can delete the corresponding line or just
+comment it out.
+
+    Do {\it not\/} include a date in the title page of your paper.
+
+    Use the default (Computer Modern) font.  Do not use Times Roman or
+other fonts.
+
+    \textcolor{red}{Acknowledgments should be in a {\it separate, numbered
+section} at the end of the paper.}
+
+Avoid the use of PicTeX; it uses too many registers and is often not
+compatible with packages we use to publish your paper.  If you
+absolutely have to use it, consider the use of {\tt pictexwd} instead.
+
+Avoid the use of pstricks; it often does not work correctly on our system.
+
+     \textcolor{red}{Please do not use {\tt tcilatex} or the {\tt
+amsart} article style when you prepare your article.}
+
+Please examine the {\tt .log} file before you send anything to us.
+Similarly, if you use BibTeX, examine the {\tt .blg} file.
+This is where errors and warnings are listed.   Make sure you 
+fix all significant errors, such as duplicate labels or right braces
+without matching left braces, etc.   If you use TeXworks
+you will need to remove the {\tt --clean} option in the preferences
+in order to see the {\tt .log} file.
+
+\section{General advice}
+
+Define notation before you use it.  Using a LaTeX {\tt definition} 
+environment may be helpful in some situations.
+
+State your results as theorems, lemmas, propositions, corollaries, and so forth, using the provided LaTeX environments.
+
+For claims consisting of a number of parts, use an {\tt itemize} or
+{\tt enumerate} environment.   Since theorems are numbered, using
+(a), (b), (c), etc., for multiple parts is suggested.
+
+Break your paper up into logical sections, using commands like
+{\tt \char'134section}, {\tt \char'134subsection}, and so forth.
+
+Use the present tense for what is true and what you accomplish in the paper.
+Use the past tense for what was done in the past.   As a general rule,
+avoid the future tense, although there may be situations where it is
+needed.  For example, instead of ``We will prove that ...", often the
+simpler ``We prove that..."  suffices.
+
+
+
+
+\section{Common grammatical errors}
+
+\textcolor{red}{Please {\bf be sure to run your paper through a spell-checker before
+submission!}}  Our Journal uses American spellings, so write
+``recognize'' (not ``recognise'');
+``generalize'' (not ``generalise''); ``color'' (not ``colour'');
+``acknowledgment'' (not ``acknowledgement''), etc.
+
+\begin{enumerate}
+
+\item Avoid the passive voice.  Instead of saying ``In
+[1] it is shown that all primes $> 2$ are odd'', say ``Smith [1] showed
+that all primes $>2$ are odd''.
+
+\item Avoid use of weak constructions such as ``this number'' or
+``it''.  For example,
+
+Wrong:  Let $x$ be a prime.  We now square this number.
+
+Wrong:  Let $x$ be a prime.  We now square it.
+
+Right:  Let $x$ be a prime.  We now square $x$.
+
+\item Avoid the use of contractions, such as ``don't'', ``can't'',
+``isn't'', etc.
+
+Wrong:  The number $7$ is prime, since it isn't divisible by
+$2, 3, 4, 5, $ or $6$.  
+
+Right:  The number $7$ is prime, since it is not divisible by
+$2, 3, 4, 5, $ or $6$.
+
+\item The word ``precise'' is not a verb in English.
+
+Wrong:  We now precise the connection between 
+$\alpha$ and $\beta$.
+
+Right:  We now make the connection between
+$\alpha$ and $\beta$ more precise.
+
+\item Use the word ``expansion'', not ``development''.
+
+Wrong:  Let $[a_0, a_1, \ldots]$ be the continued fraction
+development of $x$.
+
+Right:  Let $[a_0, a_1, \ldots]$ be the continued fraction
+expansion of $x$.
+
+\item Use ``associate with'', not ``associate to''.
+
+Wrong:  We now associate $x$ to $y$.
+
+Right:  We now associate $x$ with $y$.
+
+Wrong:  To each real number $x$ we associate a set $S_x$.
+
+Right:  We associate a set $S_x$ with each real number $x$.
+
+\item Use ``root'' for equations, and ``zero'' for polynomials. 
+
+Wrong:  Let $\alpha$ be the positive root of $x^2 - x - 1$.
+
+Right:  Let $\alpha$ be the positive zero of $x^2 - x - 1$.
+
+Right:  Let $\alpha$ be the positive root of $x^2 -x - 1 = 0$.
+
+\item Use the term ``pair'', not ``couple'', to denote two objects.
+
+Wrong:  Let $(\alpha, \beta)$ be a couple of real numbers.
+
+Right:  Let $(\alpha, \beta)$ be a pair of real numbers.
+
+\item Use the construction ``We let $x$ denote $y$'' and not
+``Denote by $x$ $y$''.
+
+Wrong:  Denote by $\mathbb{N}$ the set of positive integers.
+
+Right:  We let $\mathbb{N}$ denote the set of positive integers.
+
+Right:  Let $\mathbb{N}$ denote the set of positive integers.
+
+Right:  The set of positive integers is denoted by $\mathbb{N}$.
+
+\item \textcolor{red}{Do not start sentences or clauses with notation.}
+
+Wrong:  Since $x>0$, $x^2>0$ and the result follows.
+
+Right:  Since $x>0$, we have $x^2>0$, and the result follows.
+
+Wrong:  $p$ denotes a prime number.
+
+Right:  The variable $p$ denotes a prime number.
+
+It's fine to write things like ``The solutions are $a$, $b$, and $c$",
+since here the commas do not introduce new clauses.
+
+\item \textcolor{red}{Avoid run-on sentences.}
+A run-on sentence (also called a ``comma splice'') is one that
+expresses two thoughts in a single phrase, separated by
+a comma.  Fix these by separating
+into two or more sentences, or by connecting with a semi-colon
+or a conjunction such as ``and''.   More information can be found
+in the Wikipedia article on run-on sentences.  If you are not a native
+speaker, or even if you are, you should learn to recognize and avoid
+this common stylistic error.
+
+Wrong:  Let $\Sigma$ be a finite alphabet, $\Sigma^*$ denote the
+set of all finite words over $\Sigma$.
+
+Right:  Let $\Sigma$ be a finite alphabet, and let
+$\Sigma^*$  denote the set of all finite words over $\Sigma$.
+
+Wrong:  Let $p$ be a prime number $\geq 3$, then $2^p \equiv 2$ (mod $p$).
+
+Right:  Let $p$ be a prime number $\geq 3$.  Then $2^p \equiv 2$ (mod $p$).
+
+\item Avoid treating citation numbers as objects of prepositions, or
+subjects of sentences.
+Treat them syntactically like footnotes.
+
+Wrong:  [1] proves that $e$ is irrational.
+
+Wrong:  In [1] it is proved that $e$ is irrational.
+
+Wrong:  The article [1] proves that $e$ is irrational.
+
+Right:  Euler [1] proved that $e$ is irrational.
+
+\item Words like ``notation'', ``work'', ``progress'',
+and ``information'' are mass
+nouns in English, and as such, rarely appear in the plural.
+
+Wrong:  We now introduce some definitions and notations.
+
+Right:  We now introduce some definitions and notation.
+
+\bigskip
+
+Wrong:  You can find many works on continued fractions in the literature.
+
+Right:  You can find many papers on continued fractions in the literature.
+
+The Wikipedia article on mass nouns contains more information.
+
+\item ``Any'' is a weak and sometimes ambiguous word in English.  For example,
+if you say ``Condition (a) holds if $f(x) = 0$ for any $x$'', does it mean
+that the condition holds if $f(x) = 0$ for {\it all\/} $x$, or 
+{\it at least one\/} $x$?   Nearly always you can replace ``any'' with
+either ``every'', ``all'', ``at least one'', or nothing at all, depending
+on context.   Some examples follow:
+
+Questionable:  Conjecture A holds for any prime $p$.
+
+Can be replaced by:  Conjecture A holds for every prime $p$.
+
+Questionable:   A solution exists for any $x$.
+
+Can be replaced by:   A solution exists for all $x$.
+
+Questionable:  For any prime number $p$ let $Z_p$ be the multiplicative group of invertible elements mod $p$.
+
+Can be replaced by:  For prime numbers $p$ 
+let $Z_p$ be the multiplicative group of invertible elements mod $p$.
+
+
+
+\end{enumerate}
+
+\section{Common punctuation errors}
+
+\begin{itemize}
+
+\item  Use colons properly.  
+\textcolor{red}{In general, colons should not immediately follow
+verbs.}
+
+Wrong:  The resulting equation is:
+$$ x = y^2 .$$
+
+Right:  The resulting equation is
+$$ x = y^2 .$$
+
+Right:  The resulting equation is as follows:
+$$ x = y^2.$$
+
+
+\item  \textcolor{red}{Always put a comma after ``i.e.'' and ``e.g.''
+and ``resp.''.}
+Do {\it not\/} put these abbreviations in the italic font.
+
+Wrong:  Let $x$ be a minimal element i.e. an element such
+that if $y \leq x$ then $y = x$.
+
+Wrong:  Let $x$ be a prime e.g. $2$. 
+
+Right:  Let $x$ be a minimal element, i.e., an element such
+that if $y \leq x$ then $y = x$.
+
+Right:  Let $x$ be a prime, e.g., $2$.
+
+\item Don't be stingy with commas.  Commas should set off 
+parenthetical phrases such as ``for example'', ``in particular'',
+and so forth.
+
+Wrong:  Then $x$ for example is a real number.
+
+Right:  Then $x$, for example, is a real number.
+
+\item Avoid excessive and inappropriate capitalization.
+
+Wrong:  We let $H(x)$ denote the Hankel Transform of $x$.
+
+Right:  We let $H(x)$ denote the Hankel transform of $x$.
+
+Wrong:  Tamigawa's Theorem states that $e^x = y$.
+
+Right:  Tamigawa's theorem states that $e^x = y$.
+
+Wrong:  Now we use the Cayley-Hamilton Theorem.
+
+Right:  Now we use the Cayley-Hamilton theorem.
+
+Wrong:  The result follows by the Prime Number Theorem.
+
+Right:  The result follows by the prime number theorem.
+
+Wrong:  The Fibonacci Numbers are numbers satisfying the
+recurrence...
+
+Right:  The Fibonacci numbers are numbers satisfying the
+recurrence...
+
+Wrong:  We use the Euclidean Algorithm to compute $\gcd(m,n)$.
+
+Right:  We use the Euclidean algorithm to compute $\gcd(m,n)$.
+
+Wrong:  This is an entry in Pascal's Triangle.
+
+Right:  This is an entry in Pascal's triangle.
+
+\item Lists of three or more things always need the ``Oxford comma''.
+
+Wrong:  Smith, Jones and Wu solved the problem.
+
+Right:  Smith, Jones, and Wu solved the problem.
+
+\end{itemize}
+
+\section{Common LaTeX errors}
+
+     This section lists a few of the common errors made
+when preparing papers in LaTeX.
+
+\subsection{Blackboard bold}
+
+     For blackboard bold symbols such as
+$\mathbb Z$, $\mathbb Q$, $\mathbb R$, $\mathbb C$, use
+{\tt \char'134mathbb\char'173Z\char'175}, for example.  You may need to include
+the command {\tt \char'134usepackage\char'173amssymb\char'175}.
+
+\subsection{Variables and expressions}
+
+One of the single most basic rules of LaTeX is
+	\textcolor{red}{All mathematics must appear in mathematics mode.}
+
+     Almost always, variables such as $x$, $y$, $n$, etc., should appear
+in the italic font.  This will occur automatically if you remember
+to enclose your equations (even references to a single variable) in
+dollar signs or double-dollar signs, or use a latex equation environment.
+
+    Remember to apply this rule to table entries, too.  For example, if
+you have a negative number in a table, say $-1$, you must write
+{\tt \char'044-1\char'044} with dollar signs.  Otherwise you get the wrong
+minus sign.
+
+    Remember to apply this rule to all references in your bibliography, too.
+If variables like $n$ or $x$ appear in an article title, use latex
+mathematics mode.
+
+\medskip
+
+\noindent Wrong:  {\tt On prime numbers p divisible by 2}
+
+\noindent Right:  {\tt On prime numbers {\char'044p\char'044} divisible by
+\char'044{2}\char'044}
+
+\medskip
+
+If a variable or expression ends a sentence or phrase written in 
+a {\it non-displayed\/} environment,
+do {\it not\/} include the
+punctuation inside the {\tt \char'044 equation \char'044};
+doing so messes up the spacing.    By contrast, in a displayed
+environment, you must put the punctuation inside the environment.
+
+\medskip
+
+\noindent Right:  {\tt And so the number of terms is \char'044n\char'044.} \\
+\noindent Wrong:  {\tt And so the number of terms is \char'044n.\char'044} \\
+
+\medskip
+
+Do not use mathematics mode for anything that is not a mathematical expression!
+Do not use it for accented letters,
+section numbers, numbers in itemized lists, etc.
+
+\subsection{Spacing}
+
+    Please try not to include commands that tweak the spacing (such as
+{\tt \char'134\char'134},
+{\tt \char'134noindent}, {\tt \char'134newpage},
+{\tt \char'134bigskip}, {\tt \char'134pagebreak}, {\tt \char'134linebreak}, 
+etc.) since when your paper is formatted for final publication, the page
+breaks and spacing will probably be quite different from what you currently
+see.    The proper way to separate paragraphs is with a single blank
+line, and {\it not\/} with {\tt \char'134\char'134} at the end of the line.
+However, do not put a blank line between lines of your main text and
+any environment that follows, such as ``align''.
+
+     \textcolor{red}{Don't forget that \textbf{if a period
+follows a lower-case letter and is followed by a space, but does
+not end a sentence}, then you must
+put a {\tt \char'134} and then a space immediately 
+after the period.}  For example:
+
+\medskip
+
+\noindent Wrong:
+{\tt We use a flern (cf.\ the previous theorem) in the proof.} \\
+\noindent Right:  
+{\tt We use a flern (cf.\char'134\ the previous theorem) in the proof.} \\
+
+\noindent Wrong:
+{\tt We thank Dr.\ Smith for her assistance.} \\
+\noindent Right:
+{\tt We thank Dr.\char'134\ Smith for her assistance.}  \\
+
+\noindent Wrong:
+{\tt See Chan et al.\ \char'134cite\char'173smith\char'175\ for more information.}\\
+\noindent Right:
+{\tt See Chan et al.\char'134\ \char'134cite\char'173smith\char'175\ for more information.}\\
+
+\noindent If you don't do this, there will be too much space
+after the period, because LaTeX thinks it is the end of a sentence.
+
+Again, just to be clear, it must be a period, then a backslash, then a space.
+{\bf Do not put spaces between the period and the backslash!}
+
+By the way,
+there is no need to do this in the bibliography, because LaTeX automatically
+turns off the ``extra space at the end of a sentence'' rule there.
+
+\subsection{Accents}
+
+    Be careful to use the proper accents.  The name
+Erd\H{o}s, for example, uses a Hungarian accent, and
+should be formatted with {\tt\char'134H}.  The name
+Sierpi\'nski needs an accent on the ``n''.
+Create accents using
+the standard LaTeX abbreviations; do 
+{\it not\/} use special non-ASCII characters, keyboard shortcuts,
+or other exotic character sets to make them.  Warning: cutting and pasting
+from web pages often results in non-ASCII 
+characters being inserted into
+your file, so avoid this practice.
+The kinds of non-ASCII 
+characters that often create problems
+are alternate forms of quotation marks, long dashes (which look like ordinary
+minus signs, but aren't), and accented letters.
+
+{\bf Never use LaTeX math mode to create your accents.}
+
+Here is how to do various accented letters: \\
+	{\tt T\char'134'oth} gives T\'oth \\
+	{\tt Ha{\char'134}v{\char'173}c{\char'175}ek} gives Ha\v{c}ek \\
+	{\tt mis\char'134`ere} gives mis\`ere \\
+	{\tt Schr\char'134"oder} gives Schr\"oder \\
+	{\tt N\char'173\char'134o\char'175rg\char'173\char'134aa\char'175rd} gives N{\o}rg{\aa}rd
+
+
+\subsection{Floor and ceiling}
+
+    Be sure to use the built-in \TeX\ commands
+{\tt \char'134lfloor}, {\tt \char'134rfloor} and
+{\tt \char'134lceil}, {\tt \char'134rceil}, not square brackets,
+when using these integer functions.
+
+\subsection{Min and max}
+
+     Be sure to use the built-in \TeX\ commands
+{\tt \char'134min} and {\tt \char'134max} when using these functions.
+Do not use braces with {\tt \char'134min} and {\tt \char'134max};
+just use parentheses.
+
+\subsection{Gcd and lcm and divisors}
+
+     Be sure to use the built-in \TeX\ command {\tt\char'134gcd}
+for greatest common divisor.  Don't write $(a,b)$ for the gcd of $a$ and
+$b$; write $\gcd(a,b)$ instead.  For lcm, you will have to define
+your own command so that it appears in the roman font.  The best way
+to do this is to use the command
+
+{\tt \char'134DeclareMathOperator\char'173\char'134lcm\char'175\char'173lcm\char'175}
+
+Do {\it not\/} use square brackets for lcm!
+
+   If you wish to use the `divides' sign, often written as $|$,
+then please use {\tt \char'134mid}, which gives better spacing.
+
+\subsection{Binomial coefficients}
+
+      Use {\tt\char'134choose} or {\tt\char'134binom}
+for binomial coefficients.  
+Do not use the latex array environment.
+
+\subsection{Multi-letter functions}
+
+     \textcolor{red}{As a general rule, all multi-letter functions such as $\sin, \cos, \tan$, etc., should appear in the roman font.}  For these functions you can use
+the built-in \TeX\ commands {\tt\char'134sin, \char'134cos, \char'134tan}, etc.,
+but for others (e.g., {\rm Li} for the logarithmic integral)
+you may have to define your own commands.  Again, the best way to do this
+is, e.g., 
+
+{\tt \char'134DeclareMathOperator\char'173\char'134Li\char'175\char'173Li\char'175}
+
+\subsection{Parentheses}
+
+      Use parentheses for grouping, not square brackets or braces.
+You can get different sizes of parentheses using, for example,
+{\tt \char'134bigl(} and {\tt \char'134bigr)}.  
+
+     Do not use {\tt \char'134left(} and {\tt \char'134right)} unless
+LaTeX gives you the wrong size parentheses (too small).
+
+\subsection{Superscripts and subscripts}
+
+{\it Never} put an object you are raising to a power inside braces (parens
+are OK, of course).
+To combine powers and indices, write {\tt x\_\char'173ij\char'175\char'136k} and
+not {\tt \char'173x\_\char'173ij\char'175\char'175\char'136k}.
+If you do the latter, then
+the spacing is messed up, and it will appear like ${x_{ij}}^k$, which
+is quite undesirable.
+
+In general, try to avoid subscripts of superscripts and superscripts of
+subscripts; they make expressions hard to read.  Often this
+can be done by adjusting the notation.  For example, instead of
+$e^{x_n}$, you could write $\exp(x(n))$.   Instead of $a_{2^n}$, you could
+write $a(2^n)$.
+
+\subsection{Mod}
+
+     Observe the distinction between the use of ``mod'' as a function of
+two arguments, mapping $a \bmod b$ to the least non-negative residue
+of $a$ modulo $b$, and ``mod'' as an equivalence relation.  For
+the first, use the \TeX\ command {\tt\char'134bmod}.  For the second,
+use the \TeX\ command {\tt\char'134pmod} for centered,
+displayed equations \textit{only};
+for in-line equations and subscripts write something like
+
+\centerline{{\tt \char'044 x \char'134equiv a\char'044\ 
+(mod \char'044b\char'044)},}
+
+\noindent which typesets as follows: $x \equiv a$ (mod $b$).  Do not
+use notation like $x \equiv y \ [p]$. 
+
+      You can also define the following macro:
+
+\centerline{\tt \char'134def\char'134modd\#1 \#2\char'173\#1\char'134~\char'134mbox\char'173\char'134rm (mod\char'175 \char'134~\#2\char'134mbox\char'173\char'134rm )\char'175\char'175}
+
+\noindent which then can be used as follows:
+
+\centerline{\tt \char'044 x \char'134equiv \char'134modd\char'173a\char'175~\char'173b\char'175\char'044 .}
+
+The general rule to observe is that ``mod'' should {\it never\/} appear in the
+italic font, even in theorem statements.
+
+For chains of congruences, write
+\def\modd#1 #2{#1\ \mbox{\rm (mod}\ #2\mbox{\rm )}}
+$x \equiv y \equiv \modd{z} {w}$.
+
+\subsection{Quote marks}
+
+     Do not enclose words in ordinary quotation
+marks {\tt "like this"}.   This results in the following
+ugly output:
+\begin{center}
+"like this"
+\end{center}
+Instead, use the left-quote and right-quote
+symbols, {\tt ``like this''}, which gives the correct
+\begin{center}
+``like this'' .
+\end{center}
+
+\subsection{Sequences}
+
+Use parentheses, not braces, to denote sequences.  For example,
+$(F_n)_{n \geq 0}$ is the correct way to write the Fibonacci sequence.
+
+\subsection{Proper use of {\tt\char'134ldots} and {\tt\char'134cdots}}
+
+     \textcolor{red}{Be sure to use {\tt\char'134ldots} and {\tt\char'134cdots} properly.}
+The general rule is as follows:  you should use {\tt\char'134ldots} if
+the center of mass of the items on either side is below the middle of
+the line---for example, if the items on either side are commas.  You
+should use {\tt \char'134cdots} if the center of mass of the items on
+either side is in the middle of the line---for example, if the items
+on either side are alphabet symbols.  In particular, {\tt \char'134cdots}
+must be used for sums, products, concatenations, and chains of equalities
+or inequalities.
+
+For example:
+
+\medskip
+
+Wrong:  Consider the product $a_1 a_2 \ldots a_n$.  \ \ \   (Here we used {\tt \char'134ldots}.)
+
+Right:  Consider the product $a_1 a_2 \cdots a_n$.  \ \ \    (Here we used {\tt \char'134cdots}.)
+
+\bigskip
+
+Wrong:  Consider the sequence $a_1, a_2, \cdots, a_n$.  \ \ \   (Here we used {\tt \char'134cdots}.)
+
+Right:  Consider the sequence $a_1, a_2, \ldots, a_n$.  \ \ \   (Here we used {\tt \char'134ldots}.)
+
+\bigskip
+
+\textcolor{red}{Under {\it no\/}
+circumstances should you ever write ``...''.}  Use the appropriate
+dots command instead.
+
+\subsection{Proper punctuation of case statements}
+
+\textcolor{red}{Do {\it not\/} use the {\tt array} environment to do case statements.}  
+Please prepare case statements {\it exactly\/} as follows:
+\medskip
+
+\noindent{\tt
+\char'134begin\char'173displaymath\char'175 \\
+f(x) = \char'134begin\char'173cases\char'175 \\
+\hphantom{XXX} 1, \char'046\ \char'134text\char'173if \char'044x\char'044\ is a rational number;\char'175 \char'134\char'134 \\
+\hphantom{XXX} 2, \char'046\ \char'134text\char'173if \char'044x\char'044\ is a quadratic irrational;\char'175 \char'134\char'134 \\
+\hphantom{XXX}  0, \char'046\ \char'134text\char'173otherwise.\char'175 \\
+\char'134end\char'173cases\char'175 \\
+\char'134end\char'173displaymath\char'175
+}
+
+\medskip
+
+Note, in particular, the positions of the ampersand and semicolon,
+and the use of {\tt \char'134text}.  This gives the following output.
+
+\begin{displaymath}
+f(x) = \begin{cases}
+	1, & \text{if $x$ is a rational number;} \\
+	2, & \text{if $x$ is a quadratic irrational;} \\ 
+	0, & \text{otherwise.}
+	\end{cases}
+\end{displaymath}
+
+
+\subsection{Words in set notation}
+
+When using set notation, English words 
+{\it must\/} appear in the Roman font.
+The easiest way to use this is to use the {\tt \char'134text} command.
+
+\subsection{Inequalities}
+
+Please use {\tt \char'134geq}, not {\tt \char'134geqslant}.  Similarly,
+please use {\tt \char'134leq}, not {\tt \char'134leqslant}.
+
+\subsection{Emphasis}
+Use italics for emphasis; for example, when introducing a new term.
+In other circumstances bold might be appropriate.  However, do not use
+underlining to emphasize text.
+
+\section{Title page}
+
+The title page should include the title of your article (capitalized),
+and the complete postal mailing address and affiliations, including academic
+department, e-mail address, postal code, and country,
+for all authors.      
+(By ``capitalized'' we do {\it not\/} mean you should capitalize every letter
+of every word; just the first letter of all nontrivial words.)
+Each item (name, department, city, country, etc.)
+should be on a separate line and lines should not end in commas.
+Write your name with the surname {\it last}; if it is
+unclear which is your first name and which is your surname, please
+indicate this in a comment.
+
+Do not include footnotes to the title.  Sponsoring information can be
+placed in a footnote attached to the individual author's name.
+
+Lines of your address should not end in commas.
+
+\section{Sections}
+
+Break your paper up into logical sections, using the commands
+{\tt \char'134section}, {\tt \char'134subsection}, and so forth.
+\textcolor{red}{Section titles should
+be capitalized like an ordinary English sentence; do not add extra
+capitalization.}
+
+\section{Footnotes}
+
+We strongly
+discourage the use of footnotes in the main text.  Incorporate the text of footnotes, to the
+extent possible, in the main text.
+
+\section{Definitions}
+
+Terms that are being defined should be in a special font, such as italic
+or slant. 
+
+For example,
+
+\centerline{A {\it flern} is a 3-dimensional hypersquare.}
+
+Avoid introducing new terms and notation when there are already accepted
+equivalents widely in use in the mathematical community.
+For example, for the Fibonacci numbers, you
+should use the notation $F_n$, and the numbers defined by
+$F_0 = 0$, $F_1 = 1$, $F_n = F_{n-1} + F_{n-2}$ for $n \geq 2$.
+
+\section{People}
+
+\textcolor{red}{When referring to people's names in your main text, \textbf{use their last name only}, unless additional
+information is required to disambiguate.}  If you {\it do\/} include initials,
+make sure there is a space between each initial and between the initials
+and the name.   Of course, this does not apply to the bibliography.
+
+\medskip
+
+\noindent Right:  Euler proved that $e$ is irrational. \\
+\noindent Wrong:  L. Euler proved that $e$ is irrational.
+
+\medskip
+
+\noindent Right:  J. R. Smith \\
+\noindent Wrong:  J.R. Smith \\
+\noindent Wrong:  J R Smith \\
+\noindent Wrong:  John R Smith
+
+\section{Theorems}
+
+\textcolor{red}{Use the {\tt \char'134begin\char'173theorem\char'175} $\ldots$
+and {\tt \char'134end\char'173theorem\char'175} environments for theorems,
+lemmas, propositions, remarks,
+etc.}  Theorems should be numbered.  Refer to theorems,
+lemmas, propositions, remarks, sections, equations, figures, tables, etc.\ using
+labels; \textcolor{red}{do {\it not} hard-code references to them.}  When you
+refer to theorems, definitions, propositions, and so forth, be sure
+to capitalize the word Theorem (resp., Definition, Proposition, etc.) if
+it is attached to a reference label (number), and not otherwise.
+
+Do not put space characters or special characters, such as minus signs,
+in labels!
+
+\noindent  Right:  We now use Theorem 4.\\
+\noindent Wrong:  We now use theorem 4.\\
+\noindent Right:  We now use a previous theorem.\\
+\noindent Wrong:  We now use a previous Theorem.\\
+
+To get proper definitions, use the
+{\tt \char'134usepackage\char'173amsthm\char'175} command.
+
+Do not redefine equation numbers or appearance.  
+
+Here is the code we use for declaring theorem environments:
+
+{\tt
+\begin{verbatim}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\end{verbatim}
+}
+
+You can just cut and paste this into your file, right after the begin
+document command.
+
+\section{Equations}
+
+Not all equations need to be numbered.  If you number an equation,
+use a label and then refer to the label using
+{\tt \char'134eqref\char'173eq1\char'175} or
+{\tt Eq.\char'176(\char'134ref\char'173eq1\char'175)}
+something similar.  Do not use things like (*), with a
+star or asterisk, to number equations.
+
+For multiple related equations on consecutive lines,
+please use the {\tt align} environment.  \textcolor{red}{When you do so, remember
+that the {\tt \&} symbol should {\it precede\/} the relational symbol
+({\tt =} or {\tt >} or $\ldots$).}
+Do not use {\tt eqnarray}, as it produces bad spacing.
+
+\section{Definitions, examples, and remarks}
+
+All definitions, examples, and remarks should be stated in the roman font,
+except (of course) for 
+mathematical symbols.  You can use the following code as an example.
+
+\noindent{\tt \char'134theoremstyle\char'173definition\char'175} \\
+\noindent{\tt \char'134newtheorem\char'173defn\char'175\char'173Definition\char'175} \\
+
+\section{Proofs}
+
+\textcolor{red}{Use the commands {\tt \char'134begin\char'173proof\char'175} and
+{\tt \char'134end\char'173proof\char'175} to delimit proofs.}
+These are available in the {\tt amsthm} package mentioned above.
+Do not change the appearance of the proof environment.
+
+\section{Tables and figures}
+
+Tables and figures should be {\bf centered} on the page, using the {\tt
+center} environment.  Each table and each figure should have a number.
+Captions should appear {\it underneath} the table or figure, and
+end in a period.  Use {\tt
+rescalebox}, if necessary, to make sure your table fits properly on the
+page.
+
+Note that the position of tables and figures could change as your paper
+is reformatted for final publication.  If the positioning is crucial, then
+please use the {\tt float} latex package in your preamble, and use the
+{\tt H} option to force the table/figure to appear in the place you
+need it.    
+
+\section{Introduction}
+
+Papers should have a numbered introductory section that provides motivation and
+history of the problems discussed.  This is the place to put your results
+in context, and summarize your main contributions.
+
+\section{Abstract}
+
+Every paper should have a short abstract of 50 to 200 words, written
+in the present tense.  The purpose of an abstract is to summarize what
+you did {\it in general terms only}.  
+\textcolor{red}{The abstract
+should be free of
+symbols and equations to the extent it is possible.}
+
+When referring to results you prove in the paper, use the present tense.  
+\textbf{Avoid the passive voice in abstracts, wherever reasonable.}
+
+The abstract should be an independent entity and should stand on its
+own.  For example, it {\it should not\/} contain citations to the
+bibliography, or references to the numbers of equations, theorems, or
+sections of the paper.  It should not contain numbered equations
+itself.   
+
+When referring to other work in the abstract, you can refer to author's
+last names, but avoid mentioning years, journal names, or other
+information.
+
+Similarly, the paper text itself should not rely in any way on definitions
+or notation introduced only in the abstract.
+
+\section{Sequence numbers}
+
+Be sure to include sequence numbers from Sloane's {\it On-Line Encyclopedia
+of Integer Sequences} for all sequences you discuss in your paper.
+The list of all such sequences should be summarized at the end of your
+paper, sorted in ascending order.    If the sequences do not exist in the
+{\it Encyclopedia}, please submit them to {\tt www.oeis.org}
+and record the A-numbers assigned,
+and add those to your paper.
+
+When you refer to a sequence inside your paper, use the ``seqnum'' macro:
+\begin{verbatim}
+\newcommand{\seqnum}[1]{\href{https://oeis.org/#1}{\rm \underline{#1}}}
+\end{verbatim}
+
+
+\section{Citations and Bibliography}
+
+The easiest way to get the correct format for the bibliography
+is to use our {\tt jis.bst} file and BibTeX.   You can find it at
+\url{https://cs.uwaterloo.ca/journals/JIS/jis.bst}.
+
+     \textcolor{red}{Use citations syntactically like footnotes,
+not as objects of prepositions.}
+Avoid saying things like ``In [1] we find the following result.''  Instead,
+say ``Jones [1] proved the following result.''  Use the LaTeX command
+{\tt \char'134cite}; do {\it not\/} hard-code references to the bibliography.
+
+	Avoiding enclosing citations in an extra pair of parentheses. 
+In other words, citations should appear like ``[13]'' and not ``([13])'' or
+``(see [13])''.
+
+If you cite a paper with many authors inside the
+text, you can use ``et al.'', but do
+not put it in italics and use the first author's name.  ({\bf However, be sure
+to give the complete author list in the bibliography.})
+
+      In the bibliography, if the author has two initials, be sure
+to place a space between the two initials. 
+
+Wrong:  N.J.A. Sloane
+
+Right:  N. J. A. Sloane
+
+\medskip
+
+      Two authors should be separated with ``and'':
+
+Wrong:  J. Smith, D. Jones
+
+Right:  J. Smith and D. Jones
+
+\medskip
+
+      Three or more authors should be separated with the ``Oxford
+comma''.
+
+Right:  J. Smith, D. Jones, and Z. Xu
+
+Wrong:  J. Smith, D. Jones and Z. Xu
+
+\medskip
+
+      When simultaneously citing multiple references, use syntax
+similar to {\tt \char'134cite\char'173ref1,ref2,ref3\char'175} to combine
+all references in a single pair of brackets; do {\it not\/} write
+{\tt \char'134cite\char'173ref1\char'175, \char'134cite\char'173ref2\char'175,
+\char'134cite\char'173ref3\char'175}.
+
+      When citing a theorem or page number in another work, say
+{\tt \char'134cite[p.\char'134\ 123]\char'173ref1\char'175} or something
+similar.  Note in particular the backslash and space after the dot.  This is
+needed because LaTeX assumes that a dot following a lowercase letter indicates
+the end of a sentence, and hence inserts extra space.
+
+     Please use the following examples when preparing citations.
+Pay careful attention to punctuation and the use of roman, italic,
+and bold fonts.   In particular, notice that page ranges should be separated
+by two hyphens in LaTeX:  write {\tt 123--145}, not {\tt 123-145}.
+
+Please use the standard {\it Mathematical Reviews}
+abbreviations for journal names, with the exception that for particularly
+obscure journals you may provide the entire name.
+
+     The {\it Mathematical Reviews} journal abbreviation list can be
+found here:
+
+\centerline{\url{http://www.ams.org/msnhtml/serials.pdf}}
+
+     Do not include citations to reviews of the articles, such as those
+appearing in {\it Zentralblatt} or {\it Math.\ Reviews}.
+
+     Avoid references to secondary sources, such as Wikipedia or MathWorld,
+unless there is really no alternative at all.
+
+Always give a complete author list in the bibliography.  Be sure that
+all mathematics in bibliography items appears in mathematics mode, just as
+in the main text.
+
+\subsection{Article citation}
+
+    1.  J. Chan and F. E. Smith, An article about Chan-Smith numbers,
+    {\it J. of Chan-Smith Numbers} {\bf 13} (1998), 123--124.
+
+\smallskip
+
+Provide the volume, but {\bf not} the issue number, unless the issue
+number is required to uniquely specify the paper.  For example,
+don't write ``{\bf 13} (2) (1998)'' or ``{\bf 13}, no.~2 (1998)'', but
+just ``{\bf 13} (1998)''.
+Note that words in article
+titles should {\it not\/} be capitalized, with the following exceptions:
+the first word, proper nouns, and German nouns.    The journal name should
+be in {\it italics;} the volume number should be in {\bf bold.}
+Use two minus signs {\tt \char'055\char'055} for page ranges.
+Do not use ``pp.'' or ``pages'' to
+provide page numbers for articles.   
+Do not use ``in'' to specify the article is in a journal.
+
+Please use the standard {\it Mathematical Reviews}
+abbreviations for journal names, with the exception that for particularly
+obscure journals you may provide the entire name.
+
+\subsection{Book citation}
+
+    2.  A. Alces, {\it Introduction to Moose Theory}, Springer, 1995.
+
+\smallskip
+
+Book titles should be in italics.
+Note that words in book titles should be {\it capitalized},
+with the exception of
+very short unimportant words, such as ``to'', ``of'', ``and'', etc.
+
+Do not include the ISBN number.  Do not give the place
+of publication, unless it is a very rare or hard-to-find book.
+
+If you cite a particular theorem or page or section inside a book,
+then use the bibliography to list the book information {\it only}.
+When you cite it, however, you should use syntax like
+{\tt \char'134cite[Thm.{\char'134} 2.3,
+p.{\char'134} 45]\char'173Alces\char'175}
+to get something like [17, Thm.\ 2.3, p.\ 45].  Avoid citing a book
+without specifying the location of the exact result you are using.
+
+\subsection{Article in conference proceedings or book}
+
+    3.  B. Franklin, The public library as an aid to research,
+    in G. Washington and T. Jefferson, eds., {\it Public Libraries in
+    the United States}, Addison-Wesley, 2001, pp.\ 16--32.
+
+\medskip
+
+\noindent    4.  P. Flajolet, How to count, in {\it Automata, Languages, and
+    Programming:  Proc.\ ICALP 1990}, Lect.\ Notes in Comp.\ Sci.,
+    Vol.\ 443, Springer, 1991, pp.\ 220--234.
+
+\smallskip
+
+Capitalize the name of the book,
+but {\it not\/} the paper you are referring to
+in the book or the series.
+Note that here, unlike the case of a journal article, the
+abbreviation ``pp.'' is used.
+
+\subsection{Unpublished material or material on the web}
+
+     5.  B. Obama, G. Bush, and W. J. Clinton,
+     Combinatorial reasoning in American elections,
+	 preprint, 2005,  \url{http://www.barackobama.com/combin.pdf}.
+
+\medskip
+
+\noindent     6.  J. Schmoe, Pattern avoidance, arxiv preprint arXiv:1111.2222 [math.NT], 2010. Available at \url{http://arxiv.org/abs/1111.2222}.
+
+\smallskip
+
+You should use the command {\tt \char'134url} to specify the URL of
+electronic manuscripts.  (This command is available in
+the {\tt hyperref} package.)  When referring to an arxiv paper please
+cite the landing page (abs) of the paper, not the pdf directly.
+
+Note that the correct URL for the On-Line
+Encyclopedia of Integer Sequences is \url{https://oeis.org}.
+
+\section{Other issues}
+
+All sections of your paper should be numbered.  Do {\it not\/}
+hard-code references to section numbers; give each section a label
+and refer to it.
+
+Please be sure that your paper contains a list of {\it key words and
+phrases} and the appropriate {\it AMS 2020 Mathematics Subject
+Classifications}.  The key words should be in the singular (e.g., write
+``Fibonacci number'' and not ``Fibonacci numbers''), should be separated
+by commas, and should not be capitalized.
+A list of all the subject
+classifications can be found at\newline
+\centerline{\url{https://mathscinet.ams.org/msnhtml/msc2020.pdf} \ .}
+
+\noindent {\bf Provide only
+one classification as primary} and any additional ones as secondary.
+
+Avoid starting a line of your file  with the word ``From''.  Many mailers
+insert a $>$ character in such lines, causing a question mark to appear
+in your text.  If you must start a line of the file with the
+word ``From'', you can insert a space first.
+
+\textcolor{red}{Do not include non-ASCII special characters in your file.}  These can arise,
+for example, from cutting and pasting references from the web.  They
+create incorrect output.
+The most common mistakes are the following:  wrong quotes or apostrophes,
+dashes not represented by
+{\tt --} or {\tt ---} but by other characters, and accented special
+characters.
+
+To learn how to detect non-ASCII characters, read \\
+\url{https://tinyurl.com/2t8jtydm}.  Or you can simply paste the source
+of your paper in this web page:  \url{https://pages.cs.wisc.edu/~markm/ascii.html}.
+
+
+
+\end{document}

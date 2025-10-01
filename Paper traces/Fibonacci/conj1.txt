@@ -1,0 +1,18 @@
+\begin{definition}
+Let $(F_k)_{k\ge0}$ be the Fibonacci numbers defined by $F_0=0$, $F_1=1$, and $F_{k+2}=F_{k+1}+F_k$. 
+A sequence $(a_n)_{n\ge1}$ of positive integers has \emph{Fibonacci running averages} if for every $n\ge1$,
+\[
+\frac{a_1+\cdots+a_n}{n}\in\{F_k:\ k\ge0\}.
+\]
+Among all such sequences, let $(a_n)_{n\ge1}$ be the lexicographically least one with pairwise distinct terms (OEIS A248982).
+\end{definition}
+\bigskip
+\textbf{Conjecture 1 (Closed form for the Fibonacci-average greedy sequence).}
+For all $n\ge10$,
+\[
+a_n=
+\begin{cases}
+n\,F_{\,\frac{n}{2}+3}-(n-1)\,F_{\,\frac{n}{2}+2}, & \text{if $n$ is even},\[4pt]
+F_{\,\frac{n+1}{2}+2}, & \text{if $n$ is odd}.
+\end{cases}
+\]

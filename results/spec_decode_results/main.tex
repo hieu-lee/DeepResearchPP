@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{hyperref}
+% Algorithms
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\emergencystretch=2em
+\numberwithin{equation}{section}
+
+% Theorem environments (set up to allow nesting via titled proofs)
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Macros (consolidated; define each exactly once)
+\newcommand{\TV}{\operatorname{TV}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\mathbb{P}}
+
+\title{Order-Optimal Draft--Verify Decoding: Maximal Couplings, Temperature Sensitivity, and Block Verification}
+\author{Anonymous}
+\date{September 22, 2025}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study draft--verify algorithms for exact acceleration of autoregressive sampling, with an emphasis on stochastic-order optimality of verification, tight perturbative laws for temperature scaling, and blockwise coupling gains. Our contributions are threefold. First, at the token level we show that standard speculative decoding (SD) is optimal among all unbiased single-proposal algorithms in the increasing order and characterize all mean-optimal algorithms via maximal-agreement couplings (Theorem~\ref{thm:sd-stepwise-coupling}). Second, for temperature-scaled proposals supported on at most $m$ outcomes we prove a uniform pointwise local sensitivity law with an $O((\tau-1)^2)$ remainder and a matching two-sided second-order bound with an explicit constant depending only on $(m,\rho)$ (Theorems~\ref{thm:local-temp-sensitivity} and~\ref{thm:second-order-temp-law}). These yield sharp controls on per-step and cumulative expected rejections, including mixture-of-temperatures schedules. Third, at the block level we prove that among all unbiased $K$-block schemes with fixed proposals, longest-prefix verification maximizes increasing convex functionals of the accepted-token count and minimizes the same for rejections (Theorem~\ref{thm:longest-prefix-domination}); we complement this with an additive-TV lower bound on full-acceptance probability (Proposition~\ref{prop:block-tv-lower}) and a Markovian maximal-coupling gain under local sensitivity of the conditionals (Theorem~\ref{thm:markov-block-gain}). Together with an accounting identity for sub-maximal couplings (Proposition~\ref{prop:tv-rejection-sum}), our results provide a unified, distributionally exact foundation for designing and analyzing modern speculative, self-speculative, and block-verification decoders.
+\end{abstract}
+
+\section{Introduction}
+Autoregressive large language model (LLM) decoding is classically sequential, whereas \emph{draft--verify} methods accelerate sampling by proposing several tokens in parallel and validating them against the target model while preserving exactness of the output distribution. Recent systems demonstrate substantial end-to-end speedups using a small drafter, tree- or head-based multi-candidate speculation, or self-speculative variants that skip layers and then verify in a single pass; see \cite{Leviathan2023SpeculativeDecoding,Xia2022SpeculativeDecoding} and subsequent developments surveyed in \cite{Xia2024Survey}. Parallel efforts explore block-level verification mechanisms \cite{Sun2024BlockVerification} and new drafting formulations via optimal transport or dynamic speculation length \cite{Sun2023SpecTr,Mamou2024DISCO}, as well as alternative lookahead schemes \cite{Fu2024Lookahead} and hardware-aware designs \cite{Chen2024Sequoia}. Our work develops a rigorous probabilistic framework for these exact decoders based on stochastic orders \cite{ShakedShanthikumar2007StochasticOrders} and maximal couplings \cite{Lindvall2002CouplingMethod}, and provides temperature-sensitivity laws inspired by exponential-family deformations \cite{Naudts2009QExponentialFamily}.
+
+\paragraph{Contributions.}
+We formalize and connect three themes: (i) \emph{stepwise optimality and characterization} of token-level SD via increasing-order minimality and maximal-agreement couplings (Theorem~\ref{thm:sd-stepwise-coupling}); (ii) \emph{temperature perturbation theory} quantifying total-variation (TV) changes under $\tau$-scaling with tight first- and second-order control uniform over finite supports (Theorems~\ref{thm:local-temp-sensitivity},\ref{thm:second-order-temp-law}); and (iii) \emph{blockwise verification optimality} via longest-prefix dominance in increasing convex order (Theorem~\ref{thm:longest-prefix-domination}), with pathwise additive-TV acceptance lower bounds (Proposition~\ref{prop:block-tv-lower}) and \emph{Markovian} coupling gains under bounded one-step sensitivity (Theorem~\ref{thm:markov-block-gain}). An error accounting identity (Proposition~\ref{prop:tv-rejection-sum}) quantifies the exact expected overhead from using sub-maximal couplings.
+
+\paragraph{Notation.} We write $\TV(P,Q)$ for the total-variation distance and $\E[\cdot]$ for expectation. For a distribution $q_n(\cdot\mid x)$ we denote by $\E_{q_n}[\cdot]$ expectation under that conditional. Throughout, $T$ denotes the decoding horizon and $K$ the speculation block size.
+
+\section{Preliminaries: Draft--Verify, TV distance, and maximal couplings}
+We consider autoregressive targets with conditionals $q_n(\cdot\mid x_{1:n-1})$ and proposal families $p_n(\cdot\mid x_{1:n-1})$. A draft--verify step proposes a candidate token $Y_n\sim p_n(\cdot\mid X_{1:n-1})$ and attempts to accept it by coupling $Y_n$ with the target draw $X_n\sim q_n(\cdot\mid X_{1:n-1})$. A coupling is \emph{maximal} if $\Prb\{X_n=Y_n\mid X_{1:n-1}=x\}=1-\TV(p_n(\cdot\mid x),q_n(\cdot\mid x))$ \cite{Lindvall2002CouplingMethod}. This acceptance probability is sharp and underpins token-level optimality results below. We use the increasing and increasing-convex stochastic orders as in \cite{ShakedShanthikumar2007StochasticOrders} to compare rejection and acceptance counts.
+
+\section{Token-level optimality and error accounting}
+\label{sec:stepwise}
+\subsection{Increasing-order optimality and the structure of optimal couplings}
+\input{thm_sd-stepwise-coupling.tex}
+Theorem~\ref{thm:sd-stepwise-coupling} shows that, for one proposal per position and fixed proposals $(p_n)$, standard SD minimizes $\E[\phi(N_{\mathrm{rej}})]$ simultaneously for every nondecreasing $\phi$, hence in particular its mean, second moment, and all exponential moments. The theorem further characterizes all mean-optimal algorithms: at every step and prefix one must employ a \emph{maximal-agreement} coupling between $q_n$ and $p_n$, thereby attaining the acceptance probability $1-\TV(q_n,p_n)$ at that prefix.
+
+\subsection{Exactness under sub-maximal couplings and additive overhead}
+\input{prop_tv-rejection-sum.tex}
+Proposition~\ref{prop:tv-rejection-sum} formalizes a robust correction mechanism: even when the agreement probability is reduced by $\epsilon_n\ge 0$ relative to the TV bound, a calibrated single-step rejection--correction that preserves the $q_n$ marginal keeps the joint law \emph{exact}. The expected overhead in rejections is additive, $\E[\Delta N_{\mathrm{rej}}]=\sum_{n=1}^T\E[\epsilon_n]$, providing an interpretable budget for implementation-driven deviations from maximal coupling.
+
+\section{Temperature sensitivity: local law and second-order uniform bounds}
+\label{sec:temperature}
+\subsection{Local pointwise law and mixture-of-temperatures schedules}
+\input{thm_local-temp-sensitivity.tex}
+Theorem~\ref{thm:local-temp-sensitivity} establishes a uniform first-order expansion of $\TV(p_{\tau,n},q_n)$ in $|\tau-1|$ with a coefficient equal to the mean absolute deviation (MAD) of the log-probabilities under $q_n$. Averaging over prefixes yields the per-step expected rejection rate and implies that the cumulative expected rejections along any schedule $\{\tau_t\}\subset[1-\rho,1+\rho]$ are controlled by the path length in the $\tau$-metric weighted by the log-probability MAD. This provides a principled guide for temperature schedules that are \emph{TV-length aware}.
+
+\subsection{Two-sided second-order law with an explicit constant}
+\input{thm_second-order-temp-law.tex}
+Theorem~\ref{thm:second-order-temp-law} complements the local law by giving a uniform two-sided bound with an explicit constant $C(m,\rho)$ that depends only on the support bound $m$ and the radius $\rho$. Consequently, the linear term in $|\tau-1|$ is sharp and the quadratic remainder is uniformly controlled per step. These results connect to deformed exponential families and temperature deformations studied in statistical physics \cite{Naudts2009QExponentialFamily}.
+
+\section{Blockwise verification: dominance, lower bounds, and Markov gains}
+\label{sec:block}
+\subsection{Longest-prefix verification is increasing-convex optimal}
+\input{thm_longest-prefix-domination.tex}
+Theorem~\ref{thm:longest-prefix-domination} proves that for fixed proposal conditionals across a $K$-block, the longest-prefix verifier maximizes $\E[\phi(A^{(K)})]$ for every increasing convex $\phi:\{0,\dots,K\}\to\mathbb{R}$, and equivalently minimizes the rejection count $B^{(K)}=K-A^{(K)}$ in the increasing-convex order. This elevates the folklore preference for longest-prefix checks to a universal optimality principle aligned with stochastic orders \cite{ShakedShanthikumar2007StochasticOrders}. It also formalizes why joint block verification can outperform independent tokenwise checks, as empirically observed in recent work \cite{Sun2024BlockVerification}.
+
+% Algorithm: LP verification
+\input{alg_lp-verification.tex}
+
+\subsection{A pathwise additive-TV lower bound on full acceptance}
+\input{prop_block-tv-lower.tex}
+Proposition~\ref{prop:block-tv-lower} shows that the full-acceptance probability under longest-prefix verification is bounded below by $1-\sum_{i=0}^{K-1}\E[\TV(p_{n+i},q_{n+i})]$. The proof uses the inequality $\prod_i(1-\pi_i)\ge 1-\sum_i\pi_i$ pathwise, clarifying how additive controls on tokenwise TVs translate into guaranteed block-level throughput.
+
+\subsection{Markovian dependence across blocks and coupling gains}
+\input{thm_markov-block-gain.tex}
+Theorem~\ref{thm:markov-block-gain} exploits a one-step stability assumption $\TV(q_{n+1}(\cdot\mid x_{1:n}),q_{n+1}(\cdot\mid x'_{1:n}))\le \gamma\,\mathbf{1}\{x_n\ne x'_n\}$ to build \emph{Markovian} maximal couplings across a $K$-block, yielding a product-form lower bound on $\E[A^{(K)}]$ that strictly improves on tokenwise coupling whenever $\gamma$ is sufficiently small. This connects the literature on Markovian maximal couplings \cite{BanerjeeKendall2016Rigidity,Boettcher2017MMC} to practical blockwise verification.
+
+% Algorithm: Block-Markov maximal coupling
+\input{alg_block-markov-max-coupling.tex}
+
+\section{Applications and design guidelines}
+\label{sec:applications}
+Our results suggest the following recipe for exact high-throughput decoding.
+\begin{itemize}
+  \item \textbf{Use maximal-agreement couplings at each step.} By Theorem~\ref{thm:sd-stepwise-coupling}, any deviation increases all increasing functionals of the rejection count; if unavoidable, quantify the overhead via Proposition~\ref{prop:tv-rejection-sum}.
+  \item \textbf{Prefer longest-prefix verification in blocks.} Theorem~\ref{thm:longest-prefix-domination} ensures increasing-convex optimality among unbiased $K$-block schemes; Proposition~\ref{prop:block-tv-lower} yields conservative acceptance guarantees from tokenwise TV budgets.
+  \item \textbf{Tune temperatures by TV length.} Theorems~\ref{thm:local-temp-sensitivity} and~\ref{thm:second-order-temp-law} advise that cumulative rejections scale with the path length in $|\tau-1|$ weighted by a log-probability MAD, with a uniform second-order remainder. This guides micro-step schedules in self-speculative drafting and robustness across decoding temperatures.
+  \item \textbf{Exploit local Markov stability.} When $q_{n+1}$ is weakly sensitive to $x_n$ (small $\gamma$), Markovian couplings across blocks improve acceptance (Theorem~\ref{thm:markov-block-gain}).
+\end{itemize}
+These principles inform recent system designs: block verification \cite{Sun2024BlockVerification}, tree- or head-based drafter variants \cite{Miao2023SpecInfer,Ankner2024Hydra}, and dynamic lookahead \cite{Mamou2024DISCO}, complementing the foundational SD algorithms \cite{Leviathan2023SpeculativeDecoding,Xia2022SpeculativeDecoding}.
+
+\section{Related Work}
+\label{sec:related}
+\paragraph{Speculative decoding.} The draft--verify paradigm dates back to \cite{Xia2022SpeculativeDecoding} in sequence-to-sequence generation and was popularized for LLMs by \cite{Leviathan2023SpeculativeDecoding}. Subsequent developments explored tree-based speculation and verifier batching in systems such as SpecInfer \cite{Miao2023SpecInfer} and hardware-aware, robust designs such as Sequoia \cite{Chen2024Sequoia}. A comprehensive 2024 survey \cite{Xia2024Survey} catalogs drafter choices, verification strategies, and empirical trade-offs. Our order- and coupling-based analysis complements these works by giving distribution-level optimality and sensitivity laws.
+% citeturn2search1turn0search3turn1search3turn2academia12turn2academia13
+
+\paragraph{Block verification and lookahead variants.} Joint verification of a whole speculative block was advocated and analyzed empirically in \cite{Sun2024BlockVerification}; our Theorem~\ref{thm:longest-prefix-domination} provides a universal increasing-convex optimality guarantee for the longest-prefix verifier. Alternative acceleration paths without an auxiliary drafter include Lookahead Decoding \cite{Fu2024Lookahead} and dynamic speculation length tuning \cite{Mamou2024DISCO}. Optimal-transport views \cite{Sun2023SpecTr} offer algorithmic generalizations of membership-cost couplings; our stepwise optimality (Theorem~\ref{thm:sd-stepwise-coupling}) clarifies the role of maximal-agreement couplings in such designs.
+% citeturn0academia12turn1search4turn1search5turn0academia13
+
+\paragraph{Self-speculation and multi-head drafters.} Self-speculative decoders replace the auxiliary model with a fast internal drafter, e.g., by skipping layers and then verifying in one pass \cite{DraftVerifyACL2024}. Multi-head and sequentially dependent heads (Medusa/Hydra) increase acceptance \cite{Ankner2024Hydra}. Our temperature laws motivate acceptance-aware temperature schedules for such micro-steps, and our additive-TV bound quantifies robustness to sub-maximal couplings.
+% citeturn1search6
+
+\paragraph{Stochastic orders and maximal couplings.} We use increasing and increasing-convex orders as in \cite{ShakedShanthikumar2007StochasticOrders} and rely on maximal-agreement couplings \cite{Lindvall2002CouplingMethod}. For Markovian dependence across blocks, related uniqueness and construction results for Markovian maximal couplings \cite{BanerjeeKendall2016Rigidity,Boettcher2017MMC} contextualize Theorem~\ref{thm:markov-block-gain}. Temperature perturbations connect to generalized exponential families \cite{Naudts2009QExponentialFamily}.
+% citeturn0search0turn3search6turn3search7turn3search0
+
+\section{Conclusion}
+We provide a unified probabilistic account of draft--verify decoding. At the token level, SD is increasing-order optimal and characterized by maximal-agreement couplings. At the micro-step level, temperature scaling admits sharp uniform first- and second-order TV laws with explicit constants. At the block level, longest-prefix verification is increasing-convex optimal, with additive-TV acceptance guarantees and further gains under Markov-stable conditionals. These insights yield concrete design guidance and close analytic gaps in the rapidly evolving speculative and self-speculative decoding literature.
+
+\section*{References}
+\input{bib.tex}
+
+\end{document}
+\paragraph{FOSD vs expectation-optimality.} Sun et al. \cite{Sun2024BlockVerification} study blockwise verification policies that are \emph{expectation-optimal}, i.e., they maximize the mean accepted-token count $\E[A^{(K)}]$ under their modeling assumptions via a dynamic program. In contrast, our Theorem~\ref{thm:longest-prefix-domination} proves a strictly stronger \emph{first-order stochastic dominance} (FOSD) guarantee: for every threshold $j$, the longest-prefix (LP) verifier attains $\Pr\{A^{(K)}\ge j\}$ that no other unbiased $K$-block scheme can exceed. FOSD immediately implies mean optimality and, more generally, dominance for all increasing functionals, not only the expectation. Moreover, our proof is distribution-level and assumption-light (holding for arbitrary fixed proposals and unbiasedness), whereas expectation-optimality results typically target the mean criterion under specific structural assumptions and do not imply FOSD.

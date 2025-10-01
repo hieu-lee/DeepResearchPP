@@ -1,0 +1,37 @@
+\begin{theorem}[Ishikawa analog for cyclics (resolves Conj.~54 of \cite{Cohen2025})]\label{thm:ishikawa}
+For all $n>2$, one has $c_n+c_{n+1}>c_{n+2}$, with $c_1+c_2=c_3=3$ and $c_2+c_3=c_4=5$ as equalities at $n=1,2$.
+\end{theorem}
+
+\begin{proof}
+Every prime is cyclic, and $2$ is the only even cyclic number. We use the following dyadic prime-gap lemma.
+
+\begin{lemma}\label{lem:dyadic}
+For every $x\ge 50$ one has $\pi(x)-\pi(x/2)\ge2$.
+\end{lemma}
+
+\begin{proof}[Proof of Lemma]
+By Nagura's theorem \cite{Nagura1952}, for every $y\ge25$ there is a prime in $(y,1.2y]$. Apply this with $y_1=x/2\ge25$ to get a prime $p_1\in(x/2,0.6x]$, and with $y_2=0.6x\ge25$ to get a prime $p_2\in(0.6x,0.72x]$. These intervals are disjoint and both lie in $(x/2,x]$, hence two distinct primes lie in $(x/2,x]$.
+\end{proof}
+
+Fix $n$ and write $x:=c_{n+2}$. If $x\ge50$, Lemma~\ref{lem:dyadic} yields two primes in $(x/2,x)$, hence at least two cyclic numbers in $(x/2,x)$; together with $x$ (which is cyclic), the interval $(x/2,x]$ contains at least three cyclic numbers. Therefore the two largest cyclic numbers below $x$, namely $c_n$ and $c_{n+1}$, both lie in $(x/2,x)$, giving $c_n+c_{n+1}>x=c_{n+2}$.
+
+It remains to verify the finite initial range with $c_{n+2}<50$. By Szele's criterion, the cyclic numbers up to $117$ are exactly
+\[
+\begin{gathered}
+1,2,3,5,7,11,13,15,17,19,23,29,31,33,35,37,41,43,47,\\
+51,53,59,61,65,67,69,71,73,77,79,83,85,87,89,91,\\
+95,97,101,103,107,109,113,115.
+\end{gathered}
+\]
+From this list one checks directly that the inequality holds for $n=3,4,\dots,21$:
+\[
+\begin{aligned}
+&3+5>7,\ 5+7>11,\ 7+11>13,\ 11+13>15,\\
+&13+15>17,\ 15+17>19,\ 17+19>23,\ 19+23>29,\\
+&23+29>31,\ 29+31>33,\ 31+33>35,\ 33+35>37,\\
+&35+37>41,\ 37+41>43,\ 41+43>47,\ 43+47>51,\\
+&47+51>53,\ 51+53>59,\ 53+59>61.
+\end{aligned}
+\]
+For the remaining $n$ with $c_{n+2}<118$, we necessarily have $n\ge22$. Then $c_n\ge59$ and $c_{n+1}\ge61$, so $c_n+c_{n+1}\ge120>c_{n+2}$ (since $c_{n+2}\le115$). Finally, $c_1+c_2=1+2=3=c_3$ and $c_2+c_3=2+3=5=c_4$, giving the stated equalities at $n=1,2$. For $n\ge3$ the inequality is strict because, by Szele's criterion, $2$ is the only even cyclic number; thus $c_n,c_{n+1}$ are odd and $c_n+c_{n+1}$ is even, whereas $c_{n+2}$ is odd.
+\end{proof}

@@ -1,0 +1,43 @@
+﻿\begin{theorem}\label{thm:pkpd-nonconcave-pareto}
+There exists a PK--PD instance with concave efficacy \(\Phi(\mathrm{AUC})\) and strictly convex AE penalty \(\Psi(\mathrm{AUC})\) with \(\Psi''>0\) such that the Pareto frontier \(\{(\mathbb{E}[\Delta\mathrm{EASI}\mid d],\,\mathbb{E}[\mathrm{AEs}\mid d]) : d \in \mathcal{D}\}\) is not strictly concave, and for which no \(\lambda\) in any open interval yields an interior maximizer of \(J_\lambda\).
+\end{theorem}
+\begin{proof}
+Proof by contradiction. Assume that for every PK--PD instance with concave \(\Phi(\mathrm{AUC})\) and strictly convex \(\Psi(\mathrm{AUC})\) with \(\Psi''>0\), the Pareto frontier is strictly concave and there exists an open interval of \(\lambda\) for which the maximizer of \(J_\lambda\) lies in the interior of the feasible set \(\mathcal{D}\).
+
+Construct the following instance. Let \(\mathcal{D}\) contain a continuous scaling family \(\{d_\theta : \theta \in [0,1]\}\) with exposure \(a(d_\theta)=\theta\), so the attainable AUCs are exactly \([0,1]\). Define, for \(a\in[0,1]\),
+\[
+\Phi(a):=-a,\qquad \Psi(a):=a^2.
+\]
+Then \(\Phi\) is concave and \(\Psi\) is \(C^2\) and strictly convex with \(\Psi''(a)=2>0\) on \((0,1)\), meeting the hypotheses. For any \(d\in\mathcal{D}\) with \(a:=a(d)\),
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid d]=\Phi(a)=-a,\qquad \mathbb{E}[\mathrm{AEs}\mid d]=\Psi(a)=a^2.
+\]
+
+\begin{enumerate}
+\item[(1)] The Pareto frontier is not strictly concave. The attainable set is
+\[
+\{(\Phi(a),\Psi(a)) : a\in[0,1]\}=\{(-a,a^2): a\in[0,1]\}.
+\]
+With the Pareto order (larger first coordinate and smaller second coordinate preferred), for any \(a\in(0,1]\),
+\[
+(-a,a^2)\prec (0,0).
+\]
+Hence every point with \(a>0\) is dominated by \((0,0)\), so the Pareto frontier is the singleton \(\{(0,0)\}\). Equivalently, the value function
+\[
+F(y):=\sup\{\Phi(a): a\in[0,1],\ \Psi(a)\le y\},\qquad y\in[0,1],
+\]
+satisfies \(\Psi(a)\le y \iff a\in[0,\sqrt{y}]\), whence
+\[
+F(y)=\sup_{a\in[0,\sqrt{y}]}(-a)=0\quad\text{for all }y\in[0,1],
+\]
+so \(F\) is constant on a nontrivial interval and thus not strictly concave. This contradicts the assumed strict concavity of the Pareto frontier.
+
+\item[(2)] There is no interior maximizer for \(J_\lambda\) on any open interval of \(\lambda\). For \(d\in\mathcal{D}\) with \(a:=a(d)\in[0,1]\),
+\[
+J_\lambda(d)=\Phi(a)-\lambda \Psi(a)=-a-\lambda a^2\le 0,
+\]
+with equality if and only if \(a=0\). Therefore, for every \(\lambda\ge 0\), the unique maximizer is the zero-exposure schedule \(d_0\), which lies on the boundary of \(\mathcal{D}\), not in its interior. This contradicts the assumed existence of an open interval of \(\lambda\) with an interior maximizer.
+\end{enumerate}
+
+Both contradictions arise within a model satisfying all stated hypotheses. Hence the assumption is false, and there exists a PK--PD instance with concave \(\Phi\) and strictly convex \(\Psi\) (with \(\Psi''>0\)) for which the Pareto frontier is not strictly concave and no open interval of \(\lambda\) yields an interior maximizer of \(J_\lambda\).\qedhere
+\end{proof}

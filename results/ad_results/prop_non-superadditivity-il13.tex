@@ -1,0 +1,39 @@
+﻿\begin{proposition}[Non-super-additivity of environmental mitigation with IL-13 pathway blockade]\label{prop:non-superadditivity-il13}
+There exists an admissible structural model, consistent with the contextual constraints, such that for all real $e_0,e_1$,
+\[
+\begin{aligned}
+&\bigl[\mathbb{E}[\Delta\mid T{=}1,\,\mathrm{do}(E{=}e_1)]-\mathbb{E}[\Delta\mid T{=}1,\,\mathrm{do}(E{=}e_0)]\bigr]\\[-2pt]
+&\quad-\bigl[\mathbb{E}[\Delta\mid T{=}0,\,\mathrm{do}(E{=}e_1)]-\mathbb{E}[\Delta\mid T{=}0,\,\mathrm{do}(E{=}e_0)]\bigr]
+\end{aligned}
+=0.
+\]
+Equivalently, the within-treatment effect of changing $E$ from $e_0$ to $e_1$ is identical under $T{=}1$ and $T{=}0$, so no $\delta>0$ can satisfy the super-additive inequality.
+\end{proposition}
+
+\begin{proof}
+Constructively, let treatment $T\in\{0,1\}$ denote IL-13 pathway blockade ($T{=}1$) versus standard care ($T{=}0$), let exposure $E\in\mathbb{R}$ be causal, and let a baseline biomarker $L_0\ge 0$ have any distribution on $[0,\infty)$. Define the outcome increment $\Delta$ ("$\Delta$EASI") by
+\[
+\Delta\;=\;a\;+'b_0 T\;+\;\phi(L_0)\,T\;-\;\beta\,E,
+\]
+with constants $a\in\mathbb{R}$, $\beta>0$, $b_0\ge 0$, and a measurable $\phi:[0,\infty)\to[0,\infty)$ strictly increasing. This satisfies the contextual constraints: $\partial\Delta/\partial E=-\beta<0$, and the incremental effect of $T{=}1$ equals $b_0+\phi(L_0)\ge 0$ and increases with $L_0$.
+
+Under an intervention $\mathrm{do}(E{=}e)$,
+\[
+\mathbb{E}[\Delta\mid T,\,\mathrm{do}(E{=}e)]\;=\;a\;+\;b_0T\;+\;T\,\mathbb{E}[\phi(L_0)\mid T]\;-\;\beta e.
+\]
+Therefore, for any $e_0,e_1\in\mathbb{R}$,
+\[
+\begin{aligned}
+\bigl[\mathbb{E}[\Delta\mid T{=}1,\mathrm{do}(E{=}e_1)]-\mathbb{E}[\Delta\mid T{=}1,\mathrm{do}(E{=}e_0)]\bigr]&= -\beta(e_1-e_0),\\
+\bigl[\mathbb{E}[\Delta\mid T{=}0,\mathrm{do}(E{=}e_1)]-\mathbb{E}[\Delta\mid T{=}0,\mathrm{do}(E{=}e_0)]\bigr]&= -\beta(e_1-e_0),
+\end{aligned}
+\]
+so the difference-in-differences contrast is
+\[
+\begin{aligned}
+&\bigl[\mathbb{E}[\Delta\mid T{=}1,\,\mathrm{do}(E{=}e_1)]-\mathbb{E}[\Delta\mid T{=}1,\,\mathrm{do}(E{=}e_0)]\bigr]\\[-2pt]
+&\quad-\bigl[\mathbb{E}[\Delta\mid T{=}0,\,\mathrm{do}(E{=}e_1)]-\mathbb{E}[\Delta\mid T{=}0,\,\mathrm{do}(E{=}e_0)]\bigr]
+\end{aligned}
+=0.\qedhere
+\]
+\end{proof}

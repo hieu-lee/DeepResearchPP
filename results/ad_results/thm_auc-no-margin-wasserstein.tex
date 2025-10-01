@@ -1,0 +1,23 @@
+﻿\begin{theorem}[No uniform AUC margin over Wasserstein neighborhoods]\label{thm:auc-no-margin-wasserstein}
+There exists a source distribution \(\mathbb P_{\mathrm{source}}\) on \(\mathbb R\) and a baseline score \(S_G\) such that \(\mathrm{AUC}_{\mathbb P_{\mathrm{source}}}(S_G)=1\), and for any score \(S_{\tilde G}\) and any uncertainty set \(\mathcal U\) of distributions containing \(\mathbb P_{\mathrm{source}}\), no uniform positive AUC margin over \(\mathcal U\) is possible: for every \(\delta>0\) there exists \(\mathbb Q\in\mathcal U\) with
+\[
+\mathrm{AUC}_{\mathbb Q}(S_{\tilde G})<\mathrm{AUC}_{\mathbb Q}(S_G)+\delta.
+\]
+In particular, this holds for every Wasserstein ball \(\mathcal W_{r_0}(\mathbb P_{\mathrm{source}})\) with any radius \(r_0>0\).
+\end{theorem}
+
+\begin{proof}
+Let \((\mathcal X,\lVert\cdot\rVert)=(\mathbb R,|\cdot|)\). Consider binary labels \(Y\in\{0,1\}\) and define the source law \(\mathbb P:=\mathbb P_{\mathrm{source}}\) by
+\(\mathbb P(Y=1)=\mathbb P(Y=0)=\tfrac12\), and
+\(X\mid Y=0\sim \mathrm{Unif}[0,1]\) while \(X\mid Y=1\sim \mathrm{Unif}[2,3]\).
+Define the baseline score \(S_G(x):=x\). If \(X^+\sim \mathbb P(\cdot\mid Y{=}1)\) and \(X^-\sim \mathbb P(\cdot\mid Y{=}0)\) are independent, then \(X^+>X^-\) almost surely, hence \(\mathrm{AUC}_{\mathbb P}(S_G)=1\).
+
+Fix any score \(S_{\tilde G}\), any uncertainty set \(\mathcal U\) with \(\mathbb P\in\mathcal U\), and any \(\delta>0\). Taking \(\mathbb Q=\mathbb P\in\mathcal U\) gives
+\[
+\mathrm{AUC}_{\mathbb P}(S_{\tilde G})\le 1=\mathrm{AUC}_{\mathbb P}(S_G)<\mathrm{AUC}_{\mathbb P}(S_G)+\delta.
+\]
+Thus there exists \(\mathbb Q\in\mathcal U\) (namely \(\mathbb Q=\mathbb P\)) with \(\mathrm{AUC}_{\mathbb Q}(S_{\tilde G})<\mathrm{AUC}_{\mathbb Q}(S_G)+\delta\). Because \(S_{\tilde G}\) and \(\delta>0\) were arbitrary, no uniform positive AUC margin over \(\mathcal U\) is possible. In particular, for every \(r_0>0\) the same conclusion holds for the Wasserstein ball \(\mathcal W_{r_0}(\mathbb P_{\mathrm{source}})\), since
+\[
+W(\mathbb P,\mathbb P)=0\le r_0.\qedhere
+\]
+\end{proof}

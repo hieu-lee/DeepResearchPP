@@ -1,0 +1,32 @@
+﻿\begin{theorem}[Dual--optimal upper boundary is not a 1--Lipschitz decreasing graph]\label{thm:dual-upper-nongraph}
+There exist functions $\mu_{\mathrm{Dual}},\mu_{\mathrm{L13}},\mu_{\mathrm{D}}$ with $\mu_{\mathrm{Dual}}-\mu_{\mathrm{L13}}$ having increasing differences in $(L_0,M_0)$ such that, for every $\tau_L\ge0$, the Dual--optimal region
+\[
+U^*:=\{(L_0,M_0):\ \mu_{\mathrm{Dual}}(L_0,M_0)\ge\max(\mu_{\mathrm{D}},\mu_{\mathrm{L13}})\}
+\]
+has an upper boundary $\partial^+U^*$ that is not the graph of any strictly decreasing, $1$--Lipschitz function on $[\tau_L,\infty)$. This holds even with $\mu_{\mathrm{D}}\equiv0$, $\mu_{\mathrm{L13}}$ constant, and $\mu_{\mathrm{Dual}}$ affine.
+\end{theorem}
+
+\begin{proof}
+Fix any $a>1$ and any $c\ge0$ and define
+\[
+\mu_{\mathrm{Dual}}(L_0,M_0)=aL_0+M_0,\qquad \mu_{\mathrm{L13}}(L_0,M_0)=c,\qquad \mu_{\mathrm{D}}(L_0,M_0)=0.
+\]
+Let $\Delta(L_0,M_0):=\mu_{\mathrm{Dual}}(L_0,M_0)-\mu_{\mathrm{L13}}(L_0,M_0)=aL_0+M_0-c$. For all $L\le L'$ and $M\le M'$, one has
+\[
+\big[\Delta(L',M')-\Delta(L,M')\big]-\big[\Delta(L',M)-\Delta(L,M)\big]=0\ge0,
+\]
+so $\Delta$ has increasing differences (is supermodular).
+
+Since $\max(\mu_{\mathrm{D}},\mu_{\mathrm{L13}})\equiv c$, the Dual--optimal region is
+\[
+U^* = \{(L_0,M_0):\ aL_0+M_0\ge c\}.
+\]
+For each fixed $L_0$, the vertical section is $\{M_0:\ M_0\ge c-aL_0\}$, so the upper boundary (the minimal admissible $M_0$ at each $L_0$) is the graph of
+\[
+M_*(L_0)=c-aL_0.
+\]
+This function is affine with slope $-a$, hence strictly decreasing. Its Lipschitz constant on any interval, in particular on $[\tau_L,\infty)$ for any $\tau_L\ge0$, equals $|{-}a|=a>1$, so $M_*$ is not $1$--Lipschitz on $[\tau_L,\infty)$. Therefore, for every $\tau_L\ge0$, $\partial^+U^*$ is not the graph of a strictly decreasing, $1$--Lipschitz function on $[\tau_L,\infty)$. Equivalently,
+\[
+\operatorname{Lip}_{[\tau_L,\infty)}(M_*)=a>1.\qedhere
+\]
+\end{proof}

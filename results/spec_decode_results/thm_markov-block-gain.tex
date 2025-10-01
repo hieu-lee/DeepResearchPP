@@ -1,0 +1,84 @@
+\begin{theorem}[Markov-block gain]\label{thm:markov-block-gain}
+Let $(q_n)_{n\ge1}$ be conditional distributions such that, for some $\gamma\in[0,1)$ and all prefixes $x_{1:n},x'_{1:n}$,
+\[
+\operatorname{TV}\big(q_{n+1}(\cdot\mid x_{1:n}),\,q_{n+1}(\cdot\mid x'_{1:n})\big)\le \gamma\,\mathbf{1}\{x_n\ne x'_n\}.
+\]
+Consider a Markovian maximal coupling across a block of length $K$, and let $A^{(K)}$ denote the number of accepted tokens in this block (i.e., the length of the initial run of matches within the block). Then
+\[
+\mathbb{E}[A^{(K)}]\ \ge\ \sum_{j=0}^{K-1}\prod_{i=0}^{j}\Big(1-\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})]-\gamma\Big).
+\]
+In particular, whenever $\gamma<\min_i\big(1-\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})]\big)$, every factor is strictly positive, and the right-hand side is strictly larger than the tokenwise worst-case guarantee (which corresponds to the vacuous replacement $\gamma\mapsto1$, yielding zero).
+\end{theorem}
+
+\begin{proof}
+Fix $n$ and $K$. Assume
+\[
+\forall x_{1:n},x'_{1:n}:\operatorname{TV}\big(q_{n+1}(\cdot\mid x_{1:n}),\,q_{n+1}(\cdot\mid x'_{1:n})\big)\le \gamma\,\mathbf{1}\{x_n\ne x'_n\},\qquad \gamma\in[0,1).
+\]
+Work on the state space of prefixes: set $W_0:=X_{1:n-1}$ and, for $i\ge0$, let $W_{i+1}:=(W_i,X_{n+i})$ where $X_{n+i}\sim q_{n+i}(\cdot\mid W_i)$. Denote by $\mathsf Q_i(w,\cdot):=q_{n+i}(\cdot\mid w)$ the time-$i$ transition on prefixes. By the assumption, if $w,w'$ share the same last token then $\mathsf Q_i(w,\cdot)=\mathsf Q_i(w',\cdot)$; otherwise $\operatorname{TV}(\mathsf Q_i(w,\cdot),\mathsf Q_i(w',\cdot))\le\gamma$. Hence the Dobrushin coefficient satisfies
+\[
+\delta(\mathsf Q_i):=\sup_{w,w'}\operatorname{TV}\big(\mathsf Q_i(w,\cdot),\mathsf Q_i(w',\cdot)\big)\le\gamma.
+\]
+For each in-block index $i\in\{0,\dots,K-1\}$ and prefix $w$, define the one-step maximal-agreement probability
+\[
+U_i(w)\ :=\ 1-\operatorname{TV}\big(p_{n+i}(\cdot\mid w),\ q_{n+i}(\cdot\mid w)\big)\in[0,1].
+\]
+Couple the proposal and target processes by a Markovian maximal coupling across the block: at each step $i$, conditionally on the current coupled prefix states, draw the next pair of tokens by a maximal coupling of the corresponding conditionals.
+
+Let $B_i$ be the indicator that the $i$-th in-block tokens (position $n+i$) of the coupled proposal and target coincide, and set $T_i:=\prod_{t=0}^{i} B_t\in\{0,1\}$ with the convention $T_{-1}\equiv 1$. The event that at least $j{+}1$ tokens are accepted is $\{T_j=1\}$, so
+\[
+\mathbb{P}\{A^{(K)}\ge j{+}1\}\ =\ \mathbb{E}[T_j],\qquad j=0,1,\dots,K-1.
+\]
+Crucially, we have the one-step recursion
+\begin{equation}\label{eq:mbg-recursion}
+\mathbb{E}[T_i]\ =\ \mathbb{E}[\,T_{i-1}\,U_i(W_i)\,],\qquad i\ge0.
+\end{equation}
+Indeed, conditionally on the entire past up to time $i$ and on $W_i$, the Markovian maximal coupling ensures $\mathbb{P}\{B_i=1\mid T_{i-1}=1,\,W_i\}=U_i(W_i)$, while $T_{i-1}=0$ forces $T_i=0$. Taking expectations yields \eqref{eq:mbg-recursion}.
+
+We now lower bound $\mathbb{E}[T_i]$ using a one-step decoupling inequality for Markov chains.
+
+\begin{lemma}[one-step $\gamma$-decoupling]
+Let $(W_i)$ be a (possibly time-inhomogeneous) Markov chain with transition $\mathsf Q_i$ satisfying $\delta(\mathsf Q_i)\le\gamma$. For any $i\ge1$, any $\mathcal F_{i-1}$-measurable $Z\in[0,1]$ (where $\mathcal F_{i-1}:=\sigma(W_0,\dots,W_{i-1})$), and any $f:\text{state}\to[0,1]$,
+\begin{equation}\label{eq:mbg-decouple}
+\mathbb{E}[\,Z\,f(W_i)\,]\ \ge\ \mathbb{E}[Z]\\,\big(\mathbb{E}[f(W_i)]-\gamma\big).
+\end{equation}
+\end{lemma}
+
+\begin{proof}[Proof of the lemma]
+Let $\mu_i:=\mathcal L(W_i)$ be the unconditional law of $W_i$. By convexity of total variation, $\sup_w \,\operatorname{TV}(\mathsf Q_i(w,\cdot),\mu_i)\le\delta(\mathsf Q_i)\le\gamma$. Hence, for every $f\in[0,1]$ and all $w$,
+\[
+\mathbb{E}[f(W_i)\mid W_{i-1}=w]\ge \mathbb{E}[f(W_i)]-\gamma.
+\]
+Taking conditional expectation with respect to $\mathcal F_{i-1}$ and multiplying by any $\mathcal F_{i-1}$-measurable $Z\in[0,1]$ gives \eqref{eq:mbg-decouple}.\qedhere
+\end{proof}
+
+Return to \eqref{eq:mbg-recursion}. Since $T_{i-1}$ is $\mathcal F_{i-1}$-measurable, write $Z_i:=\mathbb{E}[T_{i-1}\mid\mathcal F_{i-1}]=T_{i-1}\in[0,1]$. Then
+\[
+\mathbb{E}[T_i]
+=\mathbb{E}[\,T_{i-1}\,U_i(W_i)\,]
+=\mathbb{E}\big[\,Z_i\,\mathbb{E}[U_i(W_i)\mid\mathcal F_{i-1}]\big]
+=\mathbb{E}[\,Z_i\,U_i(W_i)\,],
+\]
+where the last equality uses $Z_i$ being $\mathcal F_{i-1}$-measurable. Applying the lemma \eqref{eq:mbg-decouple} with $f=U_i$ yields
+\begin{equation}\label{eq:mbg-step}
+\mathbb{E}[T_i]\ \ge\ \mathbb{E}[Z_i]\\,\big(\mathbb{E}[U_i(W_i)]-\gamma\big)
+=\mathbb{E}[T_{i-1}]\\,\big(\mathbb{E}[U_i(W_i)]-\gamma\big).
+\end{equation}
+By induction on $i$ (and noting $\mathbb{E}[T_0]=\mathbb{E}[U_0(W_0)]\ge \mathbb{E}[U_0(W_0)]-\gamma$), \eqref{eq:mbg-step} gives
+\[
+\mathbb{E}[T_j]\ \ge\ \prod_{i=0}^{j}\big(\mathbb{E}[U_i(W_i)]-\gamma\big),\qquad j=0,1,\dots,K-1.
+\]
+Finally, by definition of $U_i$ and taking expectations under the target prefix law and dynamics,
+\[
+\mathbb{E}[U_i(W_i)]
+=1-\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})].
+\]
+Therefore
+\[
+\mathbb{E}[A^{(K)}]
+=\sum_{j=0}^{K-1}\mathbb{P}\{A^{(K)}\ge j{+}1\}
+=\sum_{j=0}^{K-1}\mathbb{E}[T_j]
+\ \ge\ \sum_{j=0}^{K-1}\ \prod_{i=0}^{j}\Big(1-\mathbb{E}[\operatorname{TV}(p_{n+i},q_{n+i})]-\gamma\Big),\qquad \qedhere
+\]
+which is the claimed bound.
+\end{proof}

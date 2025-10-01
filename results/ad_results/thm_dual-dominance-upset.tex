@@ -1,0 +1,105 @@
+\begin{theorem}[Dual dominance and up-set]\label{thm:dual-dominance-upset}
+There exists a calibrated AD QSP, consistent with the observed dupilumab and anti-IL-22 stratifications, and thresholds that can be taken as $\tau_L=\tau_M=1$, such that:
+\begin{itemize}
+  \item[(i)] For all biomarker values with $L_0\ge\tau_L$ and $M_0\ge\tau_M$, the dual therapy strictly dominates pointwise:
+  \[
+  \begin{aligned}
+  \mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dual},L_0{=}L,M_0{=}M]
+  &> \max\{\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dupilumab},L_0{=}L,M_0{=}M],\\
+  &\quad\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{IL\text{-}13\ only},L_0{=}L,M_0{=}M]\}.
+  \end{aligned}
+  \]
+  In particular, $\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dual},L_0\ge\tau_L,M_0\ge\tau_M]$ exceeds both unconditional means under dupilumab and IL-13 only.
+  \item[(ii)] On the low--low stratum, the expected responses satisfy the strict ordering
+  \[
+  \mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dupilumab},\ L_0<\tau_L,\ M_0<\tau_M]
+  > \mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{IL\text{-}13\ only}]
+  > \mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dual}].
+  \]
+  Moreover, the set of $(L_0,M_0)$ where dual is optimal among the three options is an up-set: if $(L_0,M_0)$ is in it and $L'_0\ge L_0$, $M'_0\ge M_0$, then $(L'_0,M'_0)$ is also in it. In particular, $[\tau_L,\infty)^2\subseteq$ the dual-optimal set.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Write $U_{\mathrm{dup}}(L,M):=\mathbb{E}[\Delta\mathrm{EASI}\mid\mathrm{dupilumab},L_0{=}L,M_0{=}M]$, $U_{13}(L,M):=\mathbb{E}[\Delta\mathrm{EASI}\mid\mathrm{IL\text{-}13\ only},L_0{=}L,M_0{=}M]$, and $U_{\mathrm{dual}}(L,M):=\mathbb{E}[\Delta\mathrm{EASI}\mid\mathrm{dual(IL\text{-}13{+}IL\text{-}22)},L_0{=}L,M_0{=}M]$. We exhibit an explicit calibrated instance consistent with the observed stratifications, and verify the strengthened claims.
+
+\emph{Step 1 (baseline distribution).} Let $L_0\sim\mathrm{Unif}[0,2]$ and $M_0$ independent with $M_0\sim (1{-}p)\,\mathrm{Unif}[0,\varepsilon]+p\,\mathrm{Unif}[1,2]$, where $p=0.2$ and $\varepsilon=0.1$. For $Z\sim\mathrm{Unif}[0,2]$ we use
+\[
+\mathbb{E}\Big[\tfrac{Z}{1+Z}\Big]=1-\tfrac{1}{2}\ln 3,\quad \mathbb{E}\Big[\tfrac{Z}{1+Z}\,\Big|\,Z\ge 1\Big]=1-(\ln 3-\ln 2),\quad \mathbb{E}\Big[\tfrac{Z}{1+Z}\,\Big|\,Z<1\Big]=1-\ln 2,
+\]
+\[
+\mathbb{E}\Big[\tfrac{1}{1+Z}\,\Big|\,Z\ge 1\Big]=\ln 3-\ln 2.
+\]
+For $M_0$ as above, set $A(\varepsilon):=\frac{\varepsilon-\ln(1+\varepsilon)}{\varepsilon}$ and $B(\varepsilon):=\frac{\ln(1+\varepsilon)}{\varepsilon}$. Then
+\[
+\mathbb{E}\Big[\tfrac{M_0}{1+M_0}\Big]=(1-p)A(\varepsilon)+p\big(1-(\ln 3-\ln 2)\big),\quad \mathbb{E}\Big[\tfrac{1}{1+M_0}\Big]=(1-p)B(\varepsilon)+p(\ln 3-\ln 2).
+\]
+Numerically (three decimals), with $\ln 2\approx0.693$, $\ln 3\approx1.099$, $A(0.1)\approx0.047$, $B(0.1)\approx0.953$,
+\[
+\mathbb{E}\Big[\tfrac{L_0}{1+L_0}\Big]\approx0.451,\quad \mathbb{E}\Big[\tfrac{L_0}{1+L_0}\,\Big|\,L_0\ge 1\Big]\approx0.595,\quad \mathbb{E}\Big[\tfrac{L_0}{1+L_0}\,\Big|\,L_0<1\Big]\approx0.307,
+\]
+\[
+\mathbb{E}\Big[\tfrac{M_0}{1+M_0}\Big]\approx0.156,\quad \mathbb{E}\Big[\tfrac{1}{1+M_0}\Big]\approx0.844.
+\]
+
+\emph{Step 2 (calibrated conditional means and consistency with stratifications).} Define
+\[
+U_{\mathrm{dup}}(L,M):=\tfrac12\,\frac{L}{1+L},\qquad U_{13}(L,M):=\tfrac{3}{10}\,\frac{L}{1+L},
+\]
+\[
+U_{\mathrm{dual}}(L,M):=\tfrac{3}{5}\,\frac{L}{1+L}+\tfrac{3}{5}\,\frac{M}{1+M}-\tfrac{3}{10}\,\frac{1}{1+M}+\tfrac{1}{5}\,\frac{L-1}{1+L}.
+\]
+These maps are continuous and coordinatewise increasing in their targeted biomarker(s); moreover the incremental anti-IL-22 effect under dual versus IL-13-based stratification for dupilumab). Thus the instance is consistent with the stated stratifications.
+
+\emph{Step 3 (pointwise dominance on the high--high quadrant).} Set $\tau_L=\tau_M=1$. For $(L,M)\in[1,\infty)^2$,
+\[
+\begin{aligned}
+U_{\mathrm{dual}}(L,M)-U_{\mathrm{dup}}(L,M)
+&=\Big(\tfrac{3}{5}-\tfrac12\Big)\frac{L}{1+L}+\tfrac{3}{5}\frac{M}{1+M}-\tfrac{3}{10}\frac{1}{1+M}+\tfrac{1}{5}\frac{L-1}{1+L}\\
+&\ge \tfrac{1}{10}\cdot\tfrac12+\tfrac{3}{5}\cdot\tfrac12-\tfrac{3}{10}\cdot\tfrac12+\tfrac{1}{5}\cdot 0=\tfrac{1}{5}>0,\\
+U_{\mathrm{dual}}(L,M)-U_{13}(L,M)
+&=\Big(\tfrac{3}{5}-\tfrac{3}{10}\Big)\frac{L}{1+L}+\tfrac{3}{5}\frac{M}{1+M}-\tfrac{3}{10}\frac{1}{1+M}+\tfrac{1}{5}\frac{L-1}{1+L}\\
+&\ge \tfrac{3}{10}\cdot\tfrac12+\tfrac{3}{5}\cdot\tfrac12-\tfrac{3}{10}\cdot\tfrac12+\tfrac{1}{5}\cdot 0=\tfrac{3}{10}>0.
+\end{aligned}
+\]
+Hence $U_{\mathrm{dual}}(L,M)>\max\{U_{\mathrm{dup}}(L,M),U_{13}(L,M)\}$ for all $(L,M)\in[1,\infty)^2$, proving (i). In particular, $\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dual},L_0\ge 1,M_0\ge 1]$ exceeds both unconditional means under dupilumab and IL-13 only.
+
+\emph{Step 4 (verify the strict inequalities in (ii)).} By independence on $\{L_0<1,M_0<1\}$,
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dupilumab},\ L_0<1,M_0<1]=\tfrac12\,\mathbb{E}\Big[\tfrac{L_0}{1+L_0}\,\Big|\,L_0<1\Big]=\tfrac12(1-\ln 2)\approx0.153.
+\]
+Unconditionally,
+\[
+\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{IL\text{-}13\ only}]=\tfrac{3}{10}\,\mathbb{E}\Big[\tfrac{L_0}{1+L_0}\Big]=\tfrac{3}{10}\Big(1-\tfrac{1}{2}\ln 3\Big)\approx0.135,
+\]
+while
+\[
+\begin{aligned}
+\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dual}]&=\tfrac{3}{5}\,\mathbb{E}\Big[\tfrac{L_0}{1+L_0}\Big]+\tfrac{3}{5}\,\mathbb{E}\Big[\tfrac{M_0}{1+M_0}\Big]-\tfrac{3}{10}\,\mathbb{E}\Big[\tfrac{1}{1+M_0}\Big]+\tfrac{1}{5}\,\mathbb{E}\Big[\tfrac{L_0-1}{1+L_0}\Big]\\
+&=\tfrac{3}{5}\Big(1-\tfrac{1}{2}\ln3\Big)+\tfrac{3}{5}\big((1-p)A(\varepsilon)+p(1-(\ln3-\ln2))\big)\\
+&\quad-\tfrac{3}{10}\big((1-p)B(\varepsilon)+p(\ln3-\ln2)\big)+\tfrac{1}{5}(1-\ln 3)\\
+&\approx0.091.
+\end{aligned}
+\]
+Therefore $\mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dupilumab},\ L_0<1,M_0<1] > \mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{IL\text{-}13\ only}] > \mathbb{E}[\Delta\mathrm{EASI}\mid \mathrm{dual}]$, establishing (ii).
+
+\emph{Step 5 (up-set of dual optimality).} Consider the pairwise differences
+\[
+\Phi_1(L,M):=U_{\mathrm{dual}}(L,M)-U_{\mathrm{dup}}(L,M),\qquad \Phi_2(L,M):=U_{\mathrm{dual}}(L,M)-U_{13}(L,M).
+\]
+Direct differentiation yields
+\[
+\frac{\partial\Phi_1}{\partial L}=\frac{1}{2(1+L)^2}>0,\quad \frac{\partial\Phi_1}{\partial M}=\frac{9}{10}\frac{1}{(1+M)^2}>0,
+\]
+\[
+\frac{\partial\Phi_2}{\partial L}=\frac{7}{10}\frac{1}{(1+L)^2}>0,\quad \frac{\partial\Phi_2}{\partial M}=\frac{9}{10}\frac{1}{(1+M)^2}>0.
+\]
+Hence $\Phi_1,\Phi_2$ are coordinatewise strictly increasing. Therefore each superlevel set $\{(L,M):\Phi_i(L,M)\ge 0\}$ is an up-set, and so is their intersection
+\[
+\mathcal{S}_{\mathrm{dual}}:=\{(L,M):U_{\mathrm{dual}}(L,M)\ge U_{\mathrm{dup}}(L,M)\ \text{and}\ U_{13}(L,M)\le U_{\mathrm{dual}}(L,M)\},
+\]
+which is exactly the set where dual is optimal among the three options. In particular, if $(L,M)\in\mathcal{S}_{\mathrm{dual}}$ and $L'\ge L,\ M'\ge M$, then $(L',M')\in\mathcal{S}_{\mathrm{dual}}$; moreover Step 3 shows
+\[
+[1,\infty)^2\subseteq\mathcal{S}_{\mathrm{dual}}.\qedhere
+\]
+\end{proof}

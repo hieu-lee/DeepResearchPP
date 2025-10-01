@@ -1,0 +1,5 @@
+\begin{definition}
+A positive integer $n$ is \emph{cyclic} if $\gcd\!\bigl(n,\varphi(n)\bigr)=1$, where $\varphi$ is Euler's totient function. Let $C$ be the set of cyclics. For $k\in\mathbb N$, let $N(k)$ be the least integer (if it exists) such that for all $n>N(k)$ there are at least $k$ cyclics in each of $[n^2-n,n^2]$ and $[n^2,n^2+n]$.
+\end{definition}
+\bigskip
+\textbf{Conjecture ($k$-fold Oppermann for cyclics).}\ For every $k\in\mathbb N$, such an $N(k)$ exists; in particular $N(2)=4$, $N(3)=7$, $N(4)=13$, $N(5)=16$, $N(6)=18$, $N(7)=21$, $N(8)=25$, $N(9)=31$, $N(10)=N(11)=32$, $N(12)=40$, $N(13)=44$.

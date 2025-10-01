@@ -1,0 +1,65 @@
+﻿\begin{theorem}[NIE share and effect of pH-lowering adjunct]\label{thm-nie-share-increase}
+In a causal mediation model with $S(t)$ as mediator, there exist parameters and $\theta\in(0.3,0.6)$ such that, for all baseline $S_0$ and all baseline $M_0$, the natural indirect effect (NIE) of L13 on $\Delta\mathrm{EASI}$ through the $S$ path satisfies $\mathrm{NIE}\ge \theta\cdot\mathrm{TE}$, and under a pH-lowering adjunct given only with L13 the NIE/TE share strictly increases.
+\end{theorem}
+
+\begin{proof}
+Let $A\in\{0,1\}$ denote IL\,13 blockade (L13), with $A=1$ for L13 and $A=0$ for control. Let $S(t)$ be the S. aureus mediator with baseline $S_0$, and $M_0$ a baseline marker. Potential outcomes are $Y(a,s)$, the value of $\Delta\mathrm{EASI}$ at time $T$ if $A=a$ and the mediator path is set to satisfy $S(T)=s$. Define the potential mediator $S_T(a)$ as the value of $S(T)$ under $A=a$.
+
+Assume the following structural equations:
+- Outcome equation (additive, no $A\times S$ interaction):
+\[
+Y(a,s)=\beta_0+\beta_A a-\beta_S s+\beta_M M_0,\qquad \beta_S>0,\ \beta_A\ge 0.
+\]
+- Mediator dynamics: for each $a\in\{0,1\}$, $S$ evolves according to the globally contracting linear ODE
+\[
+\dot S(t)= -\kappa\big(S(t)-S^{(a)}\big),\qquad \kappa>0,
+\]
+with distinct fixed points $S^{(0)}=:S^{\mathrm{high}}$ and $S^{(1)}=:S^{\mathrm{low}}$ satisfying $S^{\mathrm{low}}<S^{\mathrm{high}}$. The unique solutions are
+\[
+S_T(a)=S^{(a)}+\big(S_0-S^{(a)}\big)e^{-\kappa T}.
+\]
+Hence, for every $S_0$,
+\[
+\Delta S(S_0):=S_T(0)-S_T(1)=\big(S^{\mathrm{high}}-S^{\mathrm{low}}\big)\big(1-e^{-\kappa T}\big)=:c>0,\tag{1}
+\]
+which is uniform in $S_0$.
+
+Define the pointwise total effect (TE) and natural indirect effect (NIE) through $S$:
+\[
+\mathrm{TE}(S_0,M_0)=Y\big(1,S_T(1)\big)-Y\big(0,S_T(0)\big),\quad
+\mathrm{NIE}(S_0,M_0)=Y\big(1,S_T(1)\big)-Y\big(1,S_T(0)\big).
+\]
+By the outcome equation,
+\[
+\mathrm{TE}=\beta_A+\beta_S\,\Delta S(S_0),\qquad \mathrm{NIE}=\beta_S\,\Delta S(S_0).\tag{2}
+\]
+Combining (1)--(2), for all $S_0$ we have
+\[
+\frac{\mathrm{NIE}}{\mathrm{TE}}=\frac{\beta_S c}{\beta_A+\beta_S c}.
+\]
+Choose any $\theta\in(0.3,0.6)$ and set $\beta_A:=\tfrac{1-\theta}{\theta}\,\beta_S\,c\ (\ge 0)$. Then, for all $S_0$,
+\[
+\mathrm{NIE}=\theta\,\mathrm{TE},
+\]
+so, in particular, $\mathrm{NIE}\ge \theta\,\mathrm{TE}$. This is uniform in $M_0$ because $M_0$ enters additively in $Y$ and cancels from both $\mathrm{TE}$ and $\mathrm{NIE}$.
+
+Now consider a pH-lowering adjunct given only with L13. Model its effect as shifting the L13 setpoint further downward by $\Delta_{\mathrm{pH}}>0$ while keeping the same contraction rate $\kappa$:
+\[
+S^{(1,\downarrow\mathrm{pH})}:=S^{\mathrm{low}}-\Delta_{\mathrm{pH}},\qquad
+S_T^{\downarrow\mathrm{pH}}(1)=S^{(1,\downarrow\mathrm{pH})}+\big(S_0-S^{(1,\downarrow\mathrm{pH})}\big)e^{-\kappa T}.
+\]
+A direct calculation gives
+\[
+S_T(1)-S_T^{\downarrow\mathrm{pH}}(1)=\Delta_{\mathrm{pH}}\big(1-e^{-\kappa T}\big)=:\delta>0,
+\]
+while $S_T^{\downarrow\mathrm{pH}}(0)=S_T(0)$ (the adjunct is only used with L13). Therefore
+\[
+\Delta S^{\downarrow\mathrm{pH}}(S_0)=S_T^{\downarrow\mathrm{pH}}(0)-S_T^{\downarrow\mathrm{pH}}(1)=\Delta S(S_0)+\delta=c+\delta,\tag{3}
+\]
+for all $S_0$. With the same $(\beta_A,\beta_S)$, the NIE share strictly increases because the map $x\mapsto \tfrac{\beta_S x}{\beta_A+\beta_S x}$ is strictly increasing for $\beta_A>0$ and (3) gives $x\mapsto x+\delta$:
+\[
+\frac{\mathrm{NIE}^{\downarrow\mathrm{pH}}}{\mathrm{TE}^{\downarrow\mathrm{pH}}}
+=\frac{\beta_S(c+\delta)}{\beta_A+\beta_S(c+\delta)}
+>\frac{\beta_S c}{\beta_A+\beta_S c}=\theta.\qedhere
+\]
+\end{proof}

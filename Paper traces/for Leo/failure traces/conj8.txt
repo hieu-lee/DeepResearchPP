@@ -1,0 +1,13 @@
+\begin{definition}
+Let $\varphi(n)$ denote Euler's totient function. 
+A positive integer $m$ is called \emph{cyclic} if $\gcd\!\bigl(m,\varphi(m)\bigr)=1$; let $\mathcal C:=\{m\in\mathbb N:\ \gcd(m,\varphi(m))=1\}$.
+A \emph{near-square cyclic} is an element of $\mathcal C$ of the form $m=n^2+1$ with $n\in\mathbb N$.
+\end{definition}
+
+\bigskip
+
+\textbf{Conjecture (Infinitely many near-square cyclics).}
+There exist infinitely many $n\in\mathbb N$ such that $n^2+1$ is cyclic; equivalently, 
+\[
+\#\{\,n\in\mathbb N:\ \gcd(n^2+1,\varphi(n^2+1))=1\,\}=\infty.
+\]

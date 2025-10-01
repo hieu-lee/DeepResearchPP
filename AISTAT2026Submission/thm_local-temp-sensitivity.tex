@@ -1,0 +1,23 @@
+\begin{theorem}[Local temperature-sensitivity law (pointwise, uniform over bounded support)]\label{thm:local-temp-sensitivity}\sloppy
+Fix $m\in\mathbb{N}$ and any $\rho\in(0,1)$. For each step $n$ and prefix $x_{1:n-1}$, let $q_n(\cdot\mid x_{1:n-1})$ be supported on a finite set $S(n,x_{1:n-1})$ with $|S(n,x_{1:n-1})|\le m$. For $|\tau-1|\le\rho$, define on this support
+\[
+\begin{aligned}
+S&:=S(n,x_{1:n-1}),\qquad |S|\le m,\\
+p_{\tau,n}(v)&=\frac{q_n(v)^{\tau}}{\sum_{u\in S} q_n(u)^{\tau}},\quad v\in S,\\
+p_{\tau,n}(v)&=0,\quad v\notin S.
+\end{aligned}
+\]
+Then, uniformly over all $n$ and prefixes,
+\[
+\begin{aligned}
+\operatorname{TV}(p_{\tau,n},q_n)
+&=\tfrac{|\tau-1|}{2}\,\MAD{q_n}{\log q_n(V)}\\
+&\quad+O\big((\tau-1)^2\big),
+\end{aligned}
+\]
+where the $O$-constant depends only on $m$ and $\rho$ (and not on $n$, the prefix, or $q_n$). Averaging over prefixes yields the same expansion for the per-step expected rejection with the same $O$-constant.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Write $p_\tau(v)=q(v)^\tau/Z(\tau)$ on $S=\operatorname{supp}(q)$ and set $\ell=\log q$. Then $\tfrac{\mathrm d}{\mathrm d\tau}\log p_\tau(v)=\ell(v)-\mathbb E_{p_\tau}[\ell]$, so $\dot p_\tau(v)=p_\tau(v)(\ell(v)-s_\tau)$. A Taylor expansion about $\tau=1$ gives $p_{1+\delta}-q=\delta\,\dot p_1+r(\delta)$ with integral remainder involving $\ddot p_{1+t}$. Bounding $\sum_v|\ddot p_{1+t}(v)|\le C_{m,\rho}$ uniformly for $|t|\le\rho$ (via a second-moment bound on $\ell$ under $p_{1+t}$ and the support-size constraint) yields a uniform $O(\delta^2)$ remainder. Finally, $\sum_v|\dot p_1(v)|=\mathbb E_q\big[\,|\log q(V)-\mathbb E_q[\log q(V)]|\,\big]$, and dividing by two gives the TV coefficient. Uniformity over steps and prefixes follows from the shared $(m,\rho)$ bounds.\qedhere
+\end{proof}

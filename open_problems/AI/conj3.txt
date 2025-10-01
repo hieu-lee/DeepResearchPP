@@ -1,0 +1,8 @@
+\begin{definition}
+Consider SGD on loss $L(\theta)$ with step size $\eta$.
+Let $\lambda_{\max}(t)$ be the largest eigenvalue of the empirical Hessian $\nabla^2 L(\theta_t)$ evaluated along training.
+Define \emph{sharpness} as $\lambda_{\max}$ and the \emph{stability threshold} $2/\eta$ from linearized SGD dynamics.
+\end{definition}
+
+\textbf{Conjecture (Edge-of-Stability; sharpness law).}
+In large-scale DL training, even when the classical stability condition is violated ($\eta\,\lambda_{\max}\!>\!2$), training proceeds with $\lambda_{\max}(t)$ self-adjusting so that $\eta\,\lambda_{\max}(t)\approx 2$ for long phases. (Open mechanistically and beyond observed regimes.)
